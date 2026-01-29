@@ -1,16 +1,11 @@
 package com.example.javaproject;
 
+import java.io.IOException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.fxml.FXMLLoader;
-
-import java.io.IOException;
 
 public class LoginController {
 
@@ -32,5 +27,8 @@ public class LoginController {
 //            System.out.println("Invalid credentials");
 //        }
         Main.changeScene(event, "fxml files/dashboard.fxml");
+    }
+    public void onSignUpButtonClick(ActionEvent event) throws IOException {
+        Main.changeScene(event, "fxml files/signup.fxml");
     }
 }

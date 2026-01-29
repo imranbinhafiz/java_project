@@ -2,7 +2,7 @@
     -fx-background-color: linear-gradient(to bottom right, #3f4c6b, #606c88);
 }
 
-.login-card {
+.signup-card {
     -fx-background-color: #ffffff;
     -fx-background-radius: 15px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 5);
@@ -10,7 +10,7 @@
     -fx-max-width: 400px;
 }
 
-.login-title {
+.signup-title {
     -fx-font-family: "Segoe UI";
     -fx-font-size: 26px;
     -fx-font-weight: bold;
@@ -35,7 +35,7 @@
     -fx-opacity: 1.0;
 }
 
-
+/* Updated to explicitly include password-field for consistency */
 .text-field, .password-field {
     -fx-font-family: "Segoe UI";
     -fx-font-size: 14px;
@@ -53,7 +53,7 @@
     -fx-border-color: #606c88;
 }
 
-.login-button {
+.signup-button {
     -fx-font-family: "Segoe UI";
     -fx-font-size: 16px;
     -fx-font-weight: bold;
@@ -65,25 +65,25 @@
     -fx-pref-width: 260px;
 }
 
-.login-button:hover {
+.signup-button:hover {
     -fx-background-color: #3f4c6b;
     -fx-scale-x: 1.05;
     -fx-scale-y: 1.05;
 }
 
-.signup-hint {
+.login-hint {
     -fx-font-family: "Segoe UI";
     -fx-font-size: 13px;
     -fx-text-fill: #7f8c8d;
     -fx-padding: 0 8px 0 0;
 }
 
-.signup-hint:hover {
+.login-hint:hover {
     -fx-text-fill: #606c88;
     -fx-underline: true;
 }
 
-.signup-button {
+.login-button {
     -fx-font-family: "Segoe UI";
     -fx-font-size: 14px;
     -fx-font-weight: bold;
@@ -95,23 +95,23 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0, 0, 2);
 }
 
-.signup-button:hover {
+.login-button:hover {
     -fx-background-color: #3f4c6b;
     -fx-scale-x: 1.05;
     -fx-scale-y: 1.05;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0, 0, 3);
 }
-.signup-row {
+.login-row {
     -fx-padding: 12 0 0 0;
 }
 
-.label.signup-hint {
+.label.login-hint {
     -fx-font-family: "Segoe UI";
     -fx-font-size: 13px;
     -fx-text-fill: #7f8c8d;
 }
 
-.label.signup-hint:hover {
+.label.login-hint:hover {
     -fx-text-fill: #606c88;
     -fx-underline: true;
 }

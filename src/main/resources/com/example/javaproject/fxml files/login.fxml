@@ -42,7 +42,7 @@
             <HBox alignment="CENTER" spacing="8.0" styleClass="signup-row">
                <children>
                   <Label styleClass="signup-hint" text="Don't have an account?" />
-                  <Button styleClass="signup-button" text="Sign Up" />
+                  <Button onAction="#onSignUpButtonClick" styleClass="signup-button" text="Sign Up" />
                </children>
             </HBox>
          </children>
