@@ -4,8 +4,10 @@ import java.io.IOException;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 
 public class LoginController {
 
@@ -31,4 +33,5 @@ public class LoginController {
     public void onSignUpButtonClick(ActionEvent event) throws IOException {
         Main.changeScene(event, "fxml files/signup.fxml");
     }
+
 }

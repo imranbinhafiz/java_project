@@ -1,19 +1,205 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
-   <top>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <bottom>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="48.0" prefWidth="602.0" text="kaj suru korrr!!!!!" textAlignment="CENTER" BorderPane.alignment="CENTER">
-               <font>
-                  <Font name="Algerian" size="42.0" />
-               </font>
-            </Label>
-         </bottom>
-      </BorderPane>
-   </top>
+<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" styleClass="root" stylesheets="@../css%2520files/dashboard.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.DashboardController">
+
+    <!-- TOP BAR -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="top-bar">
+            <children>
+                <!-- Hamburger Toggle Button -->
+                <Button fx:id="toggleButton" onAction="#handleToggleSidebar" styleClass="hamburger-button" text="☰" />
+
+                <!-- Title -->
+                <Label styleClass="top-bar-title" text="TITLE" />
+
+                <!-- Spacer -->
+                <Pane HBox.hgrow="ALWAYS" />
+
+                <!-- User Profile Section (Placeholder) -->
+                <HBox alignment="CENTER_RIGHT" spacing="10.0" styleClass="user-section">
+                    <children>
+                        <Label styleClass="username-label" text="Student" />
+                        <StackPane styleClass="profile-icon">
+                            <children>
+                                <Label styleClass="profile-icon-text" text="S" />
+                            </children>
+                        </StackPane>
+                    </children>
+                </HBox>
+            </children>
+            <padding>
+                <Insets bottom="12.0" left="20.0" right="20.0" top="12.0" />
+            </padding>
+        </HBox>
+    </top>
+
+    <!-- LEFT SIDEBAR -->
+    <left>
+        <VBox fx:id="sideNav" prefWidth="230.0" spacing="8.0" styleClass="sidebar">
+            <children>
+                <!-- Sidebar Header -->
+                <Button fx:id="dashboardBtn" onAction="#handleDashboardClick" onMouseEntered="#handleNavHover" onMouseExited="#handleNavExit" prefHeight="98.0" prefWidth="167.0" styleClass="nav-button" text="🏠 Dashboard" />
+
+                <!-- Navigation Buttons -->
+                <VBox spacing="12.0" styleClass="nav-menu">
+                    <children>
+                        <!-- Courses Button -->
+                        <Button fx:id="coursesBtn" onAction="#handleCoursesClick" onMouseEntered="#handleNavHover" onMouseExited="#handleNavExit" styleClass="nav-button" text="📚 Courses" />
+
+                        <!-- Exams Button -->
+                        <Button fx:id="examsBtn" onAction="#handleExamsClick" onMouseEntered="#handleNavHover" onMouseExited="#handleNavExit" styleClass="nav-button" text="📝 Exams" />
+
+                        <!-- Performance Button -->
+                        <Button fx:id="performanceBtn" onAction="#handlePerformanceClick" onMouseEntered="#handleNavHover" onMouseExited="#handleNavExit" styleClass="nav-button" text="📊 Performance" />
+                        <Button fx:id="duelBtn" onAction="#handleDuelClick" onMouseEntered="#handleNavHover" onMouseExited="#handleNavExit" styleClass="nav-button" text="⚔ Duel" />
+                        <Button fx:id="settingsBtn" onAction="#handleSettingsClick" onMouseEntered="#handleNavHover" onMouseExited="#handleNavExit" styleClass="nav-button" text="⚙ Settings" />
+                    </children>
+                    <padding>
+                        <Insets top="30.0" />
+                    </padding>
+                </VBox>
+
+                <!-- Spacer to push logout to bottom -->
+                <Pane prefHeight="281.0" prefWidth="196.0" VBox.vgrow="ALWAYS" />
+
+                <!-- Logout Button -->
+                <Button fx:id="logoutBtn" onAction="#handleLogoutClick" styleClass="logout-button" text="🚪 Logout" />
+            </children>
+            <padding>
+                <Insets bottom="20.0" left="15.0" right="15.0" top="0.0" />
+            </padding>
+        </VBox>
+    </left>
+
+    <!-- CENTER CONTENT AREA -->
+    <center>
+        <VBox fx:id="contentArea" spacing="20.0" styleClass="content-area">
+            <children>
+                <!-- Welcome Section -->
+                <VBox spacing="8.0" styleClass="welcome-section">
+                    <children>
+                        <Label styleClass="welcome-title" text="Welcome back!" />
+                        <Label styleClass="welcome-subtitle" text="Here's your exam preparation overview" />
+                    </children>
+                </VBox>
+
+                <!-- Main Dashboard Grid -->
+                <GridPane hgap="20.0" vgap="20.0" VBox.vgrow="ALWAYS">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="35.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="35.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="30.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints percentHeight="100.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+
+                    <!-- TODO LIST CARD (Left Column) -->
+                    <VBox spacing="15.0" styleClass="dashboard-card todo-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <children>
+                            <!-- Card Header -->
+                            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                <children>
+                                    <Label styleClass="card-title" text="📋 Todo List" />
+                                    <Pane HBox.hgrow="ALWAYS" />
+                                    <Label fx:id="taskCountBadge" styleClass="card-badge" text="0 tasks" />
+                                </children>
+                            </HBox>
+
+                            <!-- Input Section -->
+                            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                <children>
+                                    <TextField fx:id="todoInputField" onAction="#handleAddTodo" promptText="Add a new task..." styleClass="todo-input" HBox.hgrow="ALWAYS" />
+                                    <Button fx:id="addTodoButton" onAction="#handleAddTodo" styleClass="todo-add-button" text="+" textFill="#cf1111" />
+                                </children>
+                            </HBox>
+
+                            <!-- Todo List View -->
+                            <ListView fx:id="todoListView" onMouseClicked="#handleTodoClick" styleClass="todo-list" VBox.vgrow="ALWAYS" />
+
+                            <!-- Action Buttons -->
+                            <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                                <children>
+                                    <Button fx:id="clearCompletedButton" onAction="#handleClearCompleted" styleClass="todo-action-button" text="Clear Completed" />
+                                    <Button fx:id="deleteSelectedButton" onAction="#handleDeleteSelected" styleClass="todo-delete-button" text="Delete" />
+                                </children>
+                            </HBox>
+                        </children>
+                        <padding>
+                            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                        </padding>
+                    </VBox>
+
+                    <!-- UPCOMING DEADLINES CARD (Middle Column) -->
+                    <VBox spacing="15.0" styleClass="dashboard-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <children>
+                            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                <children>
+                                    <Label styleClass="card-title" text="⏰ Upcoming Deadlines" />
+                                    <Pane HBox.hgrow="ALWAYS" />
+                                    <Label styleClass="card-badge card-badge-warning" text="0 due" />
+                                </children>
+                            </HBox>
+
+                            <!-- Placeholder Content -->
+                            <VBox alignment="CENTER" spacing="10.0" styleClass="placeholder-content" VBox.vgrow="ALWAYS">
+                                <children>
+                                    <Label styleClass="placeholder-icon" text="📅" />
+                                    <Label styleClass="placeholder-text" text="No deadlines" />
+                                    <Label styleClass="placeholder-subtext" text="You're all caught up!" />
+                                </children>
+                            </VBox>
+                        </children>
+                        <padding>
+                            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                        </padding>
+                    </VBox>
+
+                    <!-- MOTIVATION/IMAGE DISPLAY PANE (Right Column) -->
+                    <VBox spacing="15.0" styleClass="dashboard-card image-card" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                        <children>
+
+                            <!-- Image/GIF Placeholder -->
+                            <StackPane fx:id="imageDisplayPane" styleClass="image-display-pane" VBox.vgrow="ALWAYS">
+                                <children>
+                                    <VBox alignment="CENTER" spacing="10.0">
+                                        <children>
+                                            <ImageView fitHeight="272.0" fitWidth="157.0">
+                                                <image>
+                                                    <Image url="@../images/gojo.gif" />
+                                                </image>
+                                            </ImageView>
+                                            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                                        </children></VBox>
+                                </children>
+                            </StackPane>
+                        </children>
+                        <padding>
+                            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                        </padding>
+                    </VBox>
+                </GridPane>
+            </children>
+            <padding>
+                <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+            </padding>
+        </VBox>
+    </center>
+
 </BorderPane>
