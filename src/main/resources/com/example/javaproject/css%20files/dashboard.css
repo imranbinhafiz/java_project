@@ -3,7 +3,7 @@
    ================================ */
 .root {
     -fx-background-color: linear-gradient(to bottom right, #0f172a, #1e293b);
-    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-family: "Times New Roman";
 }
 
 /* ================================
@@ -78,7 +78,6 @@
     -fx-border-color: #334155;
     -fx-border-width: 0 1 0 0;
 }
-
 
 /* ================================
    NAVIGATION BUTTONS
@@ -212,22 +211,28 @@
 }
 
 .card-badge-warning {
-    -fx-text-fill: #fbbf24;
-    -fx-background-color: rgba(251, 191, 36, 0.15);
-    -fx-border-color: rgba(251, 191, 36, 0.3);
+    -fx-text-fill: #818cf8;
+    -fx-background-color: rgba(99, 102, 241, 0.15);
+    -fx-border-color: rgba(99, 102, 241, 0.3);
 }
 
 /* ================================
    TODO LIST CARD
    ================================ */
 .todo-card {
-    -fx-background-color: linear-gradient(to bottom right, #1e293b, #334155);
+    -fx-background-color: rgba(45, 66, 99, 0.6);
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(99, 102, 241, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 6, 0, 0, 2);
 }
 
 /* Todo Input Field */
 .todo-input {
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Times New Roman";
     -fx-font-size: 14px;
+    -fx-font-weight: bold;
     -fx-text-fill: #f8fafc;
     -fx-prompt-text-fill: #64748b;
     -fx-background-color: rgba(15, 23, 42, 0.6);
@@ -333,8 +338,8 @@
 
 /* Todo Item Text */
 .todo-item-title {
+    -fx-font-weight: bold;
     -fx-font-size: 14px;
-    -fx-font-weight: 500;
 }
 
 .todo-item-date {
@@ -394,6 +399,174 @@
     -fx-opacity: 0.4;
     -fx-cursor: default;
 }
+/* ================================
+   DEADLINE STYLES
+   ================================ */
+
+/* Deadline Input Fields - Match Todo Style */
+.deadline-date-picker,
+.deadline-title-field {
+    -fx-font-family: "Times New Roman";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f8fafc;
+    -fx-background-color: rgba(15, 23, 42, 0.6);
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(99, 102, 241, 0.3);
+    -fx-border-radius: 10px;
+    -fx-border-width: 1.5px;
+    -fx-padding: 12px 16px;
+}
+
+.deadline-date-picker:focused,
+.deadline-title-field:focused {
+    -fx-border-color: rgba(99, 102, 241, 0.7);
+    -fx-background-color: rgba(15, 23, 42, 0.8);
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.3), 8, 0, 0, 0);
+}
+
+/* DatePicker specific styles */
+.deadline-date-picker .date-picker-display-node {
+    -fx-background-color: transparent;
+}
+
+.deadline-date-picker .text-field {
+    -fx-prompt-text-fill: #64748b;
+}
+
+.deadline-date-picker .arrow-button {
+    -fx-background-color: rgba(99, 102, 241, 0.2);
+    -fx-background-radius: 0 9 9 0;
+    -fx-border-color: transparent;
+}
+
+.deadline-date-picker .arrow-button:hover {
+    -fx-background-color: rgba(99, 102, 241, 0.35);
+}
+
+.deadline-date-picker .arrow-button .arrow {
+    -fx-background-color: #818cf8;
+}
+
+/* Deadline TextField */
+.deadline-title-field {
+    -fx-prompt-text-fill: #64748b;
+}
+
+/* Deadline Add Button - Match Todo Style */
+.deadline-add-button {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #818cf8;
+    -fx-background-color: rgba(99, 102, 241, 0.2);
+    -fx-background-radius: 10px;
+    -fx-min-width: 46px;
+    -fx-min-height: 46px;
+    -fx-cursor: hand;
+    -fx-border-color: rgba(99, 102, 241, 0.4);
+    -fx-border-width: 1.5;
+    -fx-border-radius: 10px;
+}
+
+.deadline-add-button:hover {
+    -fx-background-color: rgba(99, 102, 241, 0.35);
+    -fx-text-fill: #a5b4fc;
+    -fx-border-color: rgba(99, 102, 241, 0.6);
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.4), 8, 0, 0, 0);
+}
+
+.deadline-add-button:pressed {
+    -fx-background-color: rgba(99, 102, 241, 0.5);
+}
+
+/* Deadline ListView */
+.deadline-list {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.deadline-list .list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 5 0 5 0;
+    -fx-border-color: transparent;
+}
+
+.deadline-list .list-cell:filled:selected {
+    -fx-background-color: rgba(99, 102, 241, 0.15);
+    -fx-background-radius: 12px;
+}
+
+.deadline-list .list-cell:filled:hover {
+    -fx-background-color: transparent;
+}
+
+/* Deadline List Cell Card - Blue Theme */
+.deadline-list-cell-card {
+    -fx-background-color: rgba(45, 66, 99, 0.6);
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(99, 102, 241, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 6, 0, 0, 2);
+}
+
+/* All Deadline States Use Blue Theme */
+.deadline-item-overdue .deadline-list-cell-card,
+.deadline-item-urgent .deadline-list-cell-card,
+.deadline-item-approaching .deadline-list-cell-card,
+.deadline-item-normal .deadline-list-cell-card {
+    -fx-background-color: rgba(45, 66, 99, 0.6);
+    -fx-border-color: rgba(99, 102, 241, 0.3);
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.2), 6, 0, 0, 2);
+}
+
+/* Deadline Card Hover Effect */
+.deadline-list-cell-card:hover {
+    -fx-background-color: rgba(45, 66, 99, 0.75);
+    -fx-border-color: rgba(99, 102, 241, 0.5);
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.4), 10, 0, 0, 3);
+}
+
+/* Deadline Text Styles - All Blue Theme */
+.deadline-item-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f8fafc;
+}
+
+.deadline-days-left {
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-text-fill: #93c5fd;
+}
+
+.deadline-date {
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-text-fill: #94a3b8;
+}
+
+/* Deadline Delete Button - Match Todo Style */
+.deadline-delete-button {
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #a5b4fc;
+    -fx-background-color: rgba(99, 102, 241, 0.2);
+    -fx-background-radius: 8px;
+    -fx-padding: 6 14 6 14;
+    -fx-cursor: hand;
+    -fx-border-color: rgba(99, 102, 241, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 8px;
+}
+
+.deadline-delete-button:hover {
+    -fx-background-color: rgba(99, 102, 241, 0.35);
+    -fx-text-fill: #c7d2fe;
+    -fx-border-color: rgba(99, 102, 241, 0.5);
+}
 
 /* ================================
    PLACEHOLDER CONTENT
@@ -442,17 +615,8 @@
 }
 
 /* ================================
-   RESPONSIVE ADJUSTMENTS
+   SCROLLBAR STYLING
    ================================ */
-
-/* Ensure content resizes smoothly */
-.content-area,
-.dashboard-card {
-    -fx-min-width: 0;
-    -fx-min-height: 0;
-}
-
-/* Scrollbar Styling */
 .scroll-pane {
     -fx-background-color: transparent;
 }
@@ -475,18 +639,6 @@
 .scroll-bar:vertical .thumb:hover,
 .scroll-bar:horizontal .thumb:hover {
     -fx-background-color: rgba(148, 163, 184, 0.5);
-}
-
-.scroll-bar:vertical .track,
-.scroll-bar:horizontal .track {
-    -fx-background-color: transparent;
-}
-
-.scroll-bar:vertical .increment-button,
-.scroll-bar:vertical .decrement-button,
-.scroll-bar:horizontal .increment-button,
-.scroll-bar:horizontal .decrement-button {
-    -fx-background-color: transparent;
 }
 
 /* ================================

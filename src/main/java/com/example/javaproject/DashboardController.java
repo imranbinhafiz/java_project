@@ -1,10 +1,7 @@
 package com.example.javaproject;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
@@ -13,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.MouseButton;
 import java.io.IOException;
+import java.time.LocalDate;
 
 
 public class DashboardController {
@@ -81,6 +79,28 @@ public class DashboardController {
     @FXML
     private Label taskCountBadge;
 
+
+    // ============================================
+    // DEADLINE COMPONENTS
+    // ============================================
+
+    @FXML
+    private DatePicker deadlineDatePicker;
+
+    @FXML
+    private TextField deadlineTitleField;
+
+    @FXML
+    private Button addDeadlineButton;
+
+    @FXML
+    private ListView<Deadline> deadlineListView;
+
+
+
+    @FXML
+    private Button deleteDeadlineButton;
+
     // ============================================
     // STATE MANAGEMENT
     // ============================================
@@ -91,6 +111,8 @@ public class DashboardController {
     // Todo Service - manages all todo operations
     private TodoService todoService;
 
+    //manage all deadline operations
+    private DeadlineService deadlineService;//reference object will be declared later
     // ============================================
     // INITIALIZATION
     // ============================================
@@ -103,24 +125,25 @@ public class DashboardController {
     public void initialize() {
         // Initialize todo service
         todoService = new TodoService();
+        deadlineService = new DeadlineService();
 
         // Bind ListView to todo service
         todoListView.setItems(todoService.getTodos());
+        deadlineListView.setItems(deadlineService.getDeadlines());
 
         // Set up cell factory for custom todo item display
         setupTodoListDisplay();
+        setupdeadlineListDisplay();
 
         // Set default active navigation (Dashboard)
-        setActiveNavButton(dashboardBtn);
+       setActiveNavButton(dashboardBtn);
 
         // Apply fade-in animation to content area
-        AnimationUtil.fadeIn(contentArea, AnimationUtil.FADE_IN_DURATION, null);
+        AnimationUtil.fadeIn(contentArea);
 
         // Update task count badge
         updateTaskCountBadge();
 
-        // Add some sample tasks for demonstration (optional - remove in production)
-        // addSampleTasks();
     }
 
     // ============================================
@@ -132,17 +155,27 @@ public class DashboardController {
      * Creates styled cells with proper formatting.
      */
     private void setupTodoListDisplay() {
-        todoListView.setCellFactory(listView -> new TodoListCell());
+        todoListView.setCellFactory(listView -> new TodoListCell());//for custom visual representation
 
         // Add selection listener to enable/disable delete button
         todoListView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
-                    deleteSelectedButton.setDisable(newValue == null);
+                    deleteSelectedButton.setDisable(newValue == null);//select korle enable hobe nahole disable
                 }
         );
 
         // Initially disable delete button (no selection)
         deleteSelectedButton.setDisable(true);
+    }
+
+    private void setupdeadlineListDisplay(){
+        deadlineListView.setCellFactory(listView -> new DeadlineListCell());
+        deadlineListView.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    deleteDeadlineButton.setDisable(newValue == null);
+        });
+        // Initially disable delete button (no selection)
+        deleteDeadlineButton.setDisable(true);
     }
 
     /**
@@ -174,6 +207,32 @@ public class DashboardController {
 
             // Scroll to newly added item
             todoListView.scrollTo(todoService.getTotalCount() - 1);
+            todoListView.refresh();//for fade in animation
+        }
+    }
+
+    @FXML
+    private void handleAddDeadline(ActionEvent event){
+        String t= deadlineTitleField.getText();
+        LocalDate date=deadlineDatePicker.getValue();
+
+        if(t==null || t.trim().isEmpty()){
+            //shake animation for empty input
+            AnimationUtil.pulse(deadlineTitleField,1.05);
+            return;
+        }
+        if(date==null){
+            AnimationUtil.pulse(deadlineDatePicker,1.05);
+            return;
+        }
+
+        boolean s=deadlineService.addDeadline(t.trim(),date);
+        if(s){
+            //clearing the input field
+            deadlineTitleField.clear();
+            deadlineDatePicker.setValue(null);
+            deadlineListView.scrollTo(deadlineService.getTotalCount()-1);
+            deadlineListView.refresh();//fade in animation for new item
         }
     }
 
@@ -183,21 +242,21 @@ public class DashboardController {
      */
     @FXML
     private void handleTodoClick(MouseEvent event) {
-        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
-            TodoItem selectedItem = todoListView.getSelectionModel().getSelectedItem();
+        if(event.getButton()==MouseButton.PRIMARY && event.getClickCount()==2){
+            //primary=left button
+            //secondary=right button
+            //middle=wheel
 
-            if (selectedItem != null) {
-                // Toggle completion
-                todoService.toggleCompleted(selectedItem);
+            TodoItem selected_item=todoListView.getSelectionModel().getSelectedItem();
 
-                // Update badge
+            if(selected_item!=null){
+                todoService.toggleCompleted(selected_item);
+
                 updateTaskCountBadge();
 
-                // Refresh list view
                 todoListView.refresh();
 
-                // Apply pulse animation to the list for feedback
-                AnimationUtil.pulse(todoListView, 1.02);
+                AnimationUtil.pulse(todoListView,1.02);
             }
         }
     }
@@ -224,44 +283,48 @@ public class DashboardController {
         }
     }
 
+    @FXML
+
+    private void handleDeleteDeadline(ActionEvent e){
+        Deadline selected_item=deadlineListView.getSelectionModel().getSelectedItem();
+        if(selected_item!=null){
+            boolean rmv=deadlineService.removeDeadline(selected_item);
+            if(rmv){
+                AnimationUtil.pulse(deleteDeadlineButton,1.08);
+                deadlineListView.getSelectionModel().clearSelection();
+            }
+            else {
+                //no selection pulse for feedback
+                AnimationUtil.pulse(deleteDeadlineButton,1.08);
+            }
+        }
+
+    }
+
     /**
      * Handles clearing all completed todos.
      */
     @FXML
     private void handleClearCompleted(ActionEvent event) {
-        int removedCount = todoService.clearCompleted();
+       int removed_count = todoService.clearCompleted();
 
-        if (removedCount > 0) {
-            // Update badge
-            updateTaskCountBadge();
-
-            // Apply animation for feedback
-            AnimationUtil.pulse(clearCompletedButton, 1.08);
-
-            System.out.println("Cleared " + removedCount + " completed task(s)");
-        }
+       if(removed_count>0){
+           updateTaskCountBadge();
+           AnimationUtil.pulse(clearCompletedButton,1.08);
+       }
     }
 
     /**
      * Updates the task count badge in the header.
      */
     private void updateTaskCountBadge() {
+
+        //ui te updated task ta dekhanor jnno
         if (taskCountBadge != null) {
             taskCountBadge.setText(todoService.getTaskCountBadge());
         }
     }
 
-    /**
-     * Add sample tasks for demonstration.
-     * Remove this method in production or call only for demo purposes.
-     */
-    private void addSampleTasks() {
-        todoService.addTodo("Review calculus notes");
-        todoService.addTodo("Complete physics assignment");
-        todoService.addTodo("Practice coding problems");
-        todoService.addTodo("Read chapter 5 of biology");
-        updateTaskCountBadge();
-    }
 
     // ============================================
     // SIDEBAR TOGGLE FUNCTIONALITY
@@ -275,22 +338,21 @@ public class DashboardController {
      */
     @FXML
     private void handleToggleSidebar(ActionEvent event) {
-        isSidebarCollapsed = !isSidebarCollapsed;
+       isSidebarCollapsed=!isSidebarCollapsed;
 
-        // Animate sidebar with professional transition
-        AnimationUtil.animateSidebarCollapse(sideNav, isSidebarCollapsed, () -> {
-            // Callback after animation completes
+       //ekta transition
+        AnimationUtil.animateSidebarCollapse(sideNav,isSidebarCollapsed,() -> {
             updateSidebarVisibility();
         });
 
-        // Animate hamburger button for visual feedback
-        AnimationUtil.pulse(toggleButton, 1.08);
+        AnimationUtil.pulse(toggleButton,1.08);
     }
 
     /**
      * Updates sidebar text visibility based on collapsed state.
      * Hides text labels when collapsed, shows when expanded.
      */
+    //last e korbo
     private void updateSidebarVisibility() {
         if (isSidebarCollapsed) {
             // Optional: Update button text to icons only
@@ -311,7 +373,7 @@ public class DashboardController {
     @FXML
     private void handleDashboardClick(ActionEvent event) {
         setActiveNavButton(dashboardBtn);
-        System.out.println("Dashboard clicked");
+
     }
 
     /**
@@ -322,7 +384,7 @@ public class DashboardController {
     private void handleCoursesClick(ActionEvent event) {
         setActiveNavButton(coursesBtn);
 
-        System.out.println("Courses clicked");
+
     }
 
     /**
@@ -332,7 +394,7 @@ public class DashboardController {
     @FXML
     private void handleDuelClick(ActionEvent event) {
         setActiveNavButton(duelBtn);
-        System.out.println("Duel clicked");
+
     }
 
     /**
@@ -342,7 +404,7 @@ public class DashboardController {
     @FXML
     private void handleExamsClick(ActionEvent event) {
         setActiveNavButton(examsBtn);
-        System.out.println("Exams clicked");
+
     }
 
     /**
@@ -352,7 +414,6 @@ public class DashboardController {
     @FXML
     private void handlePerformanceClick(ActionEvent event) {
         setActiveNavButton(performanceBtn);
-        System.out.println("Performance clicked");
     }
 
     /**
@@ -362,7 +423,7 @@ public class DashboardController {
     @FXML
     private void handleSettingsClick(ActionEvent event) {
         setActiveNavButton(settingsBtn);
-        System.out.println("Settings clicked");
+
     }
 
     /**
@@ -427,24 +488,21 @@ public class DashboardController {
      * @param button The button to set as active
      */
     private void setActiveNavButton(Button button) {
-        // Remove active class from previous button
-        if (activeNavButton != null) {
-            activeNavButton.getStyleClass().remove("nav-button-active");
-            AnimationUtil.scaleReset(activeNavButton, AnimationUtil.HOVER_SCALE_DURATION);
-        }
+       if(activeNavButton!=null){
+           activeNavButton.getStyleClass().remove("nav-button-active");
+           AnimationUtil.scaleReset(activeNavButton,AnimationUtil.HOVER_SCALE_DURATION);
+       }
 
-        // Set new active button
-        activeNavButton = button;
+       activeNavButton=button;
 
-        if (activeNavButton != null) {
-            // Add active class to new button
-            if (!activeNavButton.getStyleClass().contains("nav-button-active")) {
-                activeNavButton.getStyleClass().add("nav-button-active");
-            }
+       if(activeNavButton!=null){
+           if(!activeNavButton.getStyleClass().contains("nav-button-active")){
+               activeNavButton.getStyleClass().add("nav-button-active");
+           }
+           AnimationUtil.pulse(activeNavButton,1.05);
+       }
 
-            // Apply subtle pulse animation for feedback
-            AnimationUtil.pulse(activeNavButton, 1.05);
-        }
+
     }
 
     // ============================================
@@ -463,16 +521,7 @@ public class DashboardController {
         System.out.println("Content loading - To be implemented");
     }
 
-    /**
-     * Updates the image display pane.
-     * Placeholder for future motivational images/GIFs.
-     *
-     * @param imageUrl The URL of the image to display
-     */
-    private void updateMotivationalImage(String imageUrl) {
-        // TODO: Load and display image in imageDisplayPane
-        System.out.println("Image update - To be implemented");
-    }
+
 
     /**
      * Refreshes dashboard data.

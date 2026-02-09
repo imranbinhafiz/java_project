@@ -47,6 +47,8 @@ public class TodoListCell extends ListCell<TodoItem> {
         titleLabel.setMaxWidth(Double.MAX_VALUE);
         titleLabel.getStyleClass().add("todo-item-title");
 
+
+
         // Due date label (optional)
         dueDateLabel = new Label();
         dueDateLabel.getStyleClass().add("todo-item-date");
@@ -61,6 +63,19 @@ public class TodoListCell extends ListCell<TodoItem> {
 
         // Apply base style class
         content.getStyleClass().add("todo-list-cell-content");
+
+        content.setOnMouseEntered(e -> {
+            if (!isEmpty()) {
+                AnimationUtil.scaleHover(content, 1.02, AnimationUtil.HOVER_SCALE_DURATION);
+            }
+        });
+
+        content.setOnMouseExited(e -> {
+            if (!isEmpty()) {
+                AnimationUtil.scaleReset(content, AnimationUtil.HOVER_SCALE_DURATION);
+            }
+        });
+
     }
 
     @Override
@@ -96,10 +111,10 @@ public class TodoListCell extends ListCell<TodoItem> {
                 titleLabel.setStyle("-fx-text-fill: #94a3b8; -fx-strikethrough: true;");
             } else if (item.isOverdue()) {
                 getStyleClass().add("todo-item-overdue");
-                titleLabel.setStyle("-fx-text-fill: #fca5a5; -fx-font-weight: 600;");
+                titleLabel.setStyle("-fx-text-fill: #fca5a5; -fx-font-weight: bold;");
             } else {
                 getStyleClass().add("todo-item-pending");
-                titleLabel.setStyle("-fx-text-fill: #f8fafc; -fx-font-weight: 500;");
+                titleLabel.setStyle("-fx-text-fill: #f8fafc; -fx-font-weight: bold;");
             }
 
             setGraphic(content);
