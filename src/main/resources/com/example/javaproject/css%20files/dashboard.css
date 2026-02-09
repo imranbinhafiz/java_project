@@ -448,6 +448,113 @@
     -fx-background-color: #818cf8;
 }
 
+/* ================================
+   DATEPICKER CALENDAR POPUP STYLING
+   ================================ */
+
+/* Basic popup styling - ensure visibility */
+.date-picker-popup {
+    -fx-background-color: #1e293b;
+    -fx-background-radius: 12px;
+    -fx-border-color: #334155;
+    -fx-border-width: 1px;
+    -fx-border-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 0, 4);
+    -fx-padding: 10px;
+}
+
+/* Calendar styling */
+.date-picker-popup .calendar {
+    -fx-background-color: transparent;
+}
+
+/* Month/Year header */
+.date-picker-popup .spinner {
+    -fx-background-color: #334155;
+    -fx-background-radius: 8px 8px 0 0;
+}
+
+.date-picker-popup .spinner .label {
+    -fx-text-fill: #f8fafc;
+    -fx-font-weight: bold;
+}
+
+/* Navigation buttons */
+.date-picker-popup .left-button,
+.date-picker-popup .right-button {
+    -fx-background-color: rgba(99, 102, 241, 0.2);
+    -fx-background-radius: 6px;
+    -fx-border-color: rgba(99, 102, 241, 0.3);
+    -fx-border-width: 1px;
+}
+
+.date-picker-popup .left-button:hover,
+.date-picker-popup .right-button:hover {
+    -fx-background-color: rgba(99, 102, 241, 0.4);
+}
+
+/* Calendar grid */
+.date-picker-popup .calendar-grid {
+    -fx-background-color: rgba(15, 23, 42, 0.5);
+    -fx-background-radius: 0 0 8px 8px;
+    -fx-hgap: 2px;
+    -fx-vgap: 2px;
+}
+
+/* Week day headers */
+.date-picker-popup .week-number-text,
+.date-picker-popup .day-name-text {
+    -fx-fill: #cbd5e1;
+    -fx-font-weight: bold;
+}
+
+/* Day cells */
+.date-picker-popup .day-cell {
+    -fx-background-color: transparent;
+    -fx-background-radius: 6px;
+    -fx-min-width: 28px;
+    -fx-min-height: 28px;
+    -fx-pref-width: 28px;
+    -fx-pref-height: 28px;
+    -fx-text-fill: #f8fafc;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+}
+
+.date-picker-popup .day-cell:hover {
+    -fx-background-color: rgba(99, 102, 241, 0.3);
+    -fx-background-radius: 6px;
+}
+
+/* Today cell */
+.date-picker-popup .today {
+    -fx-background-color: rgba(34, 197, 94, 0.3);
+    -fx-text-fill: #22c55e;
+    -fx-font-weight: bold;
+}
+
+.date-picker-popup .today:hover {
+    -fx-background-color: rgba(34, 197, 94, 0.5);
+}
+
+/* Selected cell */
+.date-picker-popup .selected {
+    -fx-background-color: #6366f1;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.date-picker-popup .selected:hover {
+    -fx-background-color: #4f46e5;
+}
+
+/* Weekend cells */
+.date-picker-popup .weekend {
+    -fx-text-fill: #fca5a5;
+}
+
+
+
 /* Deadline TextField */
 .deadline-title-field {
     -fx-prompt-text-fill: #64748b;

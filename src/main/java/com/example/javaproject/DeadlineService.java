@@ -219,13 +219,13 @@ public class DeadlineService {
      * Get deadline count badge text.
      * @return Badge text like "5 due" or "1 due"
      */
-    public String getDeadlineCountBadge() {
-        int total = getTotalCount();
-        if (total == 0) {
-            return "0 due";
-        }
-        return total + " due";
-    }
+//    public String getDeadlineCountBadge() {
+//        int total = getTotalCount();
+//        if (total == 0) {
+//            return "0 due";
+//        }
+//        return total + " due";
+//    }
 
     /**
      * Get a summary string for display.

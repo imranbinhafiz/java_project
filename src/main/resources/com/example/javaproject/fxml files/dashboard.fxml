@@ -7,8 +7,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -160,7 +158,6 @@
                                 <children>
                                     <Label styleClass="card-title" text="⏰ Upcoming Deadlines" />
                                     <Pane HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="deadlineCountBadge" styleClass="card-badge card-badge-warning" text="0 due" />
                                 </children>
                             </HBox>
 
@@ -198,16 +195,7 @@
                             <!-- Image/GIF Placeholder -->
                             <StackPane fx:id="imageDisplayPane" styleClass="image-display-pane" VBox.vgrow="ALWAYS">
                                 <children>
-                                    <VBox alignment="CENTER" spacing="10.0">
-                                        <children>
-                                            <ImageView fitHeight="272.0" fitWidth="157.0">
-                                                <image>
-                                                    <Image url="@../images/gojo.gif" />
-                                                </image>
-                                            </ImageView>
-                                            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                                        </children>
-                                    </VBox>
+                                    <VBox alignment="CENTER" spacing="10.0" />
                                 </children>
                             </StackPane>
                         </children>
