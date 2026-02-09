@@ -771,3 +771,52 @@
 .shadow-lg {
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 12, 0, 0, 4);
 }
+/* ================================
+   MOTIVATIONAL TEXT SECTION
+   ================================ */
+.motivation-text-arabic {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(from 0% 0% to 100% 100%, #a5b4fc, #818cf8);
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.5), 8, 0, 0, 2);
+    -fx-padding: 0 10 0 10;
+}
+
+.motivation-verse-number {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #94a3b8;
+    -fx-background-color: rgba(99, 102, 241, 0.15);
+    -fx-background-radius: 50%;
+    -fx-min-width: 32px;
+    -fx-min-height: 32px;
+    -fx-max-width: 32px;
+    -fx-max-height: 32px;
+    -fx-alignment: center;
+    -fx-border-color: rgba(99, 102, 241, 0.3);
+    -fx-border-width: 1.5;
+    -fx-border-radius: 50%;
+}
+
+.motivation-text-english {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #cbd5e1;
+    -fx-font-style: italic;
+    -fx-padding: 0 10 0 10;
+}
+
+.motivation-divider {
+    -fx-background-color: linear-gradient(to right, transparent, rgba(99, 102, 241, 0.4), transparent);
+    -fx-min-height: 2px;
+    -fx-max-height: 2px;
+    -fx-pref-width: 120px;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.3), 4, 0, 0, 0);
+}
+
+.motivation-subtext {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #64748b;
+    -fx-font-style: italic;
+}
