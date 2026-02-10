@@ -1,6 +1,7 @@
 package com.example.javaproject;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
@@ -11,6 +12,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.MouseButton;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class DashboardController {
@@ -96,7 +99,7 @@ public class DashboardController {
     @FXML
     private ListView<Deadline> deadlineListView;
 
-
+    private Node originalDashboardChildren;
 
     @FXML
     private Button deleteDeadlineButton;
@@ -143,6 +146,9 @@ public class DashboardController {
 
         // Update task count badge
         updateTaskCountBadge();
+
+        originalDashboardChildren=rootPane.getCenter();
+
 
     }
 
@@ -373,6 +379,7 @@ public class DashboardController {
     @FXML
     private void handleDashboardClick(ActionEvent event) {
         setActiveNavButton(dashboardBtn);
+        loadContent(originalDashboardChildren);
 
     }
 
@@ -383,6 +390,7 @@ public class DashboardController {
     @FXML
     private void handleCoursesClick(ActionEvent event) {
         setActiveNavButton(coursesBtn);
+
 
 
     }
@@ -509,16 +517,17 @@ public class DashboardController {
     // FUTURE EXTENSION METHODS
     // ============================================
 
-    /**
-     * Loads content into the main content area.
-     * Template method for future content switching.
-     *
-     * @param contentNode The node to display in the content area
-     */
+
+
+
     private void loadContent(Node contentNode) {
-        // TODO: Implement content switching with transitions
-        // AnimationUtil.contentTransition(oldContent, contentNode, null);
-        System.out.println("Content loading - To be implemented");
+
+        if (contentNode == null) return;
+
+        Node oldContent = rootPane.getCenter();
+        AnimationUtil.contentTransition(oldContent, contentNode, null);
+        rootPane.setCenter(contentNode);
+
     }
 
 
@@ -531,6 +540,6 @@ public class DashboardController {
         // TODO: Fetch and update dashboard statistics
         // TODO: Update todo list items
         // TODO: Update upcoming deadlines
-        System.out.println("Dashboard refresh - To be implemented");
+
     }
 }
