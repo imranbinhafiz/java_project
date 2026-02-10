@@ -390,7 +390,6 @@ public class DashboardController {
     @FXML
     private void handleCoursesClick(ActionEvent event) {
         setActiveNavButton(coursesBtn);
-        setActiveNavButton(coursesBtn);
 
         try {
 
