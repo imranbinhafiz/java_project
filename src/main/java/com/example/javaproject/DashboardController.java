@@ -390,8 +390,19 @@ public class DashboardController {
     @FXML
     private void handleCoursesClick(ActionEvent event) {
         setActiveNavButton(coursesBtn);
+        setActiveNavButton(coursesBtn);
 
+        try {
 
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml files/courses.fxml"));
+            Node coursesContent = loader.load();
+
+            loadContent(coursesContent);
+        } catch (IOException e) {
+            System.err.println("Error loading courses content: " + e.getMessage());
+            e.printStackTrace();
+
+        }
 
     }
 
