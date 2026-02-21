@@ -100,7 +100,7 @@
                 </VBox>
 
                 <!-- Main Dashboard Grid -->
-                <GridPane hgap="20.0" vgap="20.0" VBox.vgrow="ALWAYS">
+                <GridPane fx:id="dashboardGrid" hgap="20.0" vgap="20.0" VBox.vgrow="ALWAYS">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" percentWidth="35.0" />
                         <ColumnConstraints hgrow="SOMETIMES" percentWidth="35.0" />

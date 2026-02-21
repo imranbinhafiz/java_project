@@ -77,6 +77,7 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 12, 0, 3, 0);
     -fx-border-color: #334155;
     -fx-border-width: 0 1 0 0;
+    -fx-padding: 15 10 10 10;
 }
 
 /* ================================
@@ -99,6 +100,10 @@
     -fx-border-width: 1;
     -fx-border-radius: 12px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0, 0, 1);
+    -fx-max-height: 40px;
+    -fx-pref-height: 20px;
+    -fx-max-width: infinity;
+    -fx-pref-width: infinity;
 }
 
 .nav-button:hover {

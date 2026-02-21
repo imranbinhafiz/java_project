@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<!-- Syllabus Content Area -->
+<VBox spacing="20.0" styleClass="syllabus-main-card" stylesheets="@../css%2520files/syllabus.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.SyllabusController">
+    <children>
+        <!-- Header Section -->
+        <VBox spacing="8.0">
+            <children>
+                <!-- Course Info -->
+                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                    <children>
+                        <Label fx:id="courseNameLabel" styleClass="syllabus-course-name" text="Course Name" />
+                        <Label fx:id="courseCodeLabel" styleClass="syllabus-course-code" text="(CODE)" />
+                    </children>
+                </HBox>
+                
+                <!-- Back Button -->
+                <Button fx:id="backButton" onAction="#handleBackClick" styleClass="back-button" text="← Back to Courses" />
+            </children>
+        </VBox>
+
+        <!-- Progress Section -->
+        <VBox spacing="12.0" styleClass="progress-section">
+            <children>
+                <HBox alignment="CENTER_LEFT" spacing="15.0">
+                    <children>
+                        <Label styleClass="section-label" text="Course Progress" />
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <Label fx:id="progressLabel" styleClass="progress-label" text="0%" />
+                    </children>
+                </HBox>
+                
+                <ProgressBar fx:id="progressBar" maxWidth="Infinity" prefHeight="20.0" progress="0.0" styleClass="syllabus-progress-bar" />
+                
+                <HBox alignment="CENTER_LEFT" spacing="20.0">
+                    <children>
+                        <Label fx:id="completedCountLabel" styleClass="progress-stat" text="0 completed" />
+                        <Label styleClass="progress-stat-separator" text="•" />
+                        <Label fx:id="totalCountLabel" styleClass="progress-stat" text="0 total topics" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+
+        <!-- Add Topic Section -->
+        <VBox spacing="12.0" styleClass="add-topic-section">
+            <children>
+                <Label styleClass="section-label" text="Add New Topic" />
+                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                    <children>
+                        <TextField fx:id="topicNameField" onAction="#handleAddTopic" promptText="Topic name (e.g., Arrays and Pointers)" styleClass="topic-input" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="addTopicButton" onAction="#handleAddTopic" styleClass="add-topic-button" text="+ Add Topic" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+
+        <!-- Topics List Section -->
+        <VBox spacing="12.0" VBox.vgrow="ALWAYS">
+            <children>
+                <HBox alignment="CENTER_LEFT" spacing="15.0">
+                    <children>
+                        <Label styleClass="section-label" text="Syllabus Topics" />
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <Label fx:id="topicCountBadge" styleClass="topic-count-badge" text="0 topics" />
+                    </children>
+                </HBox>
+                
+                <ListView fx:id="topicsListView" styleClass="topics-list" VBox.vgrow="ALWAYS" />
+            </children>
+        </VBox>
+
+        <!-- Action Buttons -->
+        <HBox alignment="CENTER_RIGHT" spacing="12.0">
+            <children>
+                <Label fx:id="selectionLabel" styleClass="selection-label" text="Check topics to mark as completed" />
+                <Pane HBox.hgrow="ALWAYS" />
+                <Button fx:id="clearAllButton" onAction="#handleClearAll" styleClass="clear-all-button" text="Clear All Progress" />
+                <Button fx:id="deleteTopicButton" onAction="#handleDeleteTopic" styleClass="delete-topic-button" text="🗑 Delete Topic" />
+            </children>
+        </HBox>
+    </children>
+    <padding>
+        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+    </padding>
+</VBox>

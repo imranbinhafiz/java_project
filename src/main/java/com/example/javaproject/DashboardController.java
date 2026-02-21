@@ -3,6 +3,7 @@ package com.example.javaproject;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
@@ -24,6 +25,9 @@ public class DashboardController {
 
     @FXML
     private BorderPane rootPane;
+
+    @FXML
+    private GridPane contentSection;
 
     @FXML
     private VBox sideNav;
@@ -125,7 +129,7 @@ public class DashboardController {
      * Sets up initial state, binds data, and applies entry animations.
      */
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException {
         // Initialize todo service
         todoService = new TodoService();
         deadlineService = new DeadlineService();
@@ -377,7 +381,7 @@ public class DashboardController {
      * Loads the dashboard view content.
      */
     @FXML
-    private void handleDashboardClick(ActionEvent event) {
+    private void handleDashboardClick(ActionEvent event) throws IOException {
         setActiveNavButton(dashboardBtn);
         loadContent(originalDashboardChildren);
 
@@ -388,19 +392,35 @@ public class DashboardController {
      * Future: Load courses view content.
      */
     @FXML
-    private void handleCoursesClick(ActionEvent event) {
+    private void handleCoursesClick(ActionEvent event) throws IOException {
         setActiveNavButton(coursesBtn);
-
         try {
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml files/courses.fxml"));
+
+            // Tell the loader to use THIS existing controller instance
+            // instead of trying to find/create a new class
+
+//            loader.setController(this);
+
             Node coursesContent = loader.load();
+
+            CoursesController controller = loader.getController();
+            controller.setContentLoader(syllabusNode -> {
+                loadContent(syllabusNode);
+                return null;
+            });
+
+            controller.setOnSyllabusOpenCallback(() -> {
+                try {
+                    handleCoursesClick(null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
 
             loadContent(coursesContent);
         } catch (IOException e) {
-            System.err.println("Error loading courses content: " + e.getMessage());
             e.printStackTrace();
-
         }
 
     }
@@ -410,7 +430,7 @@ public class DashboardController {
      * Future: Load duel mode content.
      */
     @FXML
-    private void handleDuelClick(ActionEvent event) {
+    private void handleDuelClick(ActionEvent event) throws IOException {
         setActiveNavButton(duelBtn);
 
     }
@@ -420,7 +440,7 @@ public class DashboardController {
      * Future: Load exams view content.
      */
     @FXML
-    private void handleExamsClick(ActionEvent event) {
+    private void handleExamsClick(ActionEvent event) throws IOException {
         setActiveNavButton(examsBtn);
 
     }
@@ -430,7 +450,7 @@ public class DashboardController {
      * Future: Load performance analytics content.
      */
     @FXML
-    private void handlePerformanceClick(ActionEvent event) {
+    private void handlePerformanceClick(ActionEvent event) throws IOException {
         setActiveNavButton(performanceBtn);
     }
 
@@ -439,7 +459,7 @@ public class DashboardController {
      * Future: Load settings panel.
      */
     @FXML
-    private void handleSettingsClick(ActionEvent event) {
+    private void handleSettingsClick(ActionEvent event) throws IOException {
         setActiveNavButton(settingsBtn);
 
     }
@@ -505,7 +525,7 @@ public class DashboardController {
      *
      * @param button The button to set as active
      */
-    private void setActiveNavButton(Button button) {
+    private void setActiveNavButton(Button button) throws IOException {
        if(activeNavButton!=null){
            activeNavButton.getStyleClass().remove("nav-button-active");
            AnimationUtil.scaleReset(activeNavButton,AnimationUtil.HOVER_SCALE_DURATION);
@@ -535,9 +555,11 @@ public class DashboardController {
         if (contentNode == null) return;
 
         Node oldContent = rootPane.getCenter();
-        AnimationUtil.contentTransition(oldContent, contentNode, null);
-        rootPane.setCenter(contentNode);
-
+        AnimationUtil.contentTransition(oldContent, contentNode, () -> {
+            rootPane.setCenter(contentNode);
+        });
+//        rootPane.setCenter(contentNode);
+//        rootPane.getCenter();
     }
 
 
