@@ -1,0 +1,100 @@
+/* Alert popup styling aligned with dark login/signup theme */
+
+.dialog-pane {
+    -fx-background-color: linear-gradient(to bottom, rgba(30, 41, 59, 0.98), rgba(15, 23, 42, 0.99));
+    -fx-background-radius: 0;
+    -fx-border-color: rgba(99, 102, 241, 0.35);
+    -fx-border-radius: 0;
+    -fx-border-width: 1.4;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.62), 28, 0, 0, 10);
+}
+
+.dialog-pane > *.content,
+.dialog-pane > *.button-bar,
+.dialog-pane > *.expandable-content,
+.dialog-pane > *.header-panel {
+    -fx-background-color: transparent;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: linear-gradient(to right, #6366f1, #8b5cf6);
+    -fx-background-radius: 0;
+    -fx-padding: 14 18 12 18;
+}
+
+.dialog-pane:header .header-panel .graphic-container {
+    -fx-background-color: transparent;
+}
+
+.dialog-pane .header-panel .label {
+    -fx-font-family: "Times New Roman";
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+.dialog-pane .content.label {
+    -fx-font-family: "Times New Roman";
+    -fx-font-size: 14px;
+    -fx-text-fill: #cbd5e1;
+    -fx-wrap-text: true;
+    -fx-padding: 16 18 10 18;
+}
+
+.dialog-pane .button-bar {
+    -fx-background-color: transparent;
+    -fx-padding: 10 18 16 18;
+}
+
+.dialog-pane .button-bar .container {
+    -fx-background-color: transparent;
+}
+
+.dialog-pane .button {
+    -fx-font-family: "Times New Roman";
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #6366f1, #8b5cf6);
+    -fx-background-radius: 10;
+    -fx-padding: 9 22;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-border-radius: 10;
+}
+
+.dialog-pane .button:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #4f46e5, #7c3aed);
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.45), 12, 0, 0, 2);
+}
+
+.dialog-pane .button:pressed {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #4338ca, #6d28d9);
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+.dialog-pane .separator *.line {
+    -fx-border-color: rgba(99, 102, 241, 0.35);
+    -fx-background-color: rgba(99, 102, 241, 0.35);
+}
+
+.dialog-pane .text-field,
+.dialog-pane .password-field {
+    -fx-background-color: rgba(15, 23, 42, 0.95);
+    -fx-text-fill: #e2e8f0;
+    -fx-prompt-text-fill: #94a3b8;
+    -fx-highlight-fill: #6366f1;
+    -fx-highlight-text-fill: #ffffff;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: rgba(99, 102, 241, 0.45);
+    -fx-border-width: 1.2;
+    -fx-padding: 10 12;
+}
+
+.dialog-pane .text-field:focused,
+.dialog-pane .password-field:focused {
+    -fx-border-color: #818cf8;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.30), 10, 0, 0, 1);
+}

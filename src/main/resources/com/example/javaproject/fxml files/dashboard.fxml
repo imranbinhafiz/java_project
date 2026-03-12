@@ -1,88 +1,177 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.*?>
 
-<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" styleClass="root" stylesheets="@../css%2520files/dashboard.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.DashboardController">
+<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" styleClass="root" stylesheets="@../css/dashboard.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.DashboardController">
 
     <!-- TOP BAR -->
     <top>
         <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="top-bar">
             <children>
                 <!-- Hamburger Toggle Button -->
-                <Button fx:id="toggleButton" onAction="#handleToggleSidebar" styleClass="hamburger-button" text="☰" />
+                <Button fx:id="toggleButton" onAction="#handleToggleSidebar" styleClass="hamburger-button">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-bars" iconSize="18" styleClass="hamburger-icon" />
+                    </graphic>
+                </Button>
 
                 <!-- Title -->
-                <Label styleClass="top-bar-title" text="TITLE" />
+                <Label fx:id="topBarTitle" styleClass="top-bar-title" text="Dashboard" />
 
                 <!-- Spacer -->
                 <Pane HBox.hgrow="ALWAYS" />
 
-                <!-- User Profile Section (Placeholder) -->
-                <HBox alignment="CENTER_RIGHT" spacing="10.0" styleClass="user-section">
+                <!-- User Profile Section - MenuButton Dropdown -->
+                <HBox alignment="CENTER_RIGHT" spacing="12.0" styleClass="user-section">
                     <children>
-                        <Label styleClass="username-label" text="Student" />
-                        <StackPane styleClass="profile-icon">
-                            <children>
-                                <Label styleClass="profile-icon-text" text="S" />
-                            </children>
-                        </StackPane>
+                        <!-- Avatar Circle + Name as MenuButton -->
+                        <MenuButton fx:id="profileMenuButton" popupSide="BOTTOM" styleClass="profile-menu-button">
+                            <graphic>
+                                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                    <children>
+                                        <StackPane styleClass="avatar-circle">
+                                            <children>
+                                                <Label fx:id="avatarLabel" styleClass="avatar-letter" text="?" />
+                                            </children>
+                                        </StackPane>
+                                        <VBox alignment="CENTER_LEFT" spacing="1.0">
+                                            <children>
+                                                <Label fx:id="usernameLabel" styleClass="username-label" text="User" />
+                                                <Label styleClass="username-role-label" text="Student" />
+                                            </children>
+                                        </VBox>
+                                        <FontIcon iconLiteral="fas-chevron-down" iconSize="10" styleClass="chevron-icon" />
+                                    </children>
+                                </HBox>
+                            </graphic>
+                            <items>
+                                <MenuItem fx:id="changeNameItem" onAction="#handleChangeName" text="Change Name">
+                                    <graphic><FontIcon iconLiteral="fas-user-edit" iconSize="14" styleClass="menu-icon" /></graphic>
+                                </MenuItem>
+                                <MenuItem fx:id="changePasswordItem" onAction="#handleChangePassword" text="Change Password">
+                                    <graphic><FontIcon iconLiteral="fas-lock" iconSize="14" styleClass="menu-icon" /></graphic>
+                                </MenuItem>
+                                <SeparatorMenuItem />
+                                <MenuItem fx:id="logoutMenuItem" onAction="#handleLogoutClick" text="Logout">
+                                    <graphic><FontIcon iconLiteral="fas-sign-out-alt" iconSize="14" styleClass="menu-icon-danger" /></graphic>
+                                </MenuItem>
+                            </items>
+                        </MenuButton>
                     </children>
                 </HBox>
             </children>
             <padding>
-                <Insets bottom="12.0" left="20.0" right="20.0" top="12.0" />
+                <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
             </padding>
         </HBox>
     </top>
 
     <!-- LEFT SIDEBAR -->
     <left>
-        <VBox fx:id="sideNav" prefWidth="230.0" spacing="8.0" styleClass="sidebar">
+        <VBox fx:id="sideNav" prefWidth="230.0" spacing="4.0" styleClass="sidebar">
             <children>
-                <!-- Sidebar Header -->
-                <Button fx:id="dashboardBtn" onAction="#handleDashboardClick" onMouseEntered="#handleNavHover" onMouseExited="#handleNavExit" prefHeight="98.0" prefWidth="167.0" styleClass="nav-button" text="🏠 Dashboard" />
-
-                <!-- Navigation Buttons -->
-                <VBox spacing="12.0" styleClass="nav-menu">
+                <!-- App Logo / Brand -->
+                <VBox alignment="CENTER" spacing="4.0" styleClass="sidebar-brand">
                     <children>
-                        <!-- Courses Button -->
-                        <Button fx:id="coursesBtn" onAction="#handleCoursesClick" onMouseEntered="#handleNavHover" onMouseExited="#handleNavExit" styleClass="nav-button" text="📚 Courses" />
-
-                        <!-- Exams Button -->
-                        <Button fx:id="examsBtn" onAction="#handleExamsClick" onMouseEntered="#handleNavHover" onMouseExited="#handleNavExit" styleClass="nav-button" text="📝 Exams" />
-
-                        <!-- Performance Button -->
-                        <Button fx:id="performanceBtn" onAction="#handlePerformanceClick" onMouseEntered="#handleNavHover" onMouseExited="#handleNavExit" styleClass="nav-button" text="📊 Performance" />
-                        <Button fx:id="duelBtn" onAction="#handleDuelClick" onMouseEntered="#handleNavHover" onMouseExited="#handleNavExit" styleClass="nav-button" text="⚔ Duel" />
-                        <Button fx:id="settingsBtn" onAction="#handleSettingsClick" onMouseEntered="#handleNavHover" onMouseExited="#handleNavExit" styleClass="nav-button" text="⚙ Settings" />
+                        <HBox alignment="CENTER" spacing="10.0">
+                            <children>
+                                <StackPane styleClass="brand-icon-wrap">
+                                    <FontIcon iconLiteral="fab-phoenix-framework" iconSize="22" styleClass="nav-icon" />
+                                </StackPane>
+                                <Label styleClass="brand-label" text="EduPortal" />
+                            </children>
+                        </HBox>
                     </children>
-                    <padding>
-                        <Insets top="30.0" />
-                    </padding>
+                    <padding><Insets bottom="16.0" left="8.0" right="8.0" top="20.0" /></padding>
                 </VBox>
 
-                <!-- Spacer to push logout to bottom -->
-                <Pane prefHeight="281.0" prefWidth="196.0" VBox.vgrow="ALWAYS" />
+                <!-- Navigation Buttons -->
+                <VBox spacing="4.0" styleClass="nav-menu" VBox.vgrow="ALWAYS">
+                    <children>
+                        <!-- Dashboard -->
+                        <Button fx:id="dashboardBtn" maxWidth="Infinity" onAction="#handleDashboardClick" onMouseEntered="#handleNavHover" onMouseExited="#handleNavExit" styleClass="nav-button">
+                            <graphic>
+                                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                    <FontIcon iconLiteral="fas-th-large" iconSize="16" styleClass="nav-icon" />
+                                    <Label mouseTransparent="true" styleClass="nav-label" text="Dashboard" />
+                                </HBox>
+                            </graphic>
+                        </Button>
+
+                        <!-- Courses -->
+                        <Button fx:id="coursesBtn" maxWidth="Infinity" onAction="#handleCoursesClick" onMouseEntered="#handleNavHover" onMouseExited="#handleNavExit" styleClass="nav-button">
+                            <graphic>
+                                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                    <FontIcon iconLiteral="fas-book-open" iconSize="16" styleClass="nav-icon" />
+                                    <Label mouseTransparent="true" styleClass="nav-label" text="Courses" />
+                                </HBox>
+                            </graphic>
+                        </Button>
+
+                        <!-- Exams -->
+                        <Button fx:id="examsBtn" maxWidth="Infinity" onAction="#handleExamsClick" onMouseEntered="#handleNavHover" onMouseExited="#handleNavExit" styleClass="nav-button">
+                            <graphic>
+                                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                    <FontIcon iconLiteral="fas-file-alt" iconSize="16" styleClass="nav-icon" />
+                                    <Label mouseTransparent="true" styleClass="nav-label" text="Exams" />
+                                </HBox>
+                            </graphic>
+                        </Button>
+
+                        <!-- Messenger -->
+                        <Button fx:id="performanceBtn" maxWidth="Infinity" onAction="#handlePerformanceClick" onMouseEntered="#handleNavHover" onMouseExited="#handleNavExit" styleClass="nav-button">
+                            <graphic>
+                                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                    <FontIcon iconLiteral="fas-comments" iconSize="16" styleClass="nav-icon" />
+                                    <Label mouseTransparent="true" styleClass="nav-label" text="Messenger" />
+                                </HBox>
+                            </graphic>
+                        </Button>
+
+                        <!-- Challenge -->
+                        <Button fx:id="duelBtn" maxWidth="Infinity" onAction="#handleDuelClick" onMouseEntered="#handleNavHover" onMouseExited="#handleNavExit" styleClass="nav-button">
+                            <graphic>
+                                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                    <FontIcon iconLiteral="fas-trophy" iconSize="16" styleClass="nav-icon" />
+                                    <Label mouseTransparent="true" styleClass="nav-label" text="Challenge" />
+                                </HBox>
+                            </graphic>
+                        </Button>
+
+                        <!-- AI Chat -->
+                        <Button fx:id="aiChatBtn" maxWidth="Infinity" onAction="#handleAiChatClick" onMouseEntered="#handleNavHover" onMouseExited="#handleNavExit" styleClass="nav-button">
+                            <graphic>
+                                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                    <FontIcon iconLiteral="fas-feather-alt" iconSize="16" styleClass="nav-icon" />
+                                    <Label mouseTransparent="true" styleClass="nav-label" text="AI Chat" />
+                                </HBox>
+                            </graphic>
+                        </Button>
+                    </children>
+                </VBox>
+
+                <!-- Spacer -->
+                <Pane VBox.vgrow="ALWAYS" />
+
+                <!-- Divider -->
+                <Pane styleClass="sidebar-divider" />
 
                 <!-- Logout Button -->
-                <Button fx:id="logoutBtn" onAction="#handleLogoutClick" styleClass="logout-button" text="🚪 Logout" />
+                <Button fx:id="logoutBtn" maxWidth="Infinity" onAction="#handleLogoutClick" styleClass="logout-button">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="12.0">
+                            <FontIcon iconLiteral="fas-sign-out-alt" iconSize="16" styleClass="logout-icon" />
+                            <Label mouseTransparent="true" styleClass="nav-label" text="Logout" />
+                        </HBox>
+                    </graphic>
+                </Button>
             </children>
             <padding>
-                <Insets bottom="20.0" left="15.0" right="15.0" top="0.0" />
+                <Insets bottom="20.0" left="12.0" right="12.0" top="0.0" />
             </padding>
         </VBox>
     </left>
@@ -94,7 +183,7 @@
                 <!-- Welcome Section -->
                 <VBox spacing="8.0" styleClass="welcome-section">
                     <children>
-                        <Label styleClass="welcome-title" text="Welcome back!" />
+                        <Label fx:id="welcomeTitle" styleClass="welcome-title" text="Welcome back!" />
                         <Label styleClass="welcome-subtitle" text="Here's your exam preparation overview" />
                     </children>
                 </VBox>
@@ -121,18 +210,19 @@
                                     <Label fx:id="taskCountBadge" styleClass="card-badge" text="0 tasks" />
                                 </children>
                             </HBox>
-
                             <!-- Input Section -->
                             <HBox alignment="CENTER_LEFT" spacing="10.0">
                                 <children>
-                                    <TextField fx:id="todoInputField" onAction="#handleAddTodo" promptText="Add a new task..." styleClass="todo-input" HBox.hgrow="ALWAYS" />
-                                    <Button fx:id="addTodoButton" onAction="#handleAddTodo" styleClass="todo-add-button" text="+" />
+                                    <StackPane prefHeight="55.0" prefWidth="55.0" styleClass="todo-input-icon-wrap">
+                                        <children>
+                                            <FontIcon iconLiteral="fas-list-ul" iconSize="18" styleClass="todo-input-icon" />
+                                        </children>
+                                    </StackPane>
+                                    <TextField fx:id="todoInputField" onAction="#handleAddTodo" prefHeight="55.0" promptText="Add a new task..." styleClass="todo-input" HBox.hgrow="ALWAYS" />
                                 </children>
                             </HBox>
-
                             <!-- Todo List View -->
                             <ListView fx:id="todoListView" onMouseClicked="#handleTodoClick" styleClass="todo-list" VBox.vgrow="ALWAYS" />
-
                             <!-- Action Buttons -->
                             <HBox alignment="CENTER_RIGHT" spacing="10.0">
                                 <children>
@@ -160,7 +250,6 @@
                                     <Pane HBox.hgrow="ALWAYS" />
                                 </children>
                             </HBox>
-
                             <!-- Input Section -->
                             <HBox alignment="CENTER_LEFT" spacing="10.0">
                                 <children>
@@ -168,10 +257,8 @@
                                     <TextField fx:id="deadlineTitleField" onAction="#handleAddDeadline" promptText="Event title..." styleClass="deadline-title-field" HBox.hgrow="ALWAYS" />
                                 </children>
                             </HBox>
-
                             <!-- Deadline List View -->
                             <ListView fx:id="deadlineListView" styleClass="deadline-list" VBox.vgrow="ALWAYS" />
-
                             <!-- Action Button -->
                             <HBox alignment="CENTER_RIGHT" spacing="10.0">
                                 <children>
@@ -188,28 +275,17 @@
                         </styleClass>
                     </VBox>
 
-                    <!-- MOTIVATION/IMAGE DISPLAY PANE (Right Column) -->
+                    <!-- MOTIVATION / QUOTE CARD -->
                     <VBox spacing="15.0" styleClass="dashboard-card image-card" GridPane.columnIndex="2" GridPane.rowIndex="0">
                         <children>
-
-                            <!-- Image/GIF Placeholder -->
                             <StackPane fx:id="imageDisplayPane" styleClass="image-display-pane" VBox.vgrow="ALWAYS">
                                 <children>
-                                    <VBox alignment="CENTER" spacing="15.0">
+                                    <VBox alignment="CENTER" spacing="16.0">
                                         <children>
-                                            <!-- Arabic Text -->
                                             <Label styleClass="motivation-text-arabic" text="فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا" textAlignment="CENTER" wrapText="true" />
-
-                                            <!-- Verse Number -->
                                             <Label styleClass="motivation-verse-number" text="٥" />
-
-                                            <!-- English Translation -->
                                             <Label styleClass="motivation-text-english" text="So, surely with hardship comes ease." textAlignment="CENTER" wrapText="true" />
-
-                                            <!-- Decorative Divider -->
                                             <Pane styleClass="motivation-divider" />
-
-                                            <!-- Subtle Subtext -->
                                             <Label styleClass="motivation-subtext" text="Keep pushing forward" textAlignment="CENTER" />
                                         </children>
                                         <padding>

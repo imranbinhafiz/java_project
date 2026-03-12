@@ -1,14 +1,6 @@
 package com.example.javaproject;
 
-import javafx.animation.FadeTransition;
-import javafx.animation.Interpolator;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.ParallelTransition;
-import javafx.animation.ScaleTransition;
-import javafx.animation.SequentialTransition;
-import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -81,6 +73,34 @@ public class AnimationUtil {
         if (onFinished != null) {
             fadeTransition.setOnFinished(e -> onFinished.run());
         }
+
+        fadeTransition.play();
+    }
+
+    /**
+     * Fades out a node from fully visible to invisible.
+     * @param node The node to fade out
+     * @param onFinished Runnable to execute when animation completes
+     */
+    public static void fadeOut(Node node, Runnable onFinished) {
+        fadeOut(node, FADE_IN_DURATION, onFinished);
+    }
+
+    /**
+     * Fades out a node with custom duration and callback.
+     * @param node The node to fade out
+     * @param durationMillis Duration in milliseconds
+     * @param onFinished Runnable to execute when animation completes
+     */
+    public static void fadeOut(Node node, int durationMillis, Runnable onFinished) {
+        FadeTransition fadeTransition = new FadeTransition(Duration.millis(durationMillis), node);
+        fadeTransition.setFromValue(1.0);
+        fadeTransition.setToValue(0.0);
+        fadeTransition.setInterpolator(Interpolator.EASE_IN);
+
+        fadeTransition.setOnFinished(e -> {
+            if (onFinished != null) onFinished.run();
+        });
 
         fadeTransition.play();
     }
@@ -167,5 +187,27 @@ public class AnimationUtil {
 
         SequentialTransition pulseSequence = new SequentialTransition(scaleUp, scaleDown);
         pulseSequence.play();
+    }
+
+    public static void errorPulse(Node node, String normalBorderStyle) {
+        // Set red border and background immediately
+        node.setStyle("-fx-border-color: rgba(239, 68, 68, 0.9); -fx-border-width: 1.5px; -fx-border-radius: 10px; -fx-background-color: rgba(239, 68, 68, 0.15); -fx-background-radius: 10px;");
+
+        // Pause at full red, then fade the entire node out and back in
+        PauseTransition pause = new PauseTransition(Duration.millis(300));
+        pause.setOnFinished(e -> {
+            FadeTransition fade = new FadeTransition(Duration.millis(600), node);
+            fade.setFromValue(1.0);
+            fade.setToValue(0.1);
+            fade.setAutoReverse(true);
+            fade.setCycleCount(2);
+            fade.setOnFinished(ev -> {
+                node.setOpacity(1.0);
+                node.setStyle(normalBorderStyle);
+            });
+            fade.play();
+        });
+
+        pause.play();
     }
 }

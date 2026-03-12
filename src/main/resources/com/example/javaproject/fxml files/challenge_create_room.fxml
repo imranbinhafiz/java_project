@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane style="-fx-background-color: transparent;" stylesheets="@../css/dashboard.css,@../css/challenge.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.ChallengeCreateRoomController">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="14" styleClass="ch-topbar">
+            <padding><Insets bottom="12" left="24" right="24" top="12" /></padding>
+            <Button onAction="#handleBack" styleClass="ch-btn-secondary" text="◀  Back" />
+            <Label styleClass="ch-title" text="Create Room" />
+        </HBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color:transparent; -fx-border-color:transparent;">
+            <VBox spacing="18" style="-fx-padding: 24 32 36 32;">
+
+                <!-- GAME MODE -->
+                <VBox spacing="14" style="-fx-padding: 18 20 18 20;" styleClass="ch-panel">
+                    <Label styleClass="ch-panel-title" text="Game Mode" />
+                    <Pane styleClass="ch-divider" />
+                    <HBox spacing="14">
+
+                        <!-- Swap Duel -->
+                        <VBox fx:id="swapDuelCard" onMouseClicked="#selectSwapDuel" spacing="8" styleClass="ch-mode-card" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT" spacing="12">
+                                <Label styleClass="ch-mode-emoji" text="🔄" textFill="#fcfafa" />
+                                <VBox spacing="3">
+                                    <Label styleClass="ch-mode-name" text="Swap Duel" />
+                                    <Label styleClass="ch-mode-desc" text="2 players  ·  Create &amp; Answer" />
+                                </VBox>
+                            </HBox>
+                            <Label styleClass="ch-mode-rule" text="Each player creates a question · Opponent answers · Evaluator gives marks" wrapText="true" />
+                        </VBox>
+
+                        <!-- Speed -->
+                        <VBox fx:id="speedCard" onMouseClicked="#selectSpeed" spacing="8" styleClass="ch-mode-card" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT" spacing="12">
+                                <Label styleClass="ch-mode-emoji" text="⚡" textFill="#f7f7f7" />
+                                <VBox spacing="3">
+                                    <Label styleClass="ch-mode-name" text="Speed" />
+                                    <Label styleClass="ch-mode-desc" text="Up to 8 players  ·  First correct wins" />
+                                </VBox>
+                            </HBox>
+                            <Label styleClass="ch-mode-rule" text="Host picks exam · First correct answer gets the marks" wrapText="true" />
+                        </VBox>
+
+                    </HBox>
+                </VBox>
+
+                <!-- SWAP DUEL SETTINGS (shown only for swap duel) -->
+                <VBox fx:id="swapSettingsBox" spacing="14" style="-fx-padding: 18 20 18 20;" styleClass="ch-panel">
+                    <Label styleClass="ch-panel-title" text="Swap Duel Settings" />
+                    <Pane styleClass="ch-divider" />
+                    <HBox spacing="20">
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label styleClass="ch-sec-lbl" text="NUMBER OF ROUNDS" />
+                            <ComboBox fx:id="roundsCombo" maxWidth="Infinity" styleClass="ch-combo" />
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <!-- ROOM SETTINGS -->
+                <VBox spacing="14" style="-fx-padding: 18 20 18 20;" styleClass="ch-panel">
+                    <Label styleClass="ch-panel-title" text="Room Settings" />
+                    <Pane styleClass="ch-divider" />
+                    <GridPane hgap="20" vgap="14">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="ALWAYS" />
+                            <ColumnConstraints hgrow="ALWAYS" />
+                        </columnConstraints>
+
+                        <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label styleClass="ch-sec-lbl" text="ROOM TYPE" />
+                            <ComboBox fx:id="roomTypeCombo" maxWidth="Infinity" onAction="#onRoomTypeChange" styleClass="ch-combo" />
+                        </VBox>
+
+                        <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label styleClass="ch-sec-lbl" text="MAX PLAYERS" />
+                            <ComboBox fx:id="maxPlayersCombo" maxWidth="Infinity" styleClass="ch-combo" />
+                        </VBox>
+
+                        <VBox fx:id="passwordBox" managed="false" spacing="6" visible="false" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="1">
+                            <Label styleClass="ch-sec-lbl" text="ROOM PASSWORD" />
+                            <PasswordField fx:id="passwordField" maxWidth="Infinity" promptText="Set a password" styleClass="ch-field" />
+                        </VBox>
+                  <rowConstraints>
+                     <RowConstraints />
+                  </rowConstraints>
+                    </GridPane>
+                </VBox>
+
+                <Label fx:id="errorLabel" managed="false" styleClass="ch-exam-none" text="" visible="false" />
+
+                <Button maxWidth="Infinity" onAction="#handleCreate" style="-fx-font-size:15px; -fx-padding:13 0 13 0;" styleClass="ch-btn-primary" text="Create Room" />
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane style="-fx-background-color: transparent;"
+            stylesheets="@../css/dashboard.css,@../css/challenge.css"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.javaproject.ChallengeSelectExamController">
+
+    <top>
+        <HBox styleClass="ch-topbar" alignment="CENTER_LEFT" spacing="14">
+            <padding><Insets top="12" right="24" bottom="12" left="24"/></padding>
+            <Button text="◀  Back" styleClass="ch-btn-secondary" onAction="#handleBack"/>
+            <VBox spacing="2">
+                <Label text="Select Exam" styleClass="ch-title"/>
+                <Label text="All published exams · protected exams require the exam password"
+                       styleClass="ch-subtitle"/>
+            </VBox>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label fx:id="statusLabel" text="" styleClass="ch-status-ok"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox style="-fx-padding: 22 32 32 32;" spacing="14">
+
+            <!-- Search bar -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="searchField" styleClass="ch-field"
+                           promptText="Search by title or exam ID…"
+                           onAction="#handleSearch" HBox.hgrow="ALWAYS"/>
+                <Button text="Search" styleClass="ch-btn-action" onAction="#handleSearch"/>
+            </HBox>
+
+            <!-- Exams list (built in controller) -->
+            <ScrollPane styleClass="ch-scroll" fitToWidth="true" VBox.vgrow="ALWAYS">
+                <VBox fx:id="examsBox" spacing="10">
+                    <padding><Insets top="2" right="2" bottom="2" left="2"/></padding>
+                </VBox>
+            </ScrollPane>
+
+        </VBox>
+    </center>
+
+</BorderPane>

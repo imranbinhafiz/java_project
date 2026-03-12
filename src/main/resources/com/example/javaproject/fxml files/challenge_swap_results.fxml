@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.*?>
+
+<!-- Final Results scene for Swap Duel -->
+<StackPane style="-fx-background-color: transparent;"
+           stylesheets="@../css/dashboard.css,@../css/challenge.css"
+           xmlns="http://javafx.com/javafx/17.0.12"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.example.javaproject.ChallengeSwapResultsController">
+
+    <BorderPane style="-fx-background-color: transparent;">
+        <top>
+            <HBox styleClass="ch-topbar" alignment="CENTER_LEFT" spacing="14">
+                <padding><Insets top="12" right="24" bottom="12" left="24"/></padding>
+                <FontIcon iconLiteral="fas-trophy" iconSize="20" iconColor="#fcd34d"/>
+                <Label text="Swap Duel — Final Results" styleClass="ch-title"/>
+            </HBox>
+        </top>
+
+        <center>
+            <ScrollPane fitToWidth="true" style="-fx-background-color:transparent; -fx-border-color:transparent;">
+                <VBox spacing="22" style="-fx-padding: 32 40 48 40;" alignment="TOP_CENTER">
+
+                    <!-- Winner banner -->
+                    <VBox alignment="CENTER" spacing="8"
+                          style="-fx-background-color:linear-gradient(to bottom right,rgba(99,102,241,0.15),rgba(139,92,246,0.1));
+                                 -fx-background-radius:20; -fx-border-color:rgba(99,102,241,0.3);
+                                 -fx-border-radius:20; -fx-border-width:1; -fx-padding:30 40 26 40;">
+                        <Label fx:id="winnerLabel" text="🏆 Winner!"
+                               style="-fx-font-size:36px; -fx-font-weight:bold; -fx-text-fill:#fcd34d;"/>
+                        <Label fx:id="winnerSubLabel" text="Congratulations!"
+                               style="-fx-font-size:16px; -fx-text-fill:#86efac;"/>
+                    </VBox>
+
+                    <!-- Score cards -->
+                    <HBox spacing="18">
+                        <VBox styleClass="ch-stat-card" alignment="CENTER" spacing="10" HBox.hgrow="ALWAYS">
+                            <Label fx:id="player1Label" text="Player 1"
+                                   style="-fx-font-size:16px; -fx-font-weight:bold; -fx-text-fill:#e2e8f0;"/>
+                            <Label fx:id="player1ScoreLabel" text="0 pts"
+                                   style="-fx-font-size:28px; -fx-font-weight:bold; -fx-text-fill:#818cf8;"/>
+                        </VBox>
+                        <VBox styleClass="ch-stat-card" alignment="CENTER" spacing="10" HBox.hgrow="ALWAYS">
+                            <Label fx:id="player2Label" text="Player 2"
+                                   style="-fx-font-size:16px; -fx-font-weight:bold; -fx-text-fill:#e2e8f0;"/>
+                            <Label fx:id="player2ScoreLabel" text="0 pts"
+                                   style="-fx-font-size:28px; -fx-font-weight:bold; -fx-text-fill:#818cf8;"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Round Breakdown -->
+                    <VBox styleClass="ch-panel" spacing="12" style="-fx-padding: 18 20 18 20;">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <FontIcon iconLiteral="fas-list-ol" iconSize="14" iconColor="#818cf8"/>
+                            <Label text="Round Breakdown" styleClass="ch-panel-title"/>
+                        </HBox>
+                        <Pane styleClass="ch-divider"/>
+                        <VBox fx:id="roundBreakdownBox" spacing="8"/>
+                    </VBox>
+
+                    <!-- Back to Lobby -->
+                    <Button text="← Back to Lobby" styleClass="ch-btn-primary"
+                            onAction="#handleBackToLobby" maxWidth="280"
+                            style="-fx-font-size:14px; -fx-padding:12 32 12 32;"/>
+
+                </VBox>
+            </ScrollPane>
+        </center>
+    </BorderPane>
+</StackPane>

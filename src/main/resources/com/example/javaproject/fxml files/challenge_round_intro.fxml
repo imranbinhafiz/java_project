@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!-- Round Intro — shows "ROUND X" with animation before game phase -->
+<StackPane style="-fx-background-color: #0f172a;"
+           stylesheets="@../css/dashboard.css,@../css/challenge.css"
+           xmlns="http://javafx.com/javafx/17.0.12"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.example.javaproject.ChallengeRoundIntroController">
+
+    <VBox fx:id="contentBox" alignment="CENTER" spacing="18" opacity="0">
+        <padding><Insets top="0" right="0" bottom="0" left="0"/></padding>
+
+        <!-- Round Badge -->
+        <Label style="-fx-font-size:14px; -fx-font-weight:600; -fx-text-fill:#64748b; -fx-letter-spacing:4px;"
+               text="CHALLENGE · SWAP DUEL"/>
+
+        <!-- Big Round Number -->
+        <Label fx:id="roundLabel" text="ROUND 1"
+               style="-fx-font-size:72px; -fx-font-weight:bold; -fx-text-fill:white;
+                      -fx-effect: dropshadow(gaussian,rgba(99,102,241,0.7),30,0,0,0);"/>
+
+        <!-- Sub label -->
+        <Label fx:id="subLabel" text="of 3  ·  Get ready!"
+               style="-fx-font-size:20px; -fx-text-fill:#94a3b8;"/>
+
+        <!-- Decorative line -->
+        <Pane style="-fx-background-color: linear-gradient(to right,transparent,#6366f1,transparent);
+                     -fx-min-height:2; -fx-max-height:2; -fx-min-width:260;"/>
+
+        <Label text="Question Creation Phase starts now"
+               style="-fx-font-size:14px; -fx-text-fill:#64748b; -fx-font-style:italic;"/>
+    </VBox>
+</StackPane>

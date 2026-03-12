@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane stylesheets="@../css/dashboard.css,@../css/exam.css"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.javaproject.SelectParticipantsController">
+
+    <!-- TOP -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="16" styleClass="exam-sub-topbar">
+            <padding><Insets bottom="14" left="24" right="24" top="14"/></padding>
+            <Button text="← Back" styleClass="exam-back-btn" onAction="#handleBack"/>
+            <Label fx:id="examTitleLabel" styleClass="exam-sub-title" text="Select Participants"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label fx:id="statusLabel" styleClass="exam-status-label" text=""/>
+        </HBox>
+    </top>
+
+    <!-- CENTER -->
+    <center>
+        <VBox spacing="20" styleClass="exam-form-container">
+            <padding><Insets bottom="40" left="60" right="60" top="30"/></padding>
+
+            <!-- Visibility toggles -->
+            <HBox spacing="16" alignment="CENTER_LEFT" styleClass="exam-form-section">
+                <fx:define>
+                    <ToggleGroup fx:id="visibilityGroup"/>
+                </fx:define>
+                <RadioButton fx:id="publicRadio" text="🌐 Public" toggleGroup="$visibilityGroup" styleClass="exam-radio"/>
+                <RadioButton fx:id="protectedRadio" text="🔒 Protected" toggleGroup="$visibilityGroup" styleClass="exam-radio"/>
+                <RadioButton fx:id="manualRadio" text="👥 Manual Selection" toggleGroup="$visibilityGroup" selected="true" styleClass="exam-radio"/>
+                <PasswordField fx:id="passwordField" promptText="Enter Exam Password" visible="false" managed="false" styleClass="exam-form-input"/>
+            </HBox>
+
+            <!-- Manual Selection Container -->
+            <VBox fx:id="manualSelectionBox" spacing="20" VBox.vgrow="ALWAYS">
+
+                <!-- ── GROUPS SECTION ── -->
+                <VBox spacing="10">
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="💬 Select by Messenger Group" styleClass="exam-section-label"
+                               style="-fx-font-size:14px; -fx-font-weight:bold; -fx-text-fill:#818cf8;"/>
+                        <Label text="(checking a group selects all its members below)"
+                               style="-fx-font-size:11px; -fx-text-fill:#64748b;"/>
+                    </HBox>
+                    <ScrollPane fitToWidth="true" styleClass="exam-scroll-pane" prefHeight="160" maxHeight="200">
+                        <content>
+                            <VBox fx:id="groupListContainer" spacing="8" styleClass="exam-user-list-container">
+                                <padding><Insets bottom="8" left="4" right="4" top="4"/></padding>
+                            </VBox>
+                        </content>
+                    </ScrollPane>
+                </VBox>
+
+                <!-- Divider -->
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Pane style="-fx-background-color:rgba(99,102,241,0.15); -fx-min-height:1; -fx-max-height:1;" HBox.hgrow="ALWAYS"/>
+                    <Label text="or pick individuals" style="-fx-text-fill:#475569; -fx-font-size:11px;"/>
+                    <Pane style="-fx-background-color:rgba(99,102,241,0.15); -fx-min-height:1; -fx-max-height:1;" HBox.hgrow="ALWAYS"/>
+                </HBox>
+
+                <!-- Search + count row -->
+                <HBox spacing="12" alignment="CENTER_LEFT">
+                    <TextField fx:id="searchField" promptText="🔍 Search users..." styleClass="exam-form-input" maxWidth="320"/>
+                    <Pane HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="selectedCountLabel" styleClass="exam-field-label" text="0 selected"/>
+                    <Button text="Select / Deselect All" styleClass="exam-action-btn" onAction="#handleSelectAll"/>
+                </HBox>
+
+                <!-- User list (scrollable) -->
+                <ScrollPane fitToWidth="true" styleClass="exam-scroll-pane" VBox.vgrow="ALWAYS" prefHeight="300">
+                    <content>
+                        <VBox fx:id="userListContainer" spacing="8" styleClass="exam-user-list-container">
+                            <padding><Insets bottom="10" left="4" right="4" top="4"/></padding>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+            </VBox>
+
+            <!-- Confirm -->
+            <HBox alignment="CENTER_RIGHT">
+                <Button fx:id="confirmButton" text="✅ Confirm Participants" styleClass="exam-publish-btn" onAction="#handleConfirm"/>
+            </HBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>
+

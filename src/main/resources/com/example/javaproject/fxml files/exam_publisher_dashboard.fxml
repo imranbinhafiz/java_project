@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+  exam_publisher_dashboard.fxml
+  [NEW FILE] Publisher's exam management dashboard.
+  Shows all exams published by the logged-in user.
+-->
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.javaproject.PublisherDashboardController"
+            stylesheets="@../css/dashboard.css,@../css/exam.css"
+            style="-fx-background-color: transparent;">
+
+    <!-- Top bar -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="12" styleClass="exam-sub-topbar">
+            <padding><Insets top="14" right="24" bottom="14" left="16"/></padding>
+            <Button text="← Back" styleClass="exam-back-btn" onAction="#handleBack"/>
+            <Label text="📊 My Published Exams" styleClass="exam-sub-title"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label fx:id="statusLabel" styleClass="exam-status-label"/>
+            <Button text="🔄 Refresh" styleClass="exam-action-btn" onAction="#handleRefresh"/>
+        </HBox>
+    </top>
+
+    <!-- Content -->
+    <center>
+        <ScrollPane fitToWidth="true"
+                    styleClass="exam-scroll-pane"
+                    style="-fx-background-color: transparent; -fx-border-color: transparent;">
+            <VBox fx:id="publishedExamsContainer" spacing="14"
+                  style="-fx-padding: 24 32 32 32;"/>
+        </ScrollPane>
+    </center>
+
+</BorderPane>
+

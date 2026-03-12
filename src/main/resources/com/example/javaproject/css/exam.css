@@ -1,0 +1,830 @@
+/* ================================================================
+   EXAM MODULE – exam.css
+   Design language: matches dashboard.css
+   Theme: dark (#0f172a / #1e293b) + indigo accent (#6366f1 / #818cf8)
+   ================================================================ */
+
+/* ─── SHARED SCROLL PANE ─────────────────────────────────────── */
+.exam-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.exam-scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* ─── EXAM MODULE HOME ───────────────────────────────────────── */
+.exam-home-card {
+    -fx-background-color: linear-gradient(to bottom right, #1e293b, #334155);
+    -fx-background-radius: 20px;
+    -fx-border-color: rgba(148, 163, 184, 0.15);
+    -fx-border-width: 1;
+    -fx-border-radius: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 14, 0, 0, 5);
+    -fx-cursor: default;
+}
+.exam-home-card:hover {
+    -fx-border-color: rgba(99, 102, 241, 0.45);
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.35), 20, 0, 0, 6);
+}
+.exam-home-icon {
+    -fx-font-size: 52px;
+}
+.exam-home-card-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f8fafc;
+}
+.exam-home-card-desc {
+    -fx-font-size: 14px;
+    -fx-text-fill: #94a3b8;
+    -fx-font-style: italic;
+}
+.exam-home-btn-publish {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #6366f1, #8b5cf6);
+    -fx-background-radius: 12px;
+    -fx-padding: 12 24 12 24;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.45), 8, 0, 0, 3);
+}
+.exam-home-btn-publish:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #4f46e5, #7c3aed);
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.65), 12, 0, 0, 4);
+}
+.exam-home-btn-participate {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e293b;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #38bdf8, #0ea5e9);
+    -fx-background-radius: 12px;
+    -fx-padding: 12 24 12 24;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(14,165,233,0.4), 8, 0, 0, 3);
+}
+.exam-home-btn-participate:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #0ea5e9, #0284c7);
+    -fx-effect: dropshadow(gaussian, rgba(14,165,233,0.6), 12, 0, 0, 4);
+}
+
+/* ─── SUB-SCREEN TOP BAR ─────────────────────────────────────── */
+.exam-sub-topbar {
+    -fx-background-color: linear-gradient(to right, #1e293b, #334155);
+    -fx-border-color: #334155;
+    -fx-border-width: 0 0 1 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 6, 0, 0, 2);
+}
+.exam-sub-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f8fafc;
+}
+.exam-status-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #86efac;
+}
+.exam-back-btn {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #94a3b8;
+    -fx-background-color: rgba(71,85,105,0.4);
+    -fx-background-radius: 8px;
+    -fx-padding: 8 16 8 16;
+    -fx-cursor: hand;
+    -fx-border-color: rgba(148,163,184,0.25);
+    -fx-border-width: 1;
+    -fx-border-radius: 8px;
+}
+.exam-back-btn:hover {
+    -fx-background-color: rgba(71,85,105,0.65);
+    -fx-text-fill: #f8fafc;
+}
+.exam-action-btn {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #818cf8;
+    -fx-background-color: rgba(99,102,241,0.15);
+    -fx-background-radius: 8px;
+    -fx-padding: 8 16 8 16;
+    -fx-cursor: hand;
+    -fx-border-color: rgba(99,102,241,0.35);
+    -fx-border-width: 1;
+    -fx-border-radius: 8px;
+}
+.exam-action-btn:hover {
+    -fx-background-color: rgba(99,102,241,0.3);
+    -fx-text-fill: #c7d2fe;
+}
+.exam-publish-btn {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #6366f1, #8b5cf6);
+    -fx-background-radius: 10px;
+    -fx-padding: 10 22 10 22;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.4), 6, 0, 0, 2);
+}
+.exam-publish-btn:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #4f46e5, #7c3aed);
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.6), 10, 0, 0, 3);
+}
+.exam-publish-btn:disabled {
+    -fx-opacity: 0.5;
+}
+
+/* ─── FORM ELEMENTS ──────────────────────────────────────────── */
+.exam-form-container {
+    -fx-background-color: transparent;
+}
+.exam-section-header {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #818cf8;
+    -fx-padding: 0 0 4 0;
+}
+.exam-form-section {
+    -fx-background-color: rgba(30,41,59,0.6);
+    -fx-background-radius: 14px;
+    -fx-border-color: rgba(99,102,241,0.2);
+    -fx-border-width: 1;
+    -fx-border-radius: 14px;
+    -fx-padding: 20;
+}
+.exam-field-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #94a3b8;
+}
+.exam-form-input {
+    -fx-font-family: "Times New Roman";
+    -fx-font-size: 14px;
+    -fx-text-fill: #f8fafc;
+    -fx-prompt-text-fill: #64748b;
+    -fx-background-color: rgba(15,23,42,0.65);
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(148,163,184,0.25);
+    -fx-border-radius: 10px;
+    -fx-border-width: 1.5px;
+    -fx-padding: 10 14 10 14;
+}
+.exam-form-input:focused {
+    -fx-border-color: rgba(99,102,241,0.65);
+    -fx-background-color: rgba(15,23,42,0.85);
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.3), 8, 0, 0, 0);
+}
+.exam-form-textarea {
+    -fx-font-family: "Times New Roman";
+    -fx-font-size: 13px;
+    -fx-text-fill: #0a0a0b;
+    -fx-prompt-text-fill: #64748b;
+    -fx-background-color: rgba(15,23,42,0.65);
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(148,163,184,0.25);
+    -fx-border-radius: 10px;
+    -fx-border-width: 1.5px;
+}
+.exam-form-textarea:focused {
+    -fx-border-color: rgba(99,102,241,0.65);
+}
+.exam-spinner {
+    -fx-background-color: rgba(15,23,42,0.65);
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(148,163,184,0.25);
+    -fx-border-radius: 10px;
+    -fx-border-width: 1.5px;
+}
+.exam-spinner .text-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: #f8fafc;
+    -fx-font-size: 14px;
+}
+.exam-spinner .increment-arrow-button,
+.exam-spinner .decrement-arrow-button {
+    -fx-background-color: rgba(99,102,241,0.2);
+}
+.exam-spinner .increment-arrow-button:hover,
+.exam-spinner .decrement-arrow-button:hover {
+    -fx-background-color: rgba(99,102,241,0.4);
+}
+.exam-check {
+    -fx-text-fill: #cbd5e1;
+    -fx-font-size: 14px;
+}
+.exam-check .box {
+    -fx-background-color: rgba(15,23,42,0.65);
+    -fx-border-color: rgba(99,102,241,0.4);
+    -fx-border-width: 1.5;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+}
+.exam-check:selected .box {
+    -fx-background-color: #6366f1;
+}
+.exam-radio {
+    -fx-text-fill: #cbd5e1;
+    -fx-font-size: 14px;
+}
+.exam-radio .radio {
+    -fx-border-color: rgba(99,102,241,0.5);
+    -fx-border-width: 1.5;
+    -fx-background-color: rgba(15,23,42,0.65);
+}
+.exam-radio:selected .dot {
+    -fx-background-color: #818cf8;
+}
+.exam-date-picker {
+    -fx-background-color: rgba(15,23,42,0.65);
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(148,163,184,0.25);
+    -fx-border-radius: 10px;
+    -fx-border-width: 1.5px;
+    -fx-font-family: "Times New Roman";
+    -fx-font-size: 14px;
+    -fx-text-fill: #f8fafc;
+    -fx-padding: 10 14 10 14;
+}
+.exam-date-picker .text-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: #f8fafc;
+    -fx-prompt-text-fill: #64748b;
+}
+.exam-date-picker .arrow-button {
+    -fx-background-color: rgba(99,102,241,0.2);
+    -fx-background-radius: 0 9 9 0;
+    -fx-border-color: transparent;
+}
+
+/* ─── DATEPICKER POPUP (Exam) ───────────────────────────────────── */
+.date-picker-popup {
+    -fx-background-color: #1e293b;
+    -fx-background-radius: 12px;
+    -fx-border-color: #334155;
+    -fx-border-width: 1px;
+    -fx-border-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 0, 4);
+    -fx-padding: 10px;
+}
+.date-picker-popup .calendar {
+    -fx-background-color: transparent;
+}
+.date-picker-popup .spinner {
+    -fx-background-color: #334155;
+    -fx-background-radius: 8px 8px 0 0;
+}
+.date-picker-popup .spinner .label {
+    -fx-text-fill: #f8fafc;
+    -fx-font-weight: bold;
+}
+.date-picker-popup .left-button,
+.date-picker-popup .right-button {
+    -fx-background-color: rgba(99, 102, 241, 0.2);
+    -fx-background-radius: 6px;
+    -fx-border-color: rgba(99, 102, 241, 0.3);
+    -fx-border-width: 1px;
+}
+.date-picker-popup .left-button:hover,
+.date-picker-popup .right-button:hover {
+    -fx-background-color: rgba(99, 102, 241, 0.4);
+}
+.date-picker-popup .calendar-grid {
+    -fx-background-color: rgba(15, 23, 42, 0.5);
+    -fx-background-radius: 0 0 8px 8px;
+    -fx-hgap: 2px;
+    -fx-vgap: 2px;
+}
+.date-picker-popup .week-number-text,
+.date-picker-popup .day-name-text {
+    -fx-fill: #cbd5e1;
+    -fx-font-weight: bold;
+}
+.date-picker-popup .day-cell {
+    -fx-background-color: transparent;
+    -fx-background-radius: 6px;
+    -fx-min-width: 32px;
+    -fx-min-height: 32px;
+    -fx-pref-width: 32px;
+    -fx-pref-height: 32px;
+    -fx-text-fill: #f8fafc;
+    -fx-font-size: 12px;
+    -fx-alignment: center;
+    -fx-text-overrun: clip;
+    -fx-cursor: hand;
+}
+.date-picker-popup .day-cell:hover {
+    -fx-background-color: rgba(99, 102, 241, 0.3);
+    -fx-background-radius: 6px;
+}
+.date-picker-popup .today {
+    -fx-background-color: rgba(34, 197, 94, 0.3);
+    -fx-text-fill: #22c55e;
+    -fx-font-weight: bold;
+}
+.date-picker-popup .today:hover {
+    -fx-background-color: rgba(34, 197, 94, 0.5);
+}
+.date-picker-popup .selected {
+    -fx-background-color: #6366f1;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.date-picker-popup .selected:hover {
+    -fx-background-color: #4f46e5;
+}
+.date-picker-popup .weekend {
+    -fx-text-fill: #fca5a5;
+}
+
+/* ─── QUESTION CARD (in publish form) ───────────────────────── */
+.exam-question-card {
+    -fx-background-color: rgba(30,41,59,0.7);
+    -fx-background-radius: 14px;
+    -fx-border-color: rgba(99,102,241,0.25);
+    -fx-border-width: 1;
+    -fx-border-radius: 14px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0, 0, 2);
+}
+.exam-add-question-btn {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #818cf8;
+    -fx-background-color: rgba(99,102,241,0.15);
+    -fx-background-radius: 8px;
+    -fx-padding: 8 18 8 18;
+    -fx-cursor: hand;
+    -fx-border-color: rgba(99,102,241,0.35);
+    -fx-border-width: 1;
+    -fx-border-radius: 8px;
+}
+.exam-add-question-btn:hover {
+    -fx-background-color: rgba(99,102,241,0.3);
+}
+.exam-remove-btn {
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #fca5a5;
+    -fx-background-color: rgba(239,68,68,0.1);
+    -fx-background-radius: 7px;
+    -fx-padding: 6 12 6 12;
+    -fx-cursor: hand;
+    -fx-border-color: rgba(239,68,68,0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 7px;
+}
+.exam-remove-btn:hover {
+    -fx-background-color: rgba(239,68,68,0.22);
+}
+
+/* ─── PARTICIPANT SELECTION ──────────────────────────────────── */
+.exam-user-list-container {
+    -fx-background-color: transparent;
+}
+.exam-participant-row {
+    -fx-background-color: rgba(30,41,59,0.55);
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(71,85,105,0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 10px;
+    -fx-padding: 12 16 12 16;
+}
+.exam-participant-row:hover {
+    -fx-background-color: rgba(51,65,85,0.7);
+    -fx-border-color: rgba(99,102,241,0.35);
+}
+.exam-participant-check {
+    -fx-text-fill: #e2e8f0;
+    -fx-font-size: 14px;
+}
+.exam-participant-check .box {
+    -fx-background-color: rgba(15,23,42,0.65);
+    -fx-border-color: rgba(99,102,241,0.4);
+    -fx-border-width: 1.5;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+}
+.exam-participant-check:selected .box {
+    -fx-background-color: #6366f1;
+}
+
+/* ─── AVAILABLE EXAM CARDS ───────────────────────────────────── */
+.exam-list-container {
+    -fx-background-color: transparent;
+}
+.exam-available-card {
+    -fx-background-color: rgba(30,41,59,0.7);
+    -fx-background-radius: 14px;
+    -fx-border-color: rgba(99,102,241,0.25);
+    -fx-border-width: 1;
+    -fx-border-radius: 14px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0, 0, 2);
+}
+.exam-available-card:hover {
+    -fx-border-color: rgba(99,102,241,0.5);
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.3), 12, 0, 0, 3);
+}
+.exam-previous-card {
+    -fx-background-color: rgba(30,41,59,0.6);
+    -fx-background-radius: 14px;
+    -fx-border-color: rgba(56,189,248,0.25);
+    -fx-border-width: 1;
+    -fx-border-radius: 14px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0, 0, 2);
+}
+.exam-previous-card:hover {
+    -fx-border-color: rgba(56,189,248,0.45);
+}
+.exam-empty-card {
+    -fx-background-color: rgba(15,23,42,0.4);
+    -fx-background-radius: 14px;
+    -fx-border-color: rgba(71,85,105,0.3);
+    -fx-border-width: 2;
+    -fx-border-radius: 14px;
+    -fx-border-style: dashed;
+}
+.exam-card-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f8fafc;
+}
+.exam-card-meta {
+    -fx-font-size: 13px;
+    -fx-text-fill: #94a3b8;
+}
+.exam-badge-live {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #fca5a5;
+    -fx-background-color: rgba(239,68,68,0.15);
+    -fx-background-radius: 20px;
+    -fx-padding: 4 12 4 12;
+    -fx-border-color: rgba(239,68,68,0.35);
+    -fx-border-width: 1;
+    -fx-border-radius: 20px;
+}
+.exam-badge-practice {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #93c5fd;
+    -fx-background-color: rgba(59,130,246,0.15);
+    -fx-background-radius: 20px;
+    -fx-padding: 4 12 4 12;
+    -fx-border-color: rgba(59,130,246,0.35);
+    -fx-border-width: 1;
+    -fx-border-radius: 20px;
+}
+.exam-badge-protected {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #fcd34d;
+    -fx-background-color: rgba(234,179,8,0.15);
+    -fx-background-radius: 20px;
+    -fx-padding: 4 12 4 12;
+    -fx-border-color: rgba(234,179,8,0.4);
+    -fx-border-width: 1;
+    -fx-border-radius: 20px;
+}
+.exam-score-badge {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #818cf8;
+    -fx-background-color: rgba(99,102,241,0.15);
+    -fx-background-radius: 10px;
+    -fx-padding: 6 14 6 14;
+    -fx-border-color: rgba(99,102,241,0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 10px;
+}
+.exam-start-btn {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #6366f1, #8b5cf6);
+    -fx-background-radius: 9px;
+    -fx-padding: 9 20 9 20;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.4), 6, 0, 0, 2);
+}
+.exam-start-btn:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #4f46e5, #7c3aed);
+}
+.exam-start-btn:disabled {
+    -fx-opacity: 0.38;
+    -fx-cursor: default;
+}
+.exam-view-btn {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #38bdf8;
+    -fx-background-color: rgba(56,189,248,0.12);
+    -fx-background-radius: 9px;
+    -fx-padding: 8 18 8 18;
+    -fx-cursor: hand;
+    -fx-border-color: rgba(56,189,248,0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 9px;
+}
+.exam-view-btn:hover {
+    -fx-background-color: rgba(56,189,248,0.24);
+}
+
+/* ─── TAB PANE ───────────────────────────────────────────────── */
+.exam-tab-pane {
+    -fx-background-color: transparent;
+}
+.exam-tab-pane .tab-header-area {
+    -fx-background-color: #1e293b;
+    -fx-border-color: #334155;
+    -fx-border-width: 0 0 1 0;
+}
+.exam-tab-pane .tab {
+    -fx-background-color: transparent;
+    -fx-padding: 10 20 10 20;
+}
+.exam-tab-pane .tab .tab-label {
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+}
+.exam-tab-pane .tab:selected {
+    -fx-background-color: rgba(99,102,241,0.15);
+    -fx-border-color: rgba(99,102,241,0.5) rgba(99,102,241,0.5) transparent rgba(99,102,241,0.5);
+    -fx-border-width: 0 0 2 0;
+}
+.exam-tab-pane .tab:selected .tab-label {
+    -fx-text-fill: #818cf8;
+}
+.exam-tab-pane .tab:hover .tab-label {
+    -fx-text-fill: #f8fafc;
+}
+.exam-tab-pane .tab-content-area {
+    -fx-background-color: transparent;
+}
+
+/* ─── EXAM TAKING SCREEN ─────────────────────────────────────── */
+.exam-taking-topbar {
+    -fx-background-color: linear-gradient(to right, #0f172a, #1e293b);
+    -fx-border-color: #334155;
+    -fx-border-width: 0 0 1 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 8, 0, 0, 2);
+}
+.exam-taking-title {
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f8fafc;
+}
+.exam-taking-publisher {
+    -fx-font-size: 13px;
+    -fx-text-fill: #64748b;
+}
+.exam-taking-timer {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #86efac;
+}
+.exam-taking-progress {
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #94a3b8;
+}
+.exam-taking-footer {
+    -fx-background-color: rgba(15,23,42,0.85);
+    -fx-border-color: #334155;
+    -fx-border-width: 1 0 0 0;
+}
+.exam-question-area {
+    -fx-background-color: transparent;
+}
+.exam-question-number {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #64748b;
+}
+.exam-question-text {
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f8fafc;
+    -fx-line-spacing: 4;
+}
+.exam-option-btn {
+    -fx-font-size: 14px;
+    -fx-text-fill: #e2e8f0;
+    -fx-background-color: rgba(30,41,59,0.7);
+    -fx-background-radius: 12px;
+    -fx-border-color: rgba(71,85,105,0.4);
+    -fx-border-width: 1.5;
+    -fx-border-radius: 12px;
+    -fx-padding: 14 20 14 20;
+    -fx-cursor: hand;
+    -fx-alignment: CENTER_LEFT;
+}
+.exam-option-btn:hover {
+    -fx-background-color: rgba(51,65,85,0.8);
+    -fx-border-color: rgba(99,102,241,0.45);
+}
+.exam-option-selected {
+    -fx-background-color: rgba(99,102,241,0.2);
+    -fx-border-color: #6366f1;
+    -fx-text-fill: #c7d2fe;
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.35), 8, 0, 0, 2);
+}
+.exam-nav-scroll {
+    -fx-background-color: rgba(15,23,42,0.6);
+    -fx-border-color: #334155;
+    -fx-border-width: 0 0 1 0;
+}
+.exam-nav-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+.exam-nav-dot {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #94a3b8;
+    -fx-background-color: rgba(30,41,59,0.8);
+    -fx-background-radius: 50%;
+    -fx-min-width: 32px;
+    -fx-min-height: 32px;
+    -fx-max-width: 32px;
+    -fx-max-height: 32px;
+    -fx-border-color: rgba(71,85,105,0.5);
+    -fx-border-width: 1.5;
+    -fx-border-radius: 50%;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+}
+.exam-nav-dot-active {
+    -fx-background-color: rgba(99,102,241,0.25);
+    -fx-border-color: #6366f1;
+    -fx-text-fill: #c7d2fe;
+}
+.exam-nav-dot-answered {
+    -fx-background-color: rgba(34,197,94,0.2);
+    -fx-border-color: #22c55e;
+    -fx-text-fill: #86efac;
+}
+.exam-nav-btn {
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #cbd5e1;
+    -fx-background-color: rgba(51,65,85,0.55);
+    -fx-background-radius: 10px;
+    -fx-padding: 10 20 10 20;
+    -fx-cursor: hand;
+    -fx-border-color: rgba(148,163,184,0.25);
+    -fx-border-width: 1;
+    -fx-border-radius: 10px;
+}
+.exam-nav-btn:hover {
+    -fx-background-color: rgba(71,85,105,0.7);
+    -fx-text-fill: #f8fafc;
+}
+.exam-nav-btn:disabled {
+    -fx-opacity: 0.35;
+}
+.exam-submit-final-btn {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #22c55e, #16a34a);
+    -fx-background-radius: 10px;
+    -fx-padding: 10 26 10 26;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(34,197,94,0.4), 8, 0, 0, 2);
+}
+.exam-submit-final-btn:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #16a34a, #15803d);
+    -fx-effect: dropshadow(gaussian, rgba(34,197,94,0.6), 12, 0, 0, 3);
+}
+.exam-submit-final-btn:disabled {
+    -fx-opacity: 0.5;
+}
+
+/* ─── CUSTOM MODAL DIALOG ────────────────────────────────────── */
+.exam-dialog {
+    -fx-background-color: linear-gradient(to bottom right, #1e293b, #334155);
+    -fx-background-radius: 18px;
+    -fx-border-color: rgba(99,102,241,0.35);
+    -fx-border-width: 1.5;
+    -fx-border-radius: 18px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 24, 0, 0, 8);
+}
+.exam-dialog-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f8fafc;
+}
+.exam-dialog-message {
+    -fx-font-size: 14px;
+    -fx-text-fill: #94a3b8;
+    -fx-text-alignment: center;
+}
+.exam-dialog-confirm-btn {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #22c55e, #16a34a);
+    -fx-background-radius: 10px;
+    -fx-padding: 10 22 10 22;
+    -fx-cursor: hand;
+}
+.exam-dialog-confirm-btn:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #16a34a, #15803d);
+}
+.exam-dialog-cancel-btn {
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #94a3b8;
+    -fx-background-color: rgba(71,85,105,0.45);
+    -fx-background-radius: 10px;
+    -fx-padding: 10 22 10 22;
+    -fx-cursor: hand;
+    -fx-border-color: rgba(148,163,184,0.25);
+    -fx-border-width: 1;
+    -fx-border-radius: 10px;
+}
+.exam-dialog-cancel-btn:hover {
+    -fx-background-color: rgba(71,85,105,0.7);
+    -fx-text-fill: #f8fafc;
+}
+
+/* ─── RESULTS SCREEN ─────────────────────────────────────────── */
+.exam-result-summary-card {
+    -fx-background-color: linear-gradient(to bottom right, #1e293b, #334155);
+    -fx-background-radius: 18px;
+    -fx-border-color: rgba(99,102,241,0.3);
+    -fx-border-width: 1.5;
+    -fx-border-radius: 18px;
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.25), 16, 0, 0, 5);
+}
+.exam-grade-label {
+    -fx-font-size: 52px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #86efac;
+}
+.exam-result-score {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f8fafc;
+}
+.exam-result-pct {
+    -fx-font-size: 18px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #818cf8;
+}
+.exam-result-correct {
+    -fx-font-size: 14px;
+    -fx-text-fill: #86efac;
+    -fx-font-weight: 600;
+}
+.exam-result-wrong {
+    -fx-font-size: 14px;
+    -fx-text-fill: #fca5a5;
+    -fx-font-weight: 600;
+}
+.exam-breakdown-correct {
+    -fx-background-color: rgba(34,197,94,0.08);
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(34,197,94,0.25);
+    -fx-border-width: 1;
+    -fx-border-radius: 10px;
+}
+.exam-breakdown-wrong {
+    -fx-background-color: rgba(239,68,68,0.08);
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(239,68,68,0.25);
+    -fx-border-width: 1;
+    -fx-border-radius: 10px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   [ADDED] PUBLISHER DASHBOARD STYLES
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Publisher exam card – displayed in the My Published Exams screen */
+.publisher-exam-card {
+    -fx-background-color: rgba(30, 41, 59, 0.75);
+    -fx-background-radius: 14px;
+    -fx-border-color: rgba(99, 102, 241, 0.3);
+    -fx-border-width: 1.5;
+    -fx-border-radius: 14px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.35), 10, 0, 0, 3);
+}
+.publisher-exam-card:hover {
+    -fx-border-color: rgba(99, 102, 241, 0.55);
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.3), 16, 0, 0, 4);
+}
+
+/* Statistics labels in the exam result screen */
+.exam-result-stat {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #94a3b8;
+    -fx-background-color: rgba(30, 41, 59, 0.5);
+    -fx-background-radius: 8px;
+    -fx-padding: 6 14 6 14;
+    -fx-border-color: rgba(71, 85, 105, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 8px;
+}

@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,17 +13,48 @@ import java.util.stream.Collectors;
  * Service layer for managing Deadline items.
  * Provides business logic and data management independent of UI.
  * Uses ObservableList for automatic UI updates.
+ * Persists data to the user's deadline file via UserFileManager.
  */
 public class DeadlineService {
 
     // ObservableList for automatic UI binding
-    private final ObservableList<Deadline> deadlines; //its like arraylist
+    private final ObservableList<Deadline> deadlines;
+
+    // The username whose file we read/write
+    private final String username;
 
     /**
-     * Initialize the service with an empty deadline list.
+     * Initialize the service for a specific user.
+     * Loads existing deadlines from file on startup.
+     *
+     * @param username the logged-in username
      */
-    public DeadlineService() {
+    public DeadlineService(String username) {
+        this.username = username;
         this.deadlines = FXCollections.observableArrayList();
+        // Load persisted deadlines from file
+        List<Deadline> loaded = UserFileManager.loadDeadlines(username);
+        deadlines.addAll(loaded);
+        sortDeadlines();
+    }
+
+    /**
+     * No-arg constructor for backward compatibility (uses empty list, no
+     * persistence).
+     * 
+     * @deprecated Use DeadlineService(String username) instead.
+     */
+    @Deprecated
+    public DeadlineService() {
+        this.username = null;
+        this.deadlines = FXCollections.observableArrayList();
+    }
+
+    /** Persist the full list to file (used after any mutation). */
+    private void persistAll() {
+        if (username != null) {
+            UserFileManager.persistAllDeadlines(username, new ArrayList<>(deadlines));
+        }
     }
 
     // ============================================
@@ -32,7 +64,7 @@ public class DeadlineService {
     /**
      * Add a new deadline.
      * Automatically sorts list by nearest date first.
-     * 
+     *
      * @param deadline The Deadline to add
      * @return true if added successfully, false if deadline is null
      */
@@ -42,15 +74,19 @@ public class DeadlineService {
         }
         deadlines.add(deadline);
         sortDeadlines();
+        if (username != null) {
+            // Persist the full sorted list (simpler than appending and re-sorting on load)
+            persistAll();
+        }
         return true;
     }
 
     /**
      * Add a new deadline with title and date.
      * Convenience method for quick deadline creation.
-     * 
+     *
      * @param title The deadline title
-     * @param date The deadline date
+     * @param date  The deadline date
      * @return true if added successfully, false if validation fails
      */
     public boolean addDeadline(String title, LocalDate date) {
@@ -62,6 +98,7 @@ public class DeadlineService {
 
     /**
      * Remove a deadline.
+     *
      * @param deadline The Deadline to remove
      * @return true if removed successfully, false if not found
      */
@@ -69,11 +106,15 @@ public class DeadlineService {
         if (deadline == null) {
             return false;
         }
-        return deadlines.remove(deadline);
+        boolean removed = deadlines.remove(deadline);
+        if (removed)
+            persistAll();
+        return removed;
     }
 
     /**
      * Remove a deadline by index.
+     *
      * @param index The index of the deadline to remove
      * @return true if removed successfully, false if index is invalid
      */
@@ -82,6 +123,7 @@ public class DeadlineService {
             return false;
         }
         deadlines.remove(index);
+        persistAll();
         return true;
     }
 
@@ -90,10 +132,12 @@ public class DeadlineService {
      */
     public void clearAll() {
         deadlines.clear();
+        persistAll();
     }
 
     /**
      * Clear all overdue deadlines.
+     *
      * @return Number of items removed
      */
     public int clearOverdue() {
@@ -102,6 +146,8 @@ public class DeadlineService {
                 .collect(Collectors.toList());
 
         deadlines.removeAll(overdue);
+        if (!overdue.isEmpty())
+            persistAll();
         return overdue.size();
     }
 
@@ -123,6 +169,7 @@ public class DeadlineService {
 
     /**
      * Get the observable list of deadlines for UI binding.
+     *
      * @return ObservableList of Deadlines
      */
     public ObservableList<Deadline> getDeadlines() {
@@ -131,6 +178,7 @@ public class DeadlineService {
 
     /**
      * Get total number of deadlines.
+     *
      * @return Total count
      */
     public int getTotalCount() {
@@ -139,6 +187,7 @@ public class DeadlineService {
 
     /**
      * Get all overdue deadlines.
+     *
      * @return List of overdue items
      */
     public List<Deadline> getOverdueDeadlines() {
@@ -149,6 +198,7 @@ public class DeadlineService {
 
     /**
      * Get number of overdue deadlines.
+     *
      * @return Overdue count
      */
     public int getOverdueCount() {
@@ -159,6 +209,7 @@ public class DeadlineService {
 
     /**
      * Get all urgent deadlines (≤ 2 days).
+     *
      * @return List of urgent items
      */
     public List<Deadline> getUrgentDeadlines() {
@@ -169,6 +220,7 @@ public class DeadlineService {
 
     /**
      * Get number of urgent deadlines.
+     *
      * @return Urgent count
      */
     public int getUrgentCount() {
@@ -179,6 +231,7 @@ public class DeadlineService {
 
     /**
      * Get all approaching deadlines (≤ 7 days).
+     *
      * @return List of approaching items
      */
     public List<Deadline> getApproachingDeadlines() {
@@ -189,6 +242,7 @@ public class DeadlineService {
 
     /**
      * Get deadlines due today.
+     *
      * @return List of deadlines due today
      */
     public List<Deadline> getDeadlinesToday() {
@@ -199,6 +253,7 @@ public class DeadlineService {
 
     /**
      * Get upcoming deadlines (not overdue).
+     *
      * @return List of upcoming deadlines
      */
     public List<Deadline> getUpcomingDeadlines() {
@@ -209,6 +264,7 @@ public class DeadlineService {
 
     /**
      * Check if there are any deadlines.
+     *
      * @return true if list is empty
      */
     public boolean isEmpty() {
@@ -216,19 +272,8 @@ public class DeadlineService {
     }
 
     /**
-     * Get deadline count badge text.
-     * @return Badge text like "5 due" or "1 due"
-     */
-//    public String getDeadlineCountBadge() {
-//        int total = getTotalCount();
-//        if (total == 0) {
-//            return "0 due";
-//        }
-//        return total + " due";
-//    }
-
-    /**
      * Get a summary string for display.
+     *
      * @return Summary message
      */
     public String getSummary() {

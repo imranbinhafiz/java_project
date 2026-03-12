@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane stylesheets="@../css/dashboard.css,@../css/exam.css"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.javaproject.ExamTakingController">
+
+    <!-- TOP BAR -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="20" styleClass="exam-taking-topbar">
+            <padding><Insets bottom="14" left="24" right="24" top="14"/></padding>
+
+            <VBox spacing="2">
+                <Label fx:id="examTitleLabel" styleClass="exam-taking-title" text="Exam"/>
+                <Label fx:id="publisherLabel" styleClass="exam-taking-publisher" text=""/>
+            </VBox>
+
+            <Pane HBox.hgrow="ALWAYS"/>
+
+            <Label fx:id="progressLabel" styleClass="exam-taking-progress" text="0/0 answered"/>
+            <Label fx:id="timerLabel"    styleClass="exam-taking-timer"    text="⏱ 00:00"/>
+        </HBox>
+    </top>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <VBox spacing="0">
+
+            <!-- Question number dots nav -->
+            <ScrollPane fitToHeight="false" fitToWidth="true" prefHeight="56"
+                        styleClass="exam-nav-scroll" hbarPolicy="AS_NEEDED" vbarPolicy="NEVER">
+                <content>
+                    <HBox fx:id="questionNavBar" alignment="CENTER_LEFT" spacing="6">
+                        <padding><Insets bottom="10" left="24" right="24" top="10"/></padding>
+                    </HBox>
+                </content>
+            </ScrollPane>
+
+            <!-- Question Card -->
+            <ScrollPane fitToWidth="true" styleClass="exam-scroll-pane" VBox.vgrow="ALWAYS">
+                <content>
+                    <VBox spacing="24" styleClass="exam-question-area">
+                        <padding><Insets bottom="40" left="80" right="80" top="30"/></padding>
+
+                        <Label fx:id="questionNumberLabel" styleClass="exam-question-number" text="Question 1 of 1"/>
+
+                        <!-- Question text card -->
+                        <VBox styleClass="exam-question-card" spacing="10">
+                            <padding><Insets bottom="20" left="20" right="20" top="20"/></padding>
+                            <Label fx:id="questionTextLabel" styleClass="exam-question-text"
+                                   wrapText="true" maxWidth="Infinity"/>
+                            <ImageView fx:id="questionImageView" fitWidth="400" preserveRatio="true" visible="false" managed="false"/>
+                        </VBox>
+
+                        <!-- Options -->
+                        <VBox fx:id="optionsContainer" spacing="12"/>
+
+                    </VBox>
+                </content>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+    <!-- BOTTOM NAV -->
+    <bottom>
+        <HBox alignment="CENTER_LEFT" spacing="16" styleClass="exam-taking-footer">
+            <padding><Insets bottom="16" left="24" right="24" top="16"/></padding>
+            <Button fx:id="prevBtn" text="◀ Previous" styleClass="exam-nav-btn" onAction="#handlePrev"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Button fx:id="submitBtn" text="✅ Submit Exam" styleClass="exam-submit-final-btn" onAction="#handleSubmit"/>
+            <Button fx:id="nextBtn" text="Next ▶" styleClass="exam-nav-btn" onAction="#handleNext"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>
+

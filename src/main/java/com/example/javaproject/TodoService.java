@@ -12,17 +12,47 @@ import java.util.stream.Collectors;
  * Service layer for managing Todo items.
  * Provides business logic and data management independent of UI.
  * Uses ObservableList for automatic UI updates.
+ * Persists data to the user's todo file via UserFileManager.
  */
 public class TodoService {
 
     // ObservableList for automatic UI binding
     private final ObservableList<TodoItem> todos;
 
+    // The username whose file we read/write
+    private final String username;
+
     /**
-     * Initialize the service with an empty todo list.
+     * Initialize the service for a specific user.
+     * Loads existing todos from file on startup.
+     *
+     * @param username the logged-in username
      */
-    public TodoService() {
+    public TodoService(String username) {
+        this.username = username;
         this.todos = FXCollections.observableArrayList();
+        // Load persisted todos from file
+        List<TodoItem> loaded = UserFileManager.loadTodos(username);
+        todos.addAll(loaded);
+    }
+
+    /**
+     * No-arg constructor for backward compatibility (uses empty list, no
+     * persistence).
+     * 
+     * @deprecated Use TodoService(String username) instead.
+     */
+    @Deprecated
+    public TodoService() {
+        this.username = null;
+        this.todos = FXCollections.observableArrayList();
+    }
+
+    /** Persist the full list to file (used after any mutation). */
+    private void persistAll() {
+        if (username != null) {
+            UserFileManager.persistAllTodos(username, new ArrayList<>(todos));
+        }
     }
 
     // ============================================
@@ -31,6 +61,7 @@ public class TodoService {
 
     /**
      * Add a new todo item.
+     * 
      * @param item The TodoItem to add
      * @return true if added successfully, false if item is null
      */
@@ -39,12 +70,16 @@ public class TodoService {
             return false;
         }
         todos.add(item);
+        if (username != null) {
+            UserFileManager.saveTodo(username, item);
+        }
         return true;
     }
 
     /**
      * Add a new todo with just a title.
      * Convenience method for quick task creation.
+     * 
      * @param title The task title
      * @return true if added successfully, false if title is empty
      */
@@ -57,7 +92,8 @@ public class TodoService {
 
     /**
      * Add a new todo with title and due date.
-     * @param title The task title
+     * 
+     * @param title   The task title
      * @param dueDate The due date
      * @return true if added successfully
      */
@@ -70,6 +106,7 @@ public class TodoService {
 
     /**
      * Remove a todo item.
+     * 
      * @param item The TodoItem to remove
      * @return true if removed successfully, false if item not found
      */
@@ -77,11 +114,15 @@ public class TodoService {
         if (item == null) {
             return false;
         }
-        return todos.remove(item);
+        boolean removed = todos.remove(item);
+        if (removed)
+            persistAll();
+        return removed;
     }
 
     /**
      * Remove a todo by index.
+     * 
      * @param index The index of the item to remove
      * @return true if removed successfully, false if index is invalid
      */
@@ -90,11 +131,13 @@ public class TodoService {
             return false;
         }
         todos.remove(index);
+        persistAll();
         return true;
     }
 
     /**
      * Toggle completion status of a todo item.
+     * 
      * @param item The item to toggle
      * @return true if toggled successfully
      */
@@ -106,11 +149,13 @@ public class TodoService {
         // Force list update for UI refresh
         int index = todos.indexOf(item);
         todos.set(index, item);
+        persistAll();
         return true;
     }
 
     /**
      * Mark a todo as completed.
+     * 
      * @param item The item to mark as completed
      * @return true if successful
      */
@@ -122,12 +167,14 @@ public class TodoService {
             item.setCompleted(true);
             int index = todos.indexOf(item);
             todos.set(index, item);
+            persistAll();
         }
         return true;
     }
 
     /**
      * Mark a todo as incomplete.
+     * 
      * @param item The item to mark as incomplete
      * @return true if successful
      */
@@ -139,12 +186,14 @@ public class TodoService {
             item.setCompleted(false);
             int index = todos.indexOf(item);
             todos.set(index, item);
+            persistAll();
         }
         return true;
     }
 
     /**
      * Clear all completed todos.
+     * 
      * @return Number of items removed
      */
     public int clearCompleted() {
@@ -153,6 +202,8 @@ public class TodoService {
                 .collect(Collectors.toList());
 
         todos.removeAll(completed);
+        if (!completed.isEmpty())
+            persistAll();
         return completed.size();
     }
 
@@ -161,6 +212,7 @@ public class TodoService {
      */
     public void clearAll() {
         todos.clear();
+        persistAll();
     }
 
     // ============================================
@@ -169,6 +221,7 @@ public class TodoService {
 
     /**
      * Get the observable list of todos for UI binding.
+     * 
      * @return ObservableList of TodoItems
      */
     public ObservableList<TodoItem> getTodos() {
@@ -177,6 +230,7 @@ public class TodoService {
 
     /**
      * Get total number of todos.
+     * 
      * @return Total count
      */
     public int getTotalCount() {
@@ -185,6 +239,7 @@ public class TodoService {
 
     /**
      * Get number of completed todos.
+     * 
      * @return Completed count
      */
     public int getCompletedCount() {
@@ -195,6 +250,7 @@ public class TodoService {
 
     /**
      * Get number of pending (incomplete) todos.
+     * 
      * @return Pending count
      */
     public int getPendingCount() {
@@ -203,6 +259,7 @@ public class TodoService {
 
     /**
      * Get all completed todos.
+     * 
      * @return List of completed items
      */
     public List<TodoItem> getCompletedTodos() {
@@ -213,6 +270,7 @@ public class TodoService {
 
     /**
      * Get all pending todos.
+     * 
      * @return List of pending items
      */
     public List<TodoItem> getPendingTodos() {
@@ -223,6 +281,7 @@ public class TodoService {
 
     /**
      * Get all overdue todos.
+     * 
      * @return List of overdue items
      */
     public List<TodoItem> getOverdueTodos() {
@@ -233,6 +292,7 @@ public class TodoService {
 
     /**
      * Get todos due today.
+     * 
      * @return List of todos due today
      */
     public List<TodoItem> getTodosDueToday() {
@@ -244,6 +304,7 @@ public class TodoService {
 
     /**
      * Check if there are any todos.
+     * 
      * @return true if list is empty
      */
     public boolean isEmpty() {
@@ -252,6 +313,7 @@ public class TodoService {
 
     /**
      * Get a summary string for display.
+     * 
      * @return Summary in format "X pending, Y completed"
      */
     public String getSummary() {
@@ -271,6 +333,7 @@ public class TodoService {
 
     /**
      * Get task count badge text.
+     * 
      * @return Badge text like "5 tasks" or "1 task"
      */
     public String getTaskCountBadge() {

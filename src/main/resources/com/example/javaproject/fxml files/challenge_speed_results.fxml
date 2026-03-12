@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.*?>
+
+<!-- Speed Mode Results/Rankings Scene -->
+<BorderPane style="-fx-background-color: transparent;"
+            stylesheets="@../css/dashboard.css,@../css/challenge.css"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.javaproject.ChallengeSpeedResultsController">
+
+    <top>
+        <HBox styleClass="ch-topbar" alignment="CENTER_LEFT" spacing="14">
+            <padding><Insets top="12" right="24" bottom="12" left="24"/></padding>
+            <FontIcon iconLiteral="fas-ranking-star" iconSize="20" iconColor="#fcd34d"/>
+            <Label text="Speed Mode — Rankings" styleClass="ch-title"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="22" style="-fx-padding: 32 40 48 40;" alignment="TOP_CENTER">
+
+            <!-- Rankings list -->
+            <VBox styleClass="ch-panel" spacing="12" style="-fx-padding: 18 20 18 20;" maxWidth="620">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <FontIcon iconLiteral="fas-list-ol" iconSize="16" iconColor="#818cf8"/>
+                    <Label text="Final Rankings" styleClass="ch-panel-title"/>
+                </HBox>
+                <Pane styleClass="ch-divider"/>
+                <ScrollPane styleClass="ch-scroll" fitToWidth="true" maxHeight="360">
+                    <VBox fx:id="rankingBox" spacing="10">
+                        <padding><Insets top="4" right="4" bottom="4" left="4"/></padding>
+                    </VBox>
+                </ScrollPane>
+            </VBox>
+
+            <Button text="← Back to Lobby" styleClass="ch-btn-primary"
+                    onAction="#handleBackToLobby" maxWidth="240"
+                    style="-fx-font-size:14px; -fx-padding:12 32 12 32;"/>
+        </VBox>
+    </center>
+</BorderPane>
