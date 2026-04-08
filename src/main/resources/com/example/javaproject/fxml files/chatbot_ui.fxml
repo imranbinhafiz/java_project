@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<BorderPane styleClass="chatbot-root" stylesheets="@../css/chatbot.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.AiChatController">
+
+    <!-- ── HEADER ──────────────────────────────────────────────── -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="14" styleClass="chatbot-header">
+            <padding><Insets bottom="16" left="24" right="24" top="16" /></padding>
+
+            <!-- Bot icon with gradient circle -->
+            <StackPane styleClass="chatbot-header-icon">
+                <Label styleClass="chatbot-header-icon-label" text="✦" />
+            </StackPane>
+
+            <VBox spacing="2">
+                <Label styleClass="chatbot-header-title" text="AI Assistant" />
+                <HBox alignment="CENTER_LEFT" spacing="6">
+                    <Circle radius="4" styleClass="chatbot-status-dot" />
+                    <Label styleClass="chatbot-header-sub" />
+                </HBox>
+            </VBox>
+
+            <Pane HBox.hgrow="ALWAYS" />
+
+            <!-- Clear button -->
+            <Button fx:id="clearButton" onAction="#handleClear" styleClass="chatbot-clear-btn" text="🗑 Clear" />
+        </HBox>
+    </top>
+
+    <!-- ── CHAT AREA ───────────────────────────────────────────── -->
+    <center>
+        <VBox styleClass="chatbot-center-wrap">
+
+            <!-- Scrollable message list -->
+            <ScrollPane fx:id="chatScrollPane" fitToWidth="true" styleClass="chatbot-scroll" VBox.vgrow="ALWAYS">
+                <content>
+                    <VBox fx:id="chatContainer" spacing="10" styleClass="chatbot-messages-box">
+                        <padding><Insets bottom="16" left="0" right="0" top="16" /></padding>
+                    </VBox>
+                </content>
+            </ScrollPane>
+
+            <!-- Typing indicator row with animated dots -->
+            <HBox fx:id="typingIndicator" alignment="CENTER_LEFT" spacing="8" styleClass="chatbot-typing-row">
+                <padding><Insets bottom="6" left="24" right="24" top="6" /></padding>
+
+                <StackPane styleClass="typing-avatar">
+                    <Label styleClass="typing-avatar-text" text="✦" />
+                </StackPane>
+
+                <HBox alignment="CENTER" spacing="4" styleClass="typing-dots-container">
+                    <padding><Insets bottom="4" left="10" right="10" top="4" /></padding>
+                    <Circle radius="4" styleClass="typing-dot typing-dot-1" />
+                    <Circle radius="4" styleClass="typing-dot typing-dot-2" />
+                    <Circle radius="4" styleClass="typing-dot typing-dot-3" />
+                </HBox>
+
+                <Label styleClass="chatbot-typing-label" text="AI is thinking…" />
+            </HBox>
+
+            <!-- Suggestion chips -->
+            <HBox fx:id="suggestionChips" alignment="CENTER_LEFT" spacing="8" styleClass="chatbot-suggestion-row">
+                <padding><Insets bottom="6" left="20" right="20" top="6" /></padding>
+            </HBox>
+
+        </VBox>
+    </center>
+
+    <!-- ── INPUT BAR ───────────────────────────────────────────── -->
+    <bottom>
+        <VBox styleClass="chatbot-bottom-wrap">
+
+            <!-- Attached file indicator -->
+            <HBox fx:id="attachedFileBar" alignment="CENTER_LEFT" spacing="8" styleClass="chatbot-attached-bar">
+                <padding><Insets bottom="6" left="20" right="20" top="6" /></padding>
+                <Label fx:id="attachedFileLabel" styleClass="chatbot-attached-label" text="" />
+                <Pane HBox.hgrow="ALWAYS" />
+                <Label onMouseClicked="#handleRemoveAttachment" styleClass="chatbot-attached-remove" text="✕" />
+            </HBox>
+
+            <!-- Input bar -->
+            <HBox alignment="CENTER" spacing="10" styleClass="chatbot-input-bar">
+                <padding><Insets bottom="14" left="20" right="20" top="14" /></padding>
+
+                <!-- Attach image button -->
+                <Button fx:id="attachButton" onAction="#handleAttach" styleClass="chatbot-attach-btn" text="📎" />
+
+                <TextField fx:id="inputField" promptText="Ask me anything…" styleClass="chatbot-input-field" HBox.hgrow="ALWAYS" />
+
+                <Button fx:id="sendButton" onAction="#handleSend" styleClass="chatbot-send-btn" text="➤" />
+            </HBox>
+        </VBox>
+    </bottom>
+
+</BorderPane>

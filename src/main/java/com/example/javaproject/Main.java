@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -14,13 +15,17 @@ public class Main extends Application {
     static Stage stage;
     @Override
     public void start(Stage pstage) throws IOException {
+        // Start embedded server early for local-host scenarios so LAN clients can connect immediately.
+        ExamServerRuntime.ensureRunningForLocalTarget("localhost");
         stage=pstage;
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("images/images.jpg")));
         Parent root=FXMLLoader.load(getClass().getResource("fxml files/login.fxml"));
         Scene scene = new Scene(root);
-        stage.setTitle("Hello!");
+        stage.setTitle("");
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.show();
+
     }
 
     public static void changeScene(ActionEvent event, String fxmlFile) throws IOException {

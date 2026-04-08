@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane style="-fx-background-color: transparent;"
+            stylesheets="@../css/dashboard.css,@../css/challenge.css"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.javaproject.ChallengeRoomListController">
+
+    <top>
+        <HBox styleClass="ch-topbar" alignment="CENTER_LEFT" spacing="14">
+            <padding><Insets top="12" right="24" bottom="12" left="24"/></padding>
+            <Button text="◀  Back" styleClass="ch-btn-secondary" onAction="#handleBack"/>
+            <Label text="Active Rooms" styleClass="ch-title"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label fx:id="roomCountLabel" text="0 rooms" styleClass="ch-badge-waiting"/>
+            <Button text="↻  Refresh" styleClass="ch-btn-secondary"
+                    onAction="#handleRefresh"
+                    style="-fx-padding:7 14 7 14; -fx-font-size:12px;"/>
+        </HBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true"
+                    style="-fx-background-color:transparent; -fx-border-color:transparent;">
+            <VBox spacing="10" style="-fx-padding: 22 32 36 32;">
+
+                <!-- Column header row -->
+                <HBox styleClass="ch-panel" style="-fx-padding: 10 16 10 16;"
+                      alignment="CENTER_LEFT">
+                    <Label text="Room ID"   styleClass="ch-sec-lbl" prefWidth="110"/>
+                    <Label text="Mode"      styleClass="ch-sec-lbl" prefWidth="160"/>
+                    <Label text="Players"   styleClass="ch-sec-lbl" prefWidth="80"/>
+                    <Label text="Host"      styleClass="ch-sec-lbl" prefWidth="140"/>
+                    <Label text="Status"    styleClass="ch-sec-lbl" prefWidth="90"/>
+                    <Pane HBox.hgrow="ALWAYS"/>
+                    <Label text="Action"    styleClass="ch-sec-lbl"/>
+                </HBox>
+
+                <!-- Rows populated by controller -->
+                <VBox fx:id="roomsBox" spacing="8"/>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

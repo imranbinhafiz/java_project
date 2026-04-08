@@ -1,0 +1,822 @@
+/* ================================
+   ROOT & GLOBAL STYLES
+   ================================ */
+.root {
+    -fx-background-color: linear-gradient(to bottom right, #0f172a, #1e293b);
+    -fx-font-family: "Times New Roman";
+}
+
+/* ================================
+   TOP BAR
+   ================================ */
+.top-bar {
+    -fx-background-color: linear-gradient(to right, #1e293b, #334155);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 8, 0, 0, 2);
+    -fx-border-color: #334155;
+    -fx-border-width: 0 0 1 0;
+}
+
+.top-bar-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f8fafc;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 3, 0, 0, 1);
+}
+
+.hamburger-button {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #cbd5e1;
+    -fx-background-color: transparent;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-padding: 8 14 8 14;
+}
+
+.hamburger-button:hover {
+    -fx-background-color: rgba(148, 163, 184, 0.15);
+    -fx-text-fill: #f8fafc;
+}
+
+.hamburger-button:pressed {
+    -fx-background-color: rgba(148, 163, 184, 0.25);
+}
+
+/* User Section */
+.user-section {
+    -fx-padding: 0;
+}
+
+.username-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #cbd5e1;
+}
+
+.profile-icon {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #6366f1, #8b5cf6);
+    -fx-background-radius: 50%;
+    -fx-min-width: 38px;
+    -fx-min-height: 38px;
+    -fx-max-width: 38px;
+    -fx-max-height: 38px;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.4), 6, 0, 0, 2);
+}
+
+.profile-icon-text {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* ================================
+   SIDEBAR
+   ================================ */
+.sidebar {
+    -fx-background-color: linear-gradient(to bottom, #1e293b, #0f172a);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 12, 0, 3, 0);
+    -fx-border-color: #334155;
+    -fx-border-width: 0 1 0 0;
+}
+
+/* ================================
+   NAVIGATION BUTTONS
+   ================================ */
+.nav-menu {
+    -fx-padding: 0;
+}
+
+.nav-button {
+    -fx-font-size: 15px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #cbd5e1;
+    -fx-background-color: rgba(51, 65, 85, 0.3);
+    -fx-background-radius: 12px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 14 20 14 20;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-border-width: 1;
+    -fx-border-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0, 0, 1);
+}
+
+.nav-button:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, rgba(99, 102, 241, 0.25), rgba(139, 92, 246, 0.2));
+    -fx-text-fill: #f8fafc;
+    -fx-border-color: rgba(99, 102, 241, 0.4);
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.4), 8, 0, 0, 2);
+}
+
+.nav-button:pressed {
+    -fx-background-color: rgba(99, 102, 241, 0.3);
+}
+
+.nav-button:focused {
+    -fx-border-color: rgba(99, 102, 241, 0.6);
+}
+
+/* Active navigation state */
+.nav-button-active {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #6366f1, #8b5cf6);
+    -fx-text-fill: white;
+    -fx-border-color: rgba(99, 102, 241, 0.6);
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.6), 10, 0, 0, 3);
+}
+
+/* Logout Button */
+.logout-button {
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #fca5a5;
+    -fx-background-color: rgba(239, 68, 68, 0.1);
+    -fx-background-radius: 12px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 12 20 12 20;
+    -fx-cursor: hand;
+    -fx-border-color: rgba(239, 68, 68, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 12px;
+}
+
+.logout-button:hover {
+    -fx-background-color: rgba(239, 68, 68, 0.2);
+    -fx-text-fill: #fecaca;
+    -fx-border-color: rgba(239, 68, 68, 0.5);
+}
+
+.logout-button:pressed {
+    -fx-background-color: rgba(239, 68, 68, 0.3);
+}
+
+/* ================================
+   CONTENT AREA
+   ================================ */
+.content-area {
+    -fx-background-color: transparent;
+}
+
+/* Welcome Section */
+.welcome-section {
+    -fx-padding: 0 0 10 0;
+}
+
+.welcome-title {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f8fafc;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 4, 0, 0, 1);
+}
+
+.welcome-subtitle {
+    -fx-font-size: 16px;
+    -fx-text-fill: #94a3b8;
+    -fx-font-weight: 500;
+}
+
+/* ================================
+   DASHBOARD CARDS
+   ================================ */
+.dashboard-card {
+    -fx-background-color: linear-gradient(to bottom right, #1e293b, #334155);
+    -fx-background-radius: 16px;
+    -fx-border-color: rgba(148, 163, 184, 0.2);
+    -fx-border-width: 1;
+    -fx-border-radius: 16px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 0, 4);
+}
+
+.dashboard-card:hover {
+    -fx-border-color: rgba(99, 102, 241, 0.3);
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.3), 16, 0, 0, 5);
+}
+
+/* Card Headers */
+.card-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f8fafc;
+}
+
+.card-badge {
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #818cf8;
+    -fx-background-color: rgba(99, 102, 241, 0.15);
+    -fx-background-radius: 20px;
+    -fx-padding: 4 12 4 12;
+    -fx-border-color: rgba(99, 102, 241, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 20px;
+}
+
+.card-badge-warning {
+    -fx-text-fill: #818cf8;
+    -fx-background-color: rgba(99, 102, 241, 0.15);
+    -fx-border-color: rgba(99, 102, 241, 0.3);
+}
+
+/* ================================
+   TODO LIST CARD
+   ================================ */
+.todo-card {
+    -fx-background-color: rgba(45, 66, 99, 0.6);
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(99, 102, 241, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 6, 0, 0, 2);
+}
+
+/* Todo Input Field */
+.todo-input {
+    -fx-font-family: "Times New Roman";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f8fafc;
+    -fx-prompt-text-fill: #64748b;
+    -fx-background-color: rgba(15, 23, 42, 0.6);
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(148, 163, 184, 0.3);
+    -fx-border-radius: 10px;
+    -fx-border-width: 1.5px;
+    -fx-padding: 10 15 10 15;
+    -fx-pref-height: 40px;
+}
+
+.todo-input:focused {
+    -fx-border-color: rgba(99, 102, 241, 0.6);
+    -fx-background-color: rgba(15, 23, 42, 0.8);
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.3), 8, 0, 0, 0);
+}
+
+.todo-input:hover {
+    -fx-border-color: rgba(148, 163, 184, 0.5);
+}
+
+/* Add Todo Button */
+.todo-add-button {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #6366f1, #8b5cf6);
+    -fx-background-radius: 10px;
+    -fx-min-width: 45px;
+    -fx-min-height: 40px;
+    -fx-pref-width: 45px;
+    -fx-pref-height: 40px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.4), 6, 0, 0, 2);
+}
+
+.todo-add-button:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #4f46e5, #7c3aed);
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.6), 10, 0, 0, 3);
+}
+
+.todo-add-button:pressed {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #4338ca, #6d28d9);
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+}
+
+/* Todo List View */
+.todo-list {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.todo-list .list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 2;
+    -fx-border-color: transparent;
+}
+
+.todo-list .list-cell:filled {
+    -fx-background-color: rgba(15, 23, 42, 0.4);
+    -fx-background-radius: 12px;
+    -fx-border-color: rgba(71, 85, 105, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 12px;
+}
+
+.todo-list .list-cell:filled:hover {
+    -fx-background-color: rgba(51, 65, 85, 0.5);
+    -fx-border-color: rgba(99, 102, 241, 0.4);
+    -fx-cursor: hand;
+}
+
+.todo-list .list-cell:filled:selected {
+    -fx-background-color: rgba(99, 102, 241, 0.2);
+    -fx-border-color: rgba(99, 102, 241, 0.6);
+}
+
+.todo-list .list-cell:filled:selected:hover {
+    -fx-background-color: rgba(99, 102, 241, 0.3);
+}
+
+/* Todo List Cell Content */
+.todo-list-cell-content {
+    -fx-background-color: transparent;
+}
+
+/* Todo Item States */
+.todo-item-pending {
+    -fx-background-color: transparent;
+}
+
+.todo-item-completed {
+    -fx-background-color: rgba(34, 197, 94, 0.1);
+}
+
+.todo-item-overdue {
+    -fx-background-color: rgba(239, 68, 68, 0.1);
+    -fx-border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+/* Todo Item Text */
+.todo-item-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.todo-item-date {
+    -fx-font-size: 12px;
+    -fx-text-fill: #94a3b8;
+}
+
+/* Action Buttons */
+.todo-action-button {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #cbd5e1;
+    -fx-background-color: rgba(71, 85, 105, 0.4);
+    -fx-background-radius: 8px;
+    -fx-padding: 8 16 8 16;
+    -fx-cursor: hand;
+    -fx-border-color: rgba(148, 163, 184, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 8px;
+}
+
+.todo-action-button:hover {
+    -fx-background-color: rgba(71, 85, 105, 0.6);
+    -fx-border-color: rgba(148, 163, 184, 0.5);
+    -fx-text-fill: #f8fafc;
+}
+
+.todo-action-button:pressed {
+    -fx-background-color: rgba(71, 85, 105, 0.8);
+}
+
+/* Delete Button */
+.todo-delete-button {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #fca5a5;
+    -fx-background-color: rgba(239, 68, 68, 0.15);
+    -fx-background-radius: 8px;
+    -fx-padding: 8 16 8 16;
+    -fx-cursor: hand;
+    -fx-border-color: rgba(239, 68, 68, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 8px;
+}
+
+.todo-delete-button:hover {
+    -fx-background-color: rgba(239, 68, 68, 0.25);
+    -fx-border-color: rgba(239, 68, 68, 0.5);
+    -fx-text-fill: #fecaca;
+}
+
+.todo-delete-button:pressed {
+    -fx-background-color: rgba(239, 68, 68, 0.35);
+}
+
+.todo-delete-button:disabled {
+    -fx-opacity: 0.4;
+    -fx-cursor: default;
+}
+/* ================================
+   DEADLINE STYLES
+   ================================ */
+
+/* Deadline Input Fields - Match Todo Style */
+.deadline-date-picker,
+.deadline-title-field {
+    -fx-font-family: "Times New Roman";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f8fafc;
+    -fx-background-color: rgba(15, 23, 42, 0.6);
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(99, 102, 241, 0.3);
+    -fx-border-radius: 10px;
+    -fx-border-width: 1.5px;
+    -fx-padding: 12px 16px;
+}
+
+.deadline-date-picker:focused,
+.deadline-title-field:focused {
+    -fx-border-color: rgba(99, 102, 241, 0.7);
+    -fx-background-color: rgba(15, 23, 42, 0.8);
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.3), 8, 0, 0, 0);
+}
+
+/* DatePicker specific styles */
+.deadline-date-picker .date-picker-display-node {
+    -fx-background-color: transparent;
+}
+
+.deadline-date-picker .text-field {
+    -fx-prompt-text-fill: #64748b;
+}
+
+.deadline-date-picker .arrow-button {
+    -fx-background-color: rgba(99, 102, 241, 0.2);
+    -fx-background-radius: 0 9 9 0;
+    -fx-border-color: transparent;
+}
+
+.deadline-date-picker .arrow-button:hover {
+    -fx-background-color: rgba(99, 102, 241, 0.35);
+}
+
+.deadline-date-picker .arrow-button .arrow {
+    -fx-background-color: #818cf8;
+}
+
+/* ================================
+   DATEPICKER CALENDAR POPUP STYLING
+   ================================ */
+
+/* Basic popup styling - ensure visibility */
+.date-picker-popup {
+    -fx-background-color: #1e293b;
+    -fx-background-radius: 12px;
+    -fx-border-color: #334155;
+    -fx-border-width: 1px;
+    -fx-border-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 0, 4);
+    -fx-padding: 10px;
+}
+
+/* Calendar styling */
+.date-picker-popup .calendar {
+    -fx-background-color: transparent;
+}
+
+/* Month/Year header */
+.date-picker-popup .spinner {
+    -fx-background-color: #334155;
+    -fx-background-radius: 8px 8px 0 0;
+}
+
+.date-picker-popup .spinner .label {
+    -fx-text-fill: #f8fafc;
+    -fx-font-weight: bold;
+}
+
+/* Navigation buttons */
+.date-picker-popup .left-button,
+.date-picker-popup .right-button {
+    -fx-background-color: rgba(99, 102, 241, 0.2);
+    -fx-background-radius: 6px;
+    -fx-border-color: rgba(99, 102, 241, 0.3);
+    -fx-border-width: 1px;
+}
+
+.date-picker-popup .left-button:hover,
+.date-picker-popup .right-button:hover {
+    -fx-background-color: rgba(99, 102, 241, 0.4);
+}
+
+/* Calendar grid */
+.date-picker-popup .calendar-grid {
+    -fx-background-color: rgba(15, 23, 42, 0.5);
+    -fx-background-radius: 0 0 8px 8px;
+    -fx-hgap: 2px;
+    -fx-vgap: 2px;
+}
+
+/* Week day headers */
+.date-picker-popup .week-number-text,
+.date-picker-popup .day-name-text {
+    -fx-fill: #cbd5e1;
+    -fx-font-weight: bold;
+}
+
+/* Day cells */
+.date-picker-popup .day-cell {
+    -fx-background-color: transparent;
+    -fx-background-radius: 6px;
+    -fx-min-width: 28px;
+    -fx-min-height: 28px;
+    -fx-pref-width: 28px;
+    -fx-pref-height: 28px;
+    -fx-text-fill: #f8fafc;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+}
+
+.date-picker-popup .day-cell:hover {
+    -fx-background-color: rgba(99, 102, 241, 0.3);
+    -fx-background-radius: 6px;
+}
+
+/* Today cell */
+.date-picker-popup .today {
+    -fx-background-color: rgba(34, 197, 94, 0.3);
+    -fx-text-fill: #22c55e;
+    -fx-font-weight: bold;
+}
+
+.date-picker-popup .today:hover {
+    -fx-background-color: rgba(34, 197, 94, 0.5);
+}
+
+/* Selected cell */
+.date-picker-popup .selected {
+    -fx-background-color: #6366f1;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.date-picker-popup .selected:hover {
+    -fx-background-color: #4f46e5;
+}
+
+/* Weekend cells */
+.date-picker-popup .weekend {
+    -fx-text-fill: #fca5a5;
+}
+
+
+
+/* Deadline TextField */
+.deadline-title-field {
+    -fx-prompt-text-fill: #64748b;
+}
+
+/* Deadline Add Button - Match Todo Style */
+.deadline-add-button {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #818cf8;
+    -fx-background-color: rgba(99, 102, 241, 0.2);
+    -fx-background-radius: 10px;
+    -fx-min-width: 46px;
+    -fx-min-height: 46px;
+    -fx-cursor: hand;
+    -fx-border-color: rgba(99, 102, 241, 0.4);
+    -fx-border-width: 1.5;
+    -fx-border-radius: 10px;
+}
+
+.deadline-add-button:hover {
+    -fx-background-color: rgba(99, 102, 241, 0.35);
+    -fx-text-fill: #a5b4fc;
+    -fx-border-color: rgba(99, 102, 241, 0.6);
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.4), 8, 0, 0, 0);
+}
+
+.deadline-add-button:pressed {
+    -fx-background-color: rgba(99, 102, 241, 0.5);
+}
+
+/* Deadline ListView */
+.deadline-list {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.deadline-list .list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 5 0 5 0;
+    -fx-border-color: transparent;
+}
+
+.deadline-list .list-cell:filled:selected {
+    -fx-background-color: rgba(99, 102, 241, 0.15);
+    -fx-background-radius: 12px;
+}
+
+.deadline-list .list-cell:filled:hover {
+    -fx-background-color: transparent;
+}
+
+/* Deadline List Cell Card - Blue Theme */
+.deadline-list-cell-card {
+    -fx-background-color: rgba(45, 66, 99, 0.6);
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(99, 102, 241, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 6, 0, 0, 2);
+}
+
+/* All Deadline States Use Blue Theme */
+.deadline-item-overdue .deadline-list-cell-card,
+.deadline-item-urgent .deadline-list-cell-card,
+.deadline-item-approaching .deadline-list-cell-card,
+.deadline-item-normal .deadline-list-cell-card {
+    -fx-background-color: rgba(45, 66, 99, 0.6);
+    -fx-border-color: rgba(99, 102, 241, 0.3);
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.2), 6, 0, 0, 2);
+}
+
+/* Deadline Card Hover Effect */
+.deadline-list-cell-card:hover {
+    -fx-background-color: rgba(45, 66, 99, 0.75);
+    -fx-border-color: rgba(99, 102, 241, 0.5);
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.4), 10, 0, 0, 3);
+}
+
+/* Deadline Text Styles - All Blue Theme */
+.deadline-item-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f8fafc;
+}
+
+.deadline-days-left {
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-text-fill: #93c5fd;
+}
+
+.deadline-date {
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-text-fill: #94a3b8;
+}
+
+/* Deadline Delete Button - Match Todo Style */
+.deadline-delete-button {
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #a5b4fc;
+    -fx-background-color: rgba(99, 102, 241, 0.2);
+    -fx-background-radius: 8px;
+    -fx-padding: 6 14 6 14;
+    -fx-cursor: hand;
+    -fx-border-color: rgba(99, 102, 241, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 8px;
+}
+
+.deadline-delete-button:hover {
+    -fx-background-color: rgba(99, 102, 241, 0.35);
+    -fx-text-fill: #c7d2fe;
+    -fx-border-color: rgba(99, 102, 241, 0.5);
+}
+
+/* ================================
+   PLACEHOLDER CONTENT
+   ================================ */
+.placeholder-content {
+    -fx-background-color: rgba(15, 23, 42, 0.4);
+    -fx-background-radius: 12px;
+    -fx-border-color: rgba(71, 85, 105, 0.3);
+    -fx-border-width: 2;
+    -fx-border-radius: 12px;
+    -fx-border-style: dashed;
+    -fx-padding: 30;
+}
+
+.placeholder-icon {
+    -fx-font-size: 48px;
+    -fx-text-fill: #64748b;
+}
+
+.placeholder-text {
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #94a3b8;
+}
+
+.placeholder-subtext {
+    -fx-font-size: 13px;
+    -fx-text-fill: #64748b;
+    -fx-text-alignment: center;
+}
+
+/* ================================
+   IMAGE DISPLAY PANE
+   ================================ */
+.image-card {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #1e293b, #312e81);
+}
+
+.image-display-pane {
+    -fx-background-color: rgba(15, 23, 42, 0.5);
+    -fx-background-radius: 12px;
+    -fx-border-color: rgba(99, 102, 241, 0.2);
+    -fx-border-width: 2;
+    -fx-border-radius: 12px;
+    -fx-padding: 20;
+}
+
+/* ================================
+   SCROLLBAR STYLING
+   ================================ */
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical,
+.scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: rgba(148, 163, 184, 0.3);
+    -fx-background-radius: 4px;
+}
+
+.scroll-bar:vertical .thumb:hover,
+.scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: rgba(148, 163, 184, 0.5);
+}
+
+/* ================================
+   UTILITY CLASSES
+   ================================ */
+
+.text-center {
+    -fx-text-alignment: center;
+}
+
+.full-width {
+    -fx-pref-width: Infinity;
+}
+
+.shadow-sm {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 2, 0, 0, 1);
+}
+
+.shadow-md {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 6, 0, 0, 2);
+}
+
+.shadow-lg {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 12, 0, 0, 4);
+}
+/* ================================
+   MOTIVATIONAL TEXT SECTION
+   ================================ */
+.motivation-text-arabic {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(from 0% 0% to 100% 100%, #a5b4fc, #818cf8);
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.5), 8, 0, 0, 2);
+    -fx-padding: 0 10 0 10;
+}
+
+.motivation-verse-number {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #94a3b8;
+    -fx-background-color: rgba(99, 102, 241, 0.15);
+    -fx-background-radius: 50%;
+    -fx-min-width: 32px;
+    -fx-min-height: 32px;
+    -fx-max-width: 32px;
+    -fx-max-height: 32px;
+    -fx-alignment: center;
+    -fx-border-color: rgba(99, 102, 241, 0.3);
+    -fx-border-width: 1.5;
+    -fx-border-radius: 50%;
+}
+
+.motivation-text-english {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #cbd5e1;
+    -fx-font-style: italic;
+    -fx-padding: 0 10 0 10;
+}
+
+.motivation-divider {
+    -fx-background-color: linear-gradient(to right, transparent, rgba(99, 102, 241, 0.4), transparent);
+    -fx-min-height: 2px;
+    -fx-max-height: 2px;
+    -fx-pref-width: 120px;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.3), 4, 0, 0, 0);
+}
+
+.motivation-subtext {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #64748b;
+    -fx-font-style: italic;
+}

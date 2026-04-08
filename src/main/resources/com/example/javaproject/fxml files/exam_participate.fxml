@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane stylesheets="@../css/dashboard.css,@../css/exam.css"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.javaproject.ParticipateExamController">
+
+    <!-- TOP -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="16" styleClass="exam-sub-topbar">
+            <padding><Insets bottom="14" left="24" right="24" top="14"/></padding>
+            <Button text="← Back" styleClass="exam-back-btn" onAction="#handleBack"/>
+            <Label text="My Exams" styleClass="exam-sub-title"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Button text="🔄 Refresh" styleClass="exam-action-btn" onAction="#handleRefresh"/>
+        </HBox>
+    </top>
+
+    <!-- TABS -->
+    <center>
+        <TabPane fx:id="tabPane" styleClass="exam-tab-pane" tabClosingPolicy="UNAVAILABLE">
+
+            <!-- Tab 1: Available -->
+            <Tab fx:id="availableTab" text="🟢 Available Exams">
+                <content>
+                    <BorderPane>
+                        <top>
+                            <Label fx:id="availableStatusLabel" styleClass="exam-status-label" text="">
+                                <padding><Insets bottom="6" left="24" top="10"/></padding>
+                            </Label>
+                        </top>
+                        <center>
+                            <ScrollPane fitToWidth="true" styleClass="exam-scroll-pane">
+                                <content>
+                                    <VBox fx:id="availableExamsContainer" spacing="14" styleClass="exam-list-container">
+                                        <padding><Insets bottom="30" left="40" right="40" top="20"/></padding>
+                                    </VBox>
+                                </content>
+                            </ScrollPane>
+                        </center>
+                    </BorderPane>
+                </content>
+            </Tab>
+
+            <!-- Tab 2: Previous -->
+            <Tab fx:id="previousTab" text="🔵 Previous Exams">
+                <content>
+                    <BorderPane>
+                        <top>
+                            <Label fx:id="previousStatusLabel" styleClass="exam-status-label" text="">
+                                <padding><Insets bottom="6" left="24" top="10"/></padding>
+                            </Label>
+                        </top>
+                        <center>
+                            <ScrollPane fitToWidth="true" styleClass="exam-scroll-pane">
+                                <content>
+                                    <VBox fx:id="previousExamsContainer" spacing="14" styleClass="exam-list-container">
+                                        <padding><Insets bottom="30" left="40" right="40" top="20"/></padding>
+                                    </VBox>
+                                </content>
+                            </ScrollPane>
+                        </center>
+                    </BorderPane>
+                </content>
+            </Tab>
+
+        </TabPane>
+    </center>
+
+</BorderPane>
+

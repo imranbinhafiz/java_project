@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.*?>
+
+<VBox fx:id="contentArea" spacing="20.0" styleClass="content-area" stylesheets="@../css/courses.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.CoursesController">
+
+    <padding><Insets bottom="30" left="30" right="30" top="28" /></padding>
+
+    <!-- ── Page header ───────────────────────────────────────────── -->
+    <VBox spacing="4" styleClass="welcome-section">
+        <Label styleClass="welcome-title" text="My Courses" />
+        <Label styleClass="welcome-subtitle" text="Manage your courses and track your progress" />
+    </VBox>
+
+    <!-- ── Add Course bar ────────────────────────────────────────── -->
+    <HBox alignment="CENTER_LEFT" spacing="12" styleClass="add-course-bar">
+        <padding><Insets bottom="16" left="20" right="20" top="16" /></padding>
+
+        <FontIcon iconColor="#f7f3f3" iconLiteral="fas-book-open" iconSize="16" styleClass="section-icon" />
+        <TextField fx:id="courseNameField" onAction="#handleAddCourse" promptText="Course name…" styleClass="course-input" HBox.hgrow="ALWAYS" />
+        <Button fx:id="addCourseButton" onAction="#handleAddCourse" styleClass="add-course-button" text="＋ Add" />
+        <Button fx:id="importCourseButton" onAction="#handleImportCourse" styleClass="add-course-button" text="📥 Import" />
+        <Pane minWidth="12" HBox.hgrow="NEVER" />
+        <Label fx:id="courseCountBadge" styleClass="card-badge" text="0 courses" />
+    </HBox>
+
+    <!-- ── Course Cards Grid ─────────────────────────────────────── -->
+    <ScrollPane fx:id="coursesScrollPane" fitToWidth="true" hbarPolicy="NEVER" styleClass="cards-scroll" VBox.vgrow="ALWAYS">
+        <FlowPane fx:id="coursesGrid" hgap="18" styleClass="courses-grid" vgap="18">
+            <padding><Insets bottom="10" left="4" right="4" top="6" /></padding>
+        </FlowPane>
+    </ScrollPane>
+
+</VBox>

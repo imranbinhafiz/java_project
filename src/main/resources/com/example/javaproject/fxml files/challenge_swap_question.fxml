@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.*?>
+
+<!-- Question Creation Phase for Swap Duel -->
+<StackPane style="-fx-background-color: transparent;"
+           stylesheets="@../css/dashboard.css,@../css/challenge.css"
+           xmlns="http://javafx.com/javafx/17.0.12"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.example.javaproject.ChallengeSwapQuestionController">
+
+    <BorderPane style="-fx-background-color: transparent;">
+        <top>
+            <VBox styleClass="ch-topbar" spacing="4" style="-fx-padding: 12 24 12 24;">
+                <HBox alignment="CENTER_LEFT" spacing="14">
+                    <Label fx:id="roundLabel" text="Round 1 / 3" styleClass="ch-title"/>
+                    <Pane HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="myStatusLabel" text="⏳ Write your question"
+                           style="-fx-font-size:13px; -fx-text-fill:#fcd34d;"/>
+                    <Label text="  |  " style="-fx-text-fill:#334155;"/>
+                    <Label fx:id="opponentStatusLabel" text="⏳ Opponent writing..."
+                           style="-fx-font-size:13px; -fx-text-fill:#64748b;"/>
+                </HBox>
+                <Label fx:id="phaseLabel" text="Question Creation Phase" styleClass="ch-subtitle"/>
+            </VBox>
+        </top>
+
+        <center>
+            <HBox spacing="16" style="-fx-padding: 20 28 28 28;">
+
+                <!-- LEFT: Question creation panel -->
+                <VBox spacing="14" HBox.hgrow="ALWAYS">
+                    <VBox styleClass="ch-panel" spacing="12" style="-fx-padding: 18 20 18 20;" VBox.vgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <FontIcon iconLiteral="fas-pencil-alt" iconSize="16" iconColor="#818cf8"/>
+                            <Label text="Write Your Question" styleClass="ch-panel-title"/>
+                        </HBox>
+                        <Pane styleClass="ch-divider"/>
+
+                        <TextArea fx:id="questionTextArea"
+                                  styleClass="ch-field"
+                                  promptText="Write a descriptive question for your opponent to answer..."
+                                  wrapText="true" VBox.vgrow="ALWAYS"
+                                  style="-fx-min-height:160; -fx-pref-height:200;"/>
+
+                        <!-- Image attachment -->
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Button fx:id="uploadImageBtn" text="📎  Attach Image"
+                                    styleClass="ch-btn-action" onAction="#handleUploadImage"
+                                    style="-fx-font-size:12px; -fx-padding:7 14 7 14;"/>
+                            <Label text="Optional: add an image to your question"
+                                   style="-fx-font-size:11px; -fx-text-fill:#64748b;"/>
+                        </HBox>
+
+                        <!-- Image preview -->
+                        <VBox fx:id="imagePreviewBox" visible="false" managed="false" spacing="6"
+                              style="-fx-background-color:rgba(15,23,42,0.5); -fx-background-radius:10;
+                                     -fx-border-color:rgba(99,102,241,0.2); -fx-border-radius:10;
+                                     -fx-padding:10;">
+                            <ImageView fx:id="questionImageView" fitWidth="200" fitHeight="130"
+                                       preserveRatio="true"/>
+                            <Button fx:id="removeImageBtn" text="✕ Remove Image"
+                                    styleClass="ch-btn-red" onAction="#handleRemoveImage"
+                                    style="-fx-font-size:11px; -fx-padding:4 10 4 10;"/>
+                        </VBox>
+
+                        <Button fx:id="submitQuestionBtn" text="Upload Question  ↑"
+                                styleClass="ch-btn-primary" onAction="#handleSubmitQuestion"
+                                maxWidth="Infinity"
+                                style="-fx-font-size:14px; -fx-padding:12 0 12 0;"/>
+                    </VBox>
+
+                    <!-- Host-only: Timer control -->
+                    <HBox fx:id="timerControlRow" styleClass="ch-panel" spacing="12" alignment="CENTER_LEFT"
+                          style="-fx-padding: 12 18 12 18;" visible="false" managed="false">
+                        <FontIcon iconLiteral="fas-clock" iconSize="14" iconColor="#fcd34d"/>
+                        <Label text="Exam Timer:" style="-fx-text-fill:#fcd34d; -fx-font-weight:bold;"/>
+                        <Spinner fx:id="timerSpinner" styleClass="ch-field"
+                                 style="-fx-pref-width:90;" editable="true"/>
+                        <Label text="minutes" styleClass="ch-sec-lbl"/>
+                        <Button fx:id="setTimerBtn" text="Set Timer" styleClass="ch-btn-gold"
+                                onAction="#handleSetTimer"
+                                style="-fx-font-size:12px; -fx-padding:7 14 7 14;"/>
+                    </HBox>
+                </VBox>
+
+                <!-- RIGHT: Chat panel -->
+                <VBox spacing="0" prefWidth="280" minWidth="240">
+                    <VBox styleClass="ch-panel" spacing="10" style="-fx-padding: 14 16 14 16;" VBox.vgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <FontIcon iconLiteral="fas-comments" iconSize="14" iconColor="#818cf8"/>
+                            <Label text="Chat" styleClass="ch-panel-title"/>
+                        </HBox>
+                        <Pane styleClass="ch-divider"/>
+                        <ScrollPane fx:id="chatScroll" styleClass="ch-scroll" fitToWidth="true" VBox.vgrow="ALWAYS"
+                                    style="-fx-min-height:240;">
+                            <VBox fx:id="chatBox" spacing="6" style="-fx-padding:4 4 4 4;"/>
+                        </ScrollPane>
+                        <HBox spacing="8">
+                            <TextField fx:id="chatInput" styleClass="ch-field" HBox.hgrow="ALWAYS"
+                                       promptText="Say something..." onAction="#handleSendChat"/>
+                            <Button text="Send" styleClass="ch-btn-action" onAction="#handleSendChat"
+                                    style="-fx-padding:8 12 8 12; -fx-font-size:12px;"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+            </HBox>
+        </center>
+    </BorderPane>
+
+    <!-- POPUP OVERLAY -->
+    <StackPane fx:id="popupOverlay" styleClass="ch-overlay" visible="false">
+        <VBox fx:id="popupContent" maxWidth="380" styleClass="ch-popup" StackPane.alignment="CENTER"/>
+    </StackPane>
+</StackPane>

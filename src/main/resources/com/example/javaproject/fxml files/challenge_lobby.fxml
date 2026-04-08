@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.*?>
+
+<!--  Challenge Lobby — three action cards + online players panel  -->
+
+<StackPane style="-fx-background-color: transparent;" stylesheets="@../css/dashboard.css,@../css/challenge.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.ChallengeLobbyController">
+
+    <!-- ── MAIN CONTENT ──────────────────────────────────────────── -->
+    <BorderPane style="-fx-background-color: transparent;">
+
+        <!-- Page header -->
+        <top>
+            <VBox spacing="4" style="-fx-padding: 28 32 0 32;">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                            <FontIcon iconColor="white" iconLiteral="fas-bolt" iconSize="18" />
+                            <Label styleClass="ch-panel-title" text="Challenge Arena" />
+                        </HBox>
+                <Label fx:id="serverStatusLabel" style="-fx-font-size:13px; -fx-text-fill:#64748b;" text="Connecting…" />
+            </VBox>
+        </top>
+
+        <center>
+            <ScrollPane fitToWidth="true" style="-fx-background-color:transparent; -fx-border-color:transparent;">
+                <VBox spacing="24" style="-fx-padding: 24 32 40 32;">
+
+                    <!-- ── ACTION CARDS ──────────────────────────────────── -->
+                    <HBox spacing="16">
+
+                        <!-- Create Room -->
+                        <VBox alignment="CENTER" spacing="10" style="-fx-padding: 28 20 28 20;" styleClass="ch-action-card" HBox.hgrow="ALWAYS">
+                            <FontIcon iconColor="white" iconLiteral="fas-hammer" iconSize="32" />
+                            <Label styleClass="ch-action-title" text="Create Room" />
+                            <Label style="-fx-text-alignment:center;" styleClass="ch-action-desc" text="Start a new challenge room." wrapText="true" />
+                            <Button maxWidth="Infinity" onAction="#handleCreateRoom" styleClass="ch-btn-primary" text="Create Room" />
+                            <VBox.margin><Insets top="6" /></VBox.margin>
+                        </VBox>
+
+                        <!-- Room List -->
+                        <VBox alignment="CENTER" spacing="10" style="-fx-padding: 28 20 28 20;" styleClass="ch-action-card" HBox.hgrow="ALWAYS">
+                            <FontIcon iconColor="white" iconLiteral="fas-gamepad" iconSize="32" />
+                            <Label styleClass="ch-action-title" text="Room List" />
+                            <Label style="-fx-text-alignment:center;" styleClass="ch-action-desc" text="Browse and join active rooms." wrapText="true" />
+                            <Button maxWidth="Infinity" onAction="#handleRoomList" styleClass="ch-btn-primary" text="Browse Rooms" />
+                            <VBox.margin><Insets top="6" /></VBox.margin>
+                        </VBox>
+
+                        <!-- My Stats -->
+                        <VBox alignment="CENTER" spacing="10" style="-fx-padding: 28 20 28 20;" styleClass="ch-action-card" HBox.hgrow="ALWAYS">
+                            <FontIcon iconColor="white" iconLiteral="fas-chart-pie" iconSize="32" />
+                            <Label styleClass="ch-action-title" text="My Stats" />
+                            <Label style="-fx-text-alignment:center;" styleClass="ch-action-desc" text="View your wins, losses and score." wrapText="true" />
+                            <Button maxWidth="Infinity" onAction="#handleMyStats" styleClass="ch-btn-primary" text="View Stats" />
+                            <VBox.margin><Insets top="6" /></VBox.margin>
+                        </VBox>
+
+                    </HBox>
+
+                    <!-- ── ONLINE PLAYERS ────────────────────────────────── -->
+                    <VBox spacing="12" style="-fx-padding: 18 20 18 20;" styleClass="ch-panel">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label styleClass="ch-panel-title" text="Online Players" />
+                            <Pane HBox.hgrow="ALWAYS" />
+                            <Label fx:id="onlineCountLabel" styleClass="ch-badge-online" text="0 online" />
+                            <Button onAction="#handleRefresh" style="-fx-padding:5 10 5 10; -fx-font-size:13px;" styleClass="ch-btn-secondary" text="↻" />
+                        </HBox>
+                        <Pane styleClass="ch-divider" />
+                        <ScrollPane fitToWidth="true" maxHeight="200" styleClass="ch-scroll">
+                            <VBox fx:id="onlineUsersBox" spacing="6">
+                                <padding><Insets bottom="2" left="4" right="4" top="2" /></padding>
+                            </VBox>
+                        </ScrollPane>
+                    </VBox>
+
+                </VBox>
+            </ScrollPane>
+        </center>
+    </BorderPane>
+
+    <!-- ── INVITE POPUP OVERLAY (styled like alert.css) ─────────── -->
+    <StackPane fx:id="inviteOverlay" styleClass="ch-overlay" visible="false">
+        <VBox maxWidth="380" maxHeight="220" styleClass="ch-popup" StackPane.alignment="CENTER">
+
+            <!-- Header -->
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="ch-popup-header">
+                <FontIcon iconColor="white" iconLiteral="fas-fist-raised" iconSize="16" />
+                <Label styleClass="ch-popup-title" text="Challenge Received!" />
+            </HBox>
+
+            <!-- Body -->
+            <VBox spacing="4" styleClass="ch-popup-body">
+                <Label fx:id="inviteMessageLabel" styleClass="ch-popup-msg" text="You have been invited to a room." wrapText="true" maxWidth="340" />
+            </VBox>
+
+            <!-- Footer buttons -->
+            <HBox alignment="CENTER_RIGHT" spacing="10" styleClass="ch-popup-footer">
+                <Button onAction="#handleDeclineInvite" styleClass="ch-btn-danger" text="Decline" />
+                <Button onAction="#handleAcceptInvite" styleClass="ch-btn-primary" text="Accept" />
+            </HBox>
+
+        </VBox>
+    </StackPane>
+
+</StackPane>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<HBox spacing="0" styleClass="msg-root"
+      stylesheets="@../css/messenger.css"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.javaproject.MessengerController"
+      VBox.vgrow="ALWAYS" minHeight="500">
+
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <!-- LEFT PANEL – Conversations                                -->
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <VBox minWidth="285" prefWidth="300" maxWidth="320" styleClass="sidebar-panel">
+
+        <!-- Header -->
+        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="sidebar-header">
+            <padding><Insets bottom="15" left="18" right="16" top="15"/></padding>
+            <Label styleClass="sidebar-title" text="Messages"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label fx:id="unreadBadge" styleClass="unread-pill" text="0" visible="false" managed="false"/>
+            <Label fx:id="serverStatusLabel" styleClass="server-status" text="Connecting…"/>
+        </HBox>
+
+        <!-- Search Bar -->
+        <HBox styleClass="search-bar-box" alignment="CENTER">
+            <padding><Insets bottom="10" left="12" right="12" top="10"/></padding>
+            <TextField fx:id="searchField" promptText="🔍  Search conversations…"
+                       styleClass="search-field" HBox.hgrow="ALWAYS"
+                       onKeyReleased="#handleSearch"/>
+        </HBox>
+
+        <!-- DM Section -->
+        <VBox spacing="0" styleClass="section-block" VBox.vgrow="ALWAYS">
+            <Label styleClass="section-header" text="DIRECT MESSAGES">
+                <padding><Insets bottom="5" left="18" right="18" top="12"/></padding>
+            </Label>
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER"
+                        styleClass="conv-scroll" VBox.vgrow="ALWAYS">
+                <VBox fx:id="userListPane" styleClass="conv-list"/>
+            </ScrollPane>
+        </VBox>
+
+        <!-- Separator -->
+        <Pane minHeight="1" maxHeight="1" styleClass="panel-sep"/>
+
+        <!-- Group Rooms Section -->
+        <VBox spacing="0" styleClass="section-block" VBox.vgrow="ALWAYS">
+            <Label styleClass="section-header" text="GROUP CHATS">
+                <padding><Insets bottom="5" left="18" right="18" top="12"/></padding>
+            </Label>
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER"
+                        styleClass="conv-scroll" VBox.vgrow="ALWAYS">
+                <VBox fx:id="roomListPane" styleClass="conv-list"/>
+            </ScrollPane>
+
+            <!-- Create room bar -->
+            <HBox spacing="8" styleClass="create-room-bar" alignment="CENTER_LEFT">
+                <padding><Insets bottom="11" left="12" right="12" top="10"/></padding>
+                <TextField fx:id="newRoomField" promptText="New group name…"
+                           styleClass="msg-input" onAction="#handleCreateRoom"
+                           HBox.hgrow="ALWAYS"/>
+                <Button fx:id="createRoomBtn" text="＋"
+                        styleClass="create-room-btn" onAction="#handleCreateRoom"/>
+            </HBox>
+        </VBox>
+    </VBox>
+
+    <!-- Vertical divider -->
+    <Pane minWidth="1" maxWidth="1" styleClass="panel-sep"/>
+
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <!-- RIGHT PANEL – Chat Area                                   -->
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <VBox HBox.hgrow="ALWAYS" maxWidth="Infinity" styleClass="chat-area">
+
+        <!-- No-selection placeholder -->
+        <VBox fx:id="noSelectionPane" alignment="CENTER" spacing="14"
+              VBox.vgrow="ALWAYS" styleClass="no-selection-pane">
+            <Label styleClass="no-sel-icon" text="💬"/>
+            <Label styleClass="no-sel-title" text="Your messages"/>
+            <Label styleClass="no-sel-sub"
+                   text="Select a person or group from the left panel to start chatting"
+                   wrapText="true" maxWidth="260"/>
+        </VBox>
+
+        <!-- Active chat (hidden until conversation selected) -->
+        <VBox fx:id="chatPane" VBox.vgrow="ALWAYS" visible="false" managed="false" spacing="0">
+
+            <!-- Chat header -->
+            <HBox alignment="CENTER_LEFT" spacing="13" styleClass="chat-header">
+                <padding><Insets bottom="13" left="18" right="18" top="13"/></padding>
+                <StackPane fx:id="headerAvatarPane" styleClass="chat-header-avatar"/>
+                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                    <Label fx:id="chatHeaderName" styleClass="chat-header-name" text=""/>
+                    <Label fx:id="chatHeaderStatus" styleClass="chat-header-status" text=""/>
+                </VBox>
+                <Button fx:id="memberMgmtBtn" text="⚙  Members"
+                        styleClass="mgmt-btn" onAction="#handleMemberMgmt"
+                        visible="false" managed="false"/>
+            </HBox>
+
+            <!-- Separator -->
+            <Pane minHeight="1" maxHeight="1" styleClass="panel-sep"/>
+
+            <!-- Messages scroll -->
+            <ScrollPane fx:id="messagesScroll" fitToWidth="true" hbarPolicy="NEVER"
+                        styleClass="messages-scroll" VBox.vgrow="ALWAYS">
+                <VBox fx:id="messagesContainer" spacing="4" styleClass="messages-container">
+                    <padding><Insets bottom="14" top="14"/></padding>
+                </VBox>
+            </ScrollPane>
+
+            <!-- Typing bar -->
+            <HBox fx:id="typingBar" styleClass="typing-bar" alignment="CENTER_LEFT" visible="false" managed="false">
+                <Label fx:id="typingLabel" styleClass="typing-label" text=""/>
+            </HBox>
+
+            <!-- Separator -->
+            <Pane minHeight="1" maxHeight="1" styleClass="panel-sep"/>
+
+            <HBox fx:id="pendingAttachmentBar" alignment="CENTER_LEFT" spacing="10"
+                  styleClass="pending-attachment-bar" visible="false" managed="false">
+                <Label fx:id="pendingAttachmentLabel" styleClass="pending-attachment-label" text=""/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Button fx:id="clearAttachmentBtn" text="✕" styleClass="pending-attachment-clear"
+                        onAction="#handleClearAttachment"/>
+            </HBox>
+
+            <!-- Input bar -->
+            <HBox alignment="CENTER" spacing="8" styleClass="input-bar">
+                <padding><Insets bottom="13" left="14" right="14" top="13"/></padding>
+                <!-- Attach / Image button replaces the old emoji button -->
+                <Button fx:id="attachButton" text="📎" styleClass="attach-btn" onAction="#handleAttachFile">
+                    <tooltip>
+                        <Tooltip text="Send image or file"/>
+                    </tooltip>
+                </Button>
+                <TextField fx:id="messageInput" promptText="Type a message…"
+                           styleClass="msg-input" onAction="#handleSend"
+                           HBox.hgrow="ALWAYS"/>
+                <Label fx:id="charCounter" styleClass="char-counter" text=""/>
+                <Button fx:id="sendButton" text="➤"
+                        styleClass="msg-send-btn" onAction="#handleSend"/>
+            </HBox>
+        </VBox>
+    </VBox>
+
+</HBox>

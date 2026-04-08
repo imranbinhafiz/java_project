@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.*?>
+
+<!-- Evaluation Phase for Swap Duel -->
+<StackPane style="-fx-background-color: transparent;"
+           stylesheets="@../css/dashboard.css,@../css/challenge.css"
+           xmlns="http://javafx.com/javafx/17.0.12"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.example.javaproject.ChallengeSwapEvalController">
+
+    <BorderPane style="-fx-background-color: transparent;">
+        <top>
+            <HBox styleClass="ch-topbar" alignment="CENTER_LEFT" spacing="14">
+                <padding><Insets top="12" right="24" bottom="12" left="24"/></padding>
+                <Label fx:id="roundLabel" text="Round 1 / 3  —  Evaluation Phase" styleClass="ch-title"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Label fx:id="opponentStatusLabel" text="⏳ Opponent evaluating..."
+                       style="-fx-font-size:13px; -fx-text-fill:#64748b;"/>
+            </HBox>
+        </top>
+
+        <center>
+            <ScrollPane fitToWidth="true" style="-fx-background-color:transparent; -fx-border-color:transparent;">
+                <VBox spacing="18" style="-fx-padding: 22 32 36 32;">
+
+                    <!-- Your Question -->
+                    <VBox styleClass="ch-panel" spacing="10" style="-fx-padding: 16 20 16 20;">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <FontIcon iconLiteral="fas-question-circle" iconSize="14" iconColor="#818cf8"/>
+                            <Label text="Your Question (that you wrote)" styleClass="ch-panel-title"/>
+                        </HBox>
+                        <Pane styleClass="ch-divider"/>
+                        <Label fx:id="myQuestionLabel" text=""
+                               style="-fx-font-size:14px; -fx-text-fill:#94a3b8;" wrapText="true"/>
+                        <VBox fx:id="myQuestionImageBox" visible="false" managed="false"
+                              style="-fx-background-color:rgba(15,23,42,0.4); -fx-background-radius:10; -fx-padding:10;
+                                     -fx-border-color:rgba(99,102,241,0.2); -fx-border-radius:10;">
+                            <ImageView fx:id="myQuestionImageView" fitWidth="300" fitHeight="200" preserveRatio="true"/>
+                        </VBox>
+                    </VBox>
+
+                    <!-- Opponent's Answer -->
+                    <VBox styleClass="ch-panel" spacing="12" style="-fx-padding: 18 20 18 20;">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <FontIcon iconLiteral="fas-user" iconSize="14" iconColor="#86efac"/>
+                            <Label text="Opponent's Answer" styleClass="ch-panel-title" style="-fx-text-fill:#86efac;"/>
+                        </HBox>
+                        <Pane styleClass="ch-divider"/>
+                        <Label fx:id="opponentAnswerLabel" text=""
+                               style="-fx-font-size:15px; -fx-text-fill:#e2e8f0;" wrapText="true"/>
+                        <VBox fx:id="opponentAnswerImageBox" visible="false" managed="false"
+                              style="-fx-background-color:rgba(15,23,42,0.4); -fx-background-radius:10; -fx-padding:10;
+                                     -fx-border-color:rgba(34,197,94,0.2); -fx-border-radius:10;">
+                            <ImageView fx:id="opponentAnswerImageView" fitWidth="300" fitHeight="200" preserveRatio="true"/>
+                        </VBox>
+                    </VBox>
+
+                    <!-- Mark Assignment -->
+                    <VBox styleClass="ch-panel" spacing="14" style="-fx-padding: 18 20 18 20;">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <FontIcon iconLiteral="fas-star" iconSize="16" iconColor="#fcd34d"/>
+                            <Label text="Assign Marks" styleClass="ch-panel-title" style="-fx-text-fill:#fcd34d;"/>
+                        </HBox>
+                        <Pane styleClass="ch-divider"/>
+                        <Label text="How many marks does this answer deserve? (0 – 100)"
+                               style="-fx-font-size:13px; -fx-text-fill:#94a3b8;"/>
+                        <HBox spacing="14" alignment="CENTER_LEFT">
+                            <Spinner fx:id="marksSpinner"
+                                     style="-fx-pref-width:120; -fx-font-size:18px;"
+                                     styleClass="ch-field" editable="true"/>
+                            <Label text="marks" style="-fx-font-size:14px; -fx-text-fill:#94a3b8;"/>
+                        </HBox>
+                        <Button fx:id="submitMarksBtn" text="Submit Marks  ✓"
+                                styleClass="ch-btn-gold" onAction="#handleSubmitMarks"
+                                maxWidth="Infinity"
+                                style="-fx-font-size:14px; -fx-padding:12 0 12 0;"/>
+                    </VBox>
+
+                </VBox>
+            </ScrollPane>
+        </center>
+    </BorderPane>
+
+    <StackPane fx:id="popupOverlay" styleClass="ch-overlay" visible="false">
+        <VBox fx:id="popupContent" maxWidth="380" styleClass="ch-popup" StackPane.alignment="CENTER"/>
+    </StackPane>
+</StackPane>

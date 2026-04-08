@@ -1,0 +1,340 @@
+/* ================================
+   SYLLABUS MAIN CARD
+   ================================ */
+.syllabus-main-card {
+    -fx-background-color: linear-gradient(to bottom right, #1e293b, #334155);
+    -fx-background-radius: 16px;
+    -fx-border-color: rgba(148, 163, 184, 0.2);
+    -fx-border-width: 1;
+    -fx-border-radius: 16px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 0, 4);
+}
+
+/* ================================
+   HEADER SECTION
+   ================================ */
+.syllabus-course-name {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f8fafc;
+}
+
+.syllabus-course-code {
+    -fx-font-size: 18px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #93c5fd;
+}
+
+.back-button {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #94a3b8;
+    -fx-background-color: rgba(71, 85, 105, 0.3);
+    -fx-background-radius: 8px;
+    -fx-padding: 8 16 8 16;
+    -fx-cursor: hand;
+    -fx-border-color: rgba(148, 163, 184, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 8px;
+}
+
+.back-button:hover {
+    -fx-background-color: rgba(71, 85, 105, 0.5);
+    -fx-text-fill: #cbd5e1;
+    -fx-border-color: rgba(148, 163, 184, 0.5);
+}
+
+.back-button:pressed {
+    -fx-background-color: rgba(71, 85, 105, 0.7);
+}
+
+/* ================================
+   PROGRESS SECTION
+   ================================ */
+.progress-section {
+    -fx-background-color: rgba(45, 66, 99, 0.4);
+    -fx-background-radius: 12px;
+    -fx-border-color: rgba(99, 102, 241, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 12px;
+    -fx-padding: 20;
+}
+
+.section-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #cbd5e1;
+}
+
+.progress-label {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #818cf8;
+}
+
+.syllabus-progress-bar {
+    -fx-background-color: rgba(15, 23, 42, 0.6);
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(99, 102, 241, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 10px;
+}
+
+.syllabus-progress-bar .bar {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #6366f1, #8b5cf6);
+    -fx-background-radius: 9px;
+    -fx-background-insets: 0;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.5), 8, 0, 0, 0);
+}
+
+.syllabus-progress-bar .track {
+    -fx-background-color: rgba(15, 23, 42, 0.6);
+    -fx-background-radius: 10px;
+}
+
+.progress-stat {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #94a3b8;
+}
+
+.progress-stat-separator {
+    -fx-font-size: 13px;
+    -fx-text-fill: #64748b;
+}
+
+/* ================================
+   ADD TOPIC SECTION
+   ================================ */
+.add-topic-section {
+    -fx-background-color: rgba(45, 66, 99, 0.3);
+    -fx-background-radius: 12px;
+    -fx-border-color: rgba(99, 102, 241, 0.25);
+    -fx-border-width: 1;
+    -fx-border-radius: 12px;
+    -fx-padding: 18 20 18 20;
+}
+
+.topic-input {
+    -fx-font-family: "Times New Roman";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f8fafc;
+    -fx-prompt-text-fill: #64748b;
+    -fx-background-color: rgba(15, 23, 42, 0.6);
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(148, 163, 184, 0.3);
+    -fx-border-radius: 10px;
+    -fx-border-width: 1.5px;
+    -fx-padding: 12 16 12 16;
+}
+
+.topic-input:focused {
+    -fx-border-color: rgba(99, 102, 241, 0.6);
+    -fx-background-color: rgba(15, 23, 42, 0.8);
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.3), 8, 0, 0, 0);
+}
+
+.topic-input:hover {
+    -fx-border-color: rgba(148, 163, 184, 0.5);
+}
+
+.add-topic-button {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #6366f1, #8b5cf6);
+    -fx-background-radius: 10px;
+    -fx-padding: 12 24 12 24;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.4), 6, 0, 0, 2);
+}
+
+.add-topic-button:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #4f46e5, #7c3aed);
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.6), 10, 0, 0, 3);
+}
+
+.add-topic-button:pressed {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #4338ca, #6d28d9);
+    -fx-scale-x: 0.97;
+    -fx-scale-y: 0.97;
+}
+
+/* ================================
+   TOPICS LIST
+   ================================ */
+.topic-count-badge {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #818cf8;
+    -fx-background-color: rgba(99, 102, 241, 0.15);
+    -fx-background-radius: 20px;
+    -fx-padding: 5 14 5 14;
+    -fx-border-color: rgba(99, 102, 241, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 20px;
+}
+
+.topics-list {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.topics-list .list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 4;
+    -fx-border-color: transparent;
+}
+
+.topics-list .list-cell:filled {
+    -fx-background-color: rgba(15, 23, 42, 0.4);
+    -fx-background-radius: 12px;
+    -fx-border-color: rgba(99, 102, 241, 0.25);
+    -fx-border-width: 1;
+    -fx-border-radius: 12px;
+    -fx-padding: 8;
+}
+
+.topics-list .list-cell:filled:hover {
+    -fx-background-color: rgba(51, 65, 85, 0.5);
+    -fx-border-color: rgba(99, 102, 241, 0.4);
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.2), 6, 0, 0, 2);
+}
+
+.topics-list .list-cell:filled:selected {
+    -fx-background-color: rgba(99, 102, 241, 0.2);
+    -fx-border-color: rgba(99, 102, 241, 0.6);
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.4), 8, 0, 0, 2);
+}
+
+.topics-list .list-cell:filled:selected:hover {
+    -fx-background-color: rgba(99, 102, 241, 0.3);
+}
+
+/* Topic Cell Content */
+.topic-checkbox {
+    -fx-text-fill: #f8fafc;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+}
+
+.topic-checkbox:selected .box {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #6366f1, #8b5cf6);
+    -fx-border-color: #6366f1;
+}
+
+.topic-checkbox:selected .mark {
+    -fx-background-color: white;
+}
+
+.topic-checkbox .box {
+    -fx-background-color: rgba(15, 23, 42, 0.6);
+    -fx-border-color: rgba(148, 163, 184, 0.5);
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+}
+
+.topic-checkbox:hover .box {
+    -fx-border-color: rgba(99, 102, 241, 0.6);
+}
+
+.topic-completed {
+    -fx-text-fill: #94a3b8;
+    -fx-strikethrough: true;
+}
+
+.topic-pending {
+    -fx-text-fill: #f8fafc;
+}
+
+/* ================================
+   ACTION BUTTONS
+   ================================ */
+.selection-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #64748b;
+    -fx-font-style: italic;
+}
+
+.delete-topic-button {
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #fca5a5;
+    -fx-background-color: rgba(239, 68, 68, 0.15);
+    -fx-background-radius: 10px;
+    -fx-padding: 12 20 12 20;
+    -fx-cursor: hand;
+    -fx-border-color: rgba(239, 68, 68, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 10px;
+}
+
+.delete-topic-button:hover {
+    -fx-background-color: rgba(239, 68, 68, 0.25);
+    -fx-border-color: rgba(239, 68, 68, 0.5);
+    -fx-text-fill: #fecaca;
+    -fx-effect: dropshadow(gaussian, rgba(239, 68, 68, 0.3), 6, 0, 0, 2);
+}
+
+.delete-topic-button:pressed {
+    -fx-background-color: rgba(239, 68, 68, 0.35);
+}
+
+.delete-topic-button:disabled {
+    -fx-opacity: 0.4;
+    -fx-cursor: default;
+}
+
+.clear-all-button {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #fca5a5;
+    -fx-background-color: rgba(239, 68, 68, 0.1);
+    -fx-background-radius: 8px;
+    -fx-padding: 10 18 10 18;
+    -fx-cursor: hand;
+    -fx-border-color: rgba(239, 68, 68, 0.25);
+    -fx-border-width: 1;
+    -fx-border-radius: 8px;
+}
+
+.clear-all-button:hover {
+    -fx-background-color: rgba(239, 68, 68, 0.2);
+    -fx-text-fill: #fecaca;
+    -fx-border-color: rgba(239, 68, 68, 0.4);
+}
+
+.clear-all-button:pressed {
+    -fx-background-color: rgba(239, 68, 68, 0.3);
+}
+
+/* ================================
+   SCROLLBAR STYLING
+   ================================ */
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical,
+.scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: rgba(148, 163, 184, 0.3);
+    -fx-background-radius: 4px;
+}
+
+.scroll-bar:vertical .thumb:hover,
+.scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: rgba(148, 163, 184, 0.5);
+}

@@ -10,8 +10,44 @@
     -fx-max-width: 400px;
 }
 
+.server-panel {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-radius: 14px;
+    -fx-border-color: rgba(255, 255, 255, 0.28);
+    -fx-border-radius: 14px;
+    -fx-border-width: 1px;
+    -fx-padding: 10px 12px 10px 12px;
+    -fx-effect: dropshadow(gaussian, rgba(17, 24, 39, 0.30), 12, 0, 0, 4);
+}
+
+.server-label {
+    -fx-font-family: "Times New Roman";
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f8fafc;
+    -fx-opacity: 0.95;
+}
+
+.server-field {
+    -fx-font-family: "Times New Roman";
+    -fx-font-size: 13px;
+    -fx-pref-width: 168px;
+    -fx-padding: 8px 10px 8px 10px;
+    -fx-background-color: rgba(255, 255, 255, 0.95);
+    -fx-background-radius: 9px;
+    -fx-border-color: rgba(96, 108, 136, 0.55);
+    -fx-border-radius: 9px;
+    -fx-border-width: 1px;
+}
+
+.server-field:focused {
+    -fx-border-color: #606c88;
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(96, 108, 136, 0.25), 8, 0, 0, 2);
+}
+
 .login-title {
-    -fx-font-family: "Segoe UI";
+    -fx-font-family: "Times New Roman";
     -fx-font-size: 26px;
     -fx-font-weight: bold;
     -fx-text-fill: linear-gradient(to bottom, #3f4c6b, #606c88);
@@ -21,7 +57,7 @@
 }
 
 .field-label {
-    -fx-font-family: "Segoe UI";
+    -fx-font-family: "Times New Roman";
     -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-text-fill: #34495e;
@@ -37,7 +73,7 @@
 
 
 .text-field, .password-field {
-    -fx-font-family: "Segoe UI";
+    -fx-font-family: "Times New Roman";
     -fx-font-size: 14px;
     -fx-prompt-text-fill: #95a5a6;
     -fx-background-color: #f9f9f9;
@@ -54,7 +90,7 @@
 }
 
 .login-button {
-    -fx-font-family: "Segoe UI";
+    -fx-font-family: "Times New Roman";
     -fx-font-size: 16px;
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
@@ -72,7 +108,7 @@
 }
 
 .signup-hint {
-    -fx-font-family: "Segoe UI";
+    -fx-font-family: "Times New Roman";
     -fx-font-size: 13px;
     -fx-text-fill: #7f8c8d;
     -fx-padding: 0 8px 0 0;
@@ -84,7 +120,7 @@
 }
 
 .signup-button {
-    -fx-font-family: "Segoe UI";
+    -fx-font-family: "Times New Roman";
     -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
@@ -106,7 +142,7 @@
 }
 
 .label.signup-hint {
-    -fx-font-family: "Segoe UI";
+    -fx-font-family: "Times New Roman";
     -fx-font-size: 13px;
     -fx-text-fill: #7f8c8d;
 }

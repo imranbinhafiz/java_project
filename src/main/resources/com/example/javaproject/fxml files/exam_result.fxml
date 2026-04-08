@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane stylesheets="@../css/dashboard.css,@../css/exam.css"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.javaproject.ExamResultController">
+
+    <!-- TOP -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="16" styleClass="exam-sub-topbar">
+            <padding><Insets bottom="14" left="24" right="24" top="14"/></padding>
+            <Button text="← All Exams" styleClass="exam-back-btn" onAction="#handleBackToExams"/>
+            <Label fx:id="examTitleLabel" styleClass="exam-sub-title" text="Result"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Button text="🏠 Exam Home" styleClass="exam-action-btn" onAction="#handleBackToHome"/>
+        </HBox>
+    </top>
+
+    <!-- CONTENT -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="exam-scroll-pane">
+            <content>
+                <VBox spacing="28">
+                    <padding><Insets bottom="40" left="60" right="60" top="30"/></padding>
+
+                    <!-- Score Summary Card -->
+                    <HBox spacing="40" alignment="CENTER" styleClass="exam-result-summary-card">
+                        <padding><Insets bottom="30" left="40" right="40" top="30"/></padding>
+
+                        <!-- Grade circle -->
+                        <VBox alignment="CENTER" spacing="4" minWidth="110">
+                            <Label fx:id="gradeLabel" text="A" styleClass="exam-grade-label"/>
+                            <Label text="Grade" styleClass="exam-field-label"/>
+                        </VBox>
+
+                        <!-- Stats -->
+                        <VBox spacing="12" HBox.hgrow="ALWAYS">
+                            <Label fx:id="scoreLabel"      styleClass="exam-result-score" text="—/—"/>
+                            <Label fx:id="percentageLabel" styleClass="exam-result-pct"   text="—%"/>
+                            <HBox spacing="24">
+                                <Label fx:id="correctLabel"  styleClass="exam-result-correct" text="✅ Correct: —"/>
+                                <Label fx:id="wrongLabel"    styleClass="exam-result-wrong"   text="❌ Wrong: —"/>
+                            </HBox>
+                            <HBox spacing="20">
+                                <Label fx:id="attemptDateLabel" styleClass="exam-card-meta" text=""/>
+                                <Label fx:id="publisherLabel"   styleClass="exam-card-meta" text=""/>
+                            </HBox>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Question Breakdown -->
+                    <VBox spacing="12">
+                        <Label text="Question Breakdown" styleClass="exam-section-header"/>
+                        <VBox fx:id="breakdownContainer" spacing="8"/>
+                    </VBox>
+
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+
+</BorderPane>
+

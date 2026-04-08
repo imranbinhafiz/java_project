@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane stylesheets="@../css/dashboard.css,@../css/exam.css"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.javaproject.PublishExamController">
+
+    <!-- TOP BAR -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="16" styleClass="exam-sub-topbar">
+            <padding><Insets bottom="14" left="24" right="24" top="14"/></padding>
+            <Button text="← Back" styleClass="exam-back-btn" onAction="#handleBack"/>
+            <Label text="Create New Exam" styleClass="exam-sub-title"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label fx:id="statusLabel" styleClass="exam-status-label" text=""/>
+            <Button fx:id="publishButton" text="🚀 Publish Exam" styleClass="exam-publish-btn" onAction="#handlePublish"/>
+        </HBox>
+    </top>
+
+    <!-- SCROLLABLE FORM -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="exam-scroll-pane">
+            <content>
+                <VBox spacing="24" styleClass="exam-form-container">
+                    <padding><Insets bottom="40" left="60" right="60" top="30"/></padding>
+
+                    <!-- ROW 1: Title + Description -->
+                    <VBox spacing="10" styleClass="exam-form-section">
+                        <Label text="Exam Details" styleClass="exam-section-header"/>
+                        <TextField fx:id="examTitleField" promptText="Exam title *" styleClass="exam-form-input" maxWidth="Infinity"/>
+                        <TextArea fx:id="examDescField" promptText="Description (optional)" styleClass="exam-form-textarea"
+                                  prefHeight="80" maxWidth="Infinity" wrapText="true"/>
+                    </VBox>
+
+                    <!-- ROW 2: Duration + Marks + Toggles -->
+                    <HBox spacing="20">
+                        <VBox spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Duration (minutes)" styleClass="exam-field-label"/>
+                            <TextField fx:id="durationField"  styleClass="exam-spinner" maxWidth="Infinity"/>
+                        </VBox>
+                        <VBox spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Total Marks" styleClass="exam-field-label"/>
+                            <TextField fx:id="totalMarksField"  styleClass="exam-spinner" maxWidth="Infinity"/>
+                        </VBox>
+                        <VBox spacing="12" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                            <CheckBox fx:id="negativeMarkingCheck" text="Negative Marking (-1)" styleClass="exam-check"/>
+                            <CheckBox fx:id="shuffleOptionsCheck" text="Shuffle Options" styleClass="exam-check"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- ROW 3: Exam Type -->
+                    <VBox spacing="10" styleClass="exam-form-section">
+                        <Label text="Exam Type" styleClass="exam-section-header"/>
+                        <HBox spacing="30" alignment="CENTER_LEFT">
+                            <RadioButton fx:id="practiceRadio"  text="📘 Practice Exam"       styleClass="exam-radio"/>
+                            <RadioButton fx:id="realTimeRadio"  text="🔴 Real-Time Scheduled" styleClass="exam-radio"/>
+                        </HBox>
+
+                        <!-- Real-Time date/time fields -->
+                        <VBox fx:id="realTimeFields" spacing="12">
+                            <HBox spacing="16" alignment="CENTER_LEFT">
+                                <Label text="Start:" styleClass="exam-field-label" minWidth="40"/>
+                                <DatePicker fx:id="startDatePicker" styleClass="exam-date-picker"/>
+                                <Spinner fx:id="startHourSpinner" styleClass="exam-spinner" prefWidth="75"/>
+                                <Label text=":" styleClass="exam-field-label"/>
+                                <Spinner fx:id="startMinSpinner"  styleClass="exam-spinner" prefWidth="75"/>
+                            </HBox>
+                            <HBox spacing="16" alignment="CENTER_LEFT">
+                                <Label text="End:" styleClass="exam-field-label" minWidth="40"/>
+                                <DatePicker fx:id="endDatePicker" styleClass="exam-date-picker"/>
+                                <Spinner fx:id="endHourSpinner" styleClass="exam-spinner" prefWidth="75"/>
+                                <Label text=":" styleClass="exam-field-label"/>
+                                <Spinner fx:id="endMinSpinner"  styleClass="exam-spinner" prefWidth="75"/>
+                            </HBox>
+                        </VBox>
+                    </VBox>
+
+                    <!-- ROW 4: Questions -->
+                    <VBox spacing="12" styleClass="exam-form-section">
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <Label text="Questions" styleClass="exam-section-header"/>
+                            <Pane HBox.hgrow="ALWAYS"/>
+                            <Button text="+ Add Question" styleClass="exam-add-question-btn" onAction="#handleAddQuestion"/>
+                        </HBox>
+                        <VBox fx:id="questionsContainer" spacing="16"/>
+                    </VBox>
+
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+
+</BorderPane>
+

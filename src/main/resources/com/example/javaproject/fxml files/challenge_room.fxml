@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<StackPane style="-fx-background-color: transparent;" stylesheets="@../css/dashboard.css,@../css/challenge.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.ChallengeRoomController">
+
+    <BorderPane style="-fx-background-color: transparent;">
+        <top>
+            <HBox alignment="CENTER_LEFT" spacing="14" styleClass="ch-topbar">
+                <padding><Insets bottom="12" left="24" right="24" top="12" /></padding>
+                <VBox spacing="2">
+                    <Label fx:id="roomModeLabel" styleClass="ch-title" text="Room" />
+                    <Label fx:id="roomIdLabel" styleClass="ch-subtitle" text="" />
+                </VBox>
+                <Pane HBox.hgrow="ALWAYS" />
+                <Label styleClass="ch-sec-lbl" text="Host:" />
+                <Label fx:id="hostLabel" style="-fx-font-size:13px; -fx-font-weight:bold; -fx-text-fill:#818cf8;" text="—" />
+                <Button onAction="#handleLeave" styleClass="ch-btn-secondary" text="Leave" />
+            </HBox>
+        </top>
+
+        <center>
+            <HBox spacing="18" style="-fx-padding: 22 30 32 30;">
+
+                <!-- LEFT: Players -->
+                <VBox minWidth="240" prefWidth="280" spacing="0">
+                    <VBox spacing="12" style="-fx-padding: 16 18 16 18;" styleClass="ch-panel" VBox.vgrow="ALWAYS">
+                        <Label styleClass="ch-panel-title" text="Players" />
+                        <Pane styleClass="ch-divider" />
+                        <ScrollPane fitToWidth="true" styleClass="ch-scroll" VBox.vgrow="ALWAYS">
+                            <VBox fx:id="playersBox" spacing="8">
+                                <padding><Insets bottom="2" left="2" right="2" top="2" /></padding>
+                            </VBox>
+                        </ScrollPane>
+                    </VBox>
+                </VBox>
+
+                <!-- RIGHT: Info + controls -->
+                <VBox spacing="14" HBox.hgrow="ALWAYS">
+
+                    <!-- Rounds info (swap duel only) -->
+                    <Label fx:id="roundsInfoLabel" managed="false" style="-fx-font-size:13px; -fx-text-fill:#818cf8; -fx-font-weight:600;" text="" visible="false" />
+
+                    <!-- Selected Exam (speed only) -->
+                    <VBox fx:id="examRow" managed="false" spacing="12" style="-fx-padding: 16 18 16 18;" styleClass="ch-panel" visible="false">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label styleClass="ch-panel-title" text="Selected Exam" />
+                            <Pane HBox.hgrow="ALWAYS" />
+                            <Button fx:id="selectExamBtn" managed="false" onAction="#handleSelectExam" styleClass="ch-btn-gold" text="Select Exam" visible="false" />
+                        </HBox>
+                        <Pane styleClass="ch-divider" />
+                        <Label fx:id="examLabel" styleClass="ch-exam-none" text="No exam selected" wrapText="true" />
+                    </VBox>
+
+                    <!-- Status -->
+                    <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 12 18 12 18;" styleClass="ch-panel">
+                        <Label styleClass="ch-sec-lbl" text="Status:" />
+                        <Label fx:id="statusLabel" styleClass="ch-badge-waiting" text="WAITING" />
+                    </HBox>
+
+                    <Pane VBox.vgrow="ALWAYS" />
+
+                    <!-- Actions -->
+                    <VBox spacing="12" style="-fx-padding: 16 18 16 18;" styleClass="ch-panel">
+                        <Label styleClass="ch-panel-title" text="Actions" />
+                        <Pane styleClass="ch-divider" />
+                        <HBox spacing="10">
+                            <Button fx:id="readyBtn" maxWidth="Infinity" onAction="#handleReady" styleClass="ch-btn-green" text="Mark as Ready" HBox.hgrow="ALWAYS" />
+                            <Button maxWidth="Infinity" onAction="#handleInvite" styleClass="ch-btn-action" text="Invite Participants " HBox.hgrow="ALWAYS" />
+                        </HBox>
+                        <Button fx:id="startBtn" managed="false" maxWidth="Infinity" onAction="#handleStart" style="-fx-font-size:14px; -fx-padding:12 0 12 0;" styleClass="ch-btn-primary" text="▶  Start Game" visible="false" />
+                    </VBox>
+                </VBox>
+            </HBox>
+        </center>
+    </BorderPane>
+
+    <!-- GENERIC POPUP -->
+    <StackPane fx:id="popupOverlay" styleClass="ch-overlay" visible="false">
+        <VBox fx:id="popupContent" maxWidth="380" styleClass="ch-popup" StackPane.alignment="CENTER" />
+    </StackPane>
+
+    <!-- INVITE POPUP -->
+    <StackPane fx:id="inviteOverlay" styleClass="ch-overlay" visible="false">
+        <VBox maxHeight="440" maxWidth="420" styleClass="ch-popup" StackPane.alignment="CENTER">
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="ch-popup-header">
+                <FontIcon iconColor="white" iconLiteral="fas-user-plus" iconSize="16" />
+                <Label styleClass="ch-popup-title" text="Invite Players" />
+                <Pane HBox.hgrow="ALWAYS" />
+                <Button onAction="#handleCloseInvite" style="-fx-padding:4 10 4 10; -fx-font-size:12px; -fx-min-width:28;" styleClass="ch-btn-secondary" text="✕" />
+            </HBox>
+            <VBox spacing="8" style="-fx-padding: 12 16 6 16;">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <TextField fx:id="inviteSearchField" onAction="#handleInviteSearch" promptText="Search by username…" styleClass="ch-field" HBox.hgrow="ALWAYS" />
+                    <Button onAction="#handleInviteSearch" style="-fx-padding:8 14 8 14; -fx-font-size:12px;" styleClass="ch-btn-action" text="Search" />
+                </HBox>
+                <Label fx:id="inviteStatusLabel" styleClass="ch-status-ok" text="" />
+            </VBox>
+            <ScrollPane fitToWidth="true" style="-fx-padding: 0 8 8 8;" styleClass="ch-scroll" VBox.vgrow="ALWAYS">
+                <VBox fx:id="inviteUsersBox" spacing="6">
+                    <padding><Insets bottom="6" left="4" right="4" top="2" /></padding>
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </StackPane>
+
+</StackPane>

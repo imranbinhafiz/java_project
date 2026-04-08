@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="0" styleClass="syl-root" stylesheets="@../css/syllabus.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.SyllabusController">
+
+    <!-- ── Top Bar ─────────────────────────────────────────────── -->
+    <HBox alignment="CENTER_LEFT" spacing="14" styleClass="syl-topbar">
+        <padding><Insets bottom="14" left="22" right="22" top="14" /></padding>
+        <Button fx:id="backButton" onAction="#handleBackClick" styleClass="syl-back-btn" text="← Back" />
+        <Label fx:id="courseNameLabel" styleClass="syl-course-title" text="Course" />
+        <Pane HBox.hgrow="ALWAYS" />
+        <Label fx:id="topicCountBadge" styleClass="syl-count-badge" text="0/0 done" />
+    </HBox>
+
+    <!-- ── Main body ───────────────────────────────────────────── -->
+    <VBox spacing="20" VBox.vgrow="ALWAYS">
+        <padding><Insets bottom="26" left="26" right="26" top="22" /></padding>
+
+        <!-- Add Topic Panel -->
+        <VBox spacing="12" styleClass="syl-panel">
+            <padding><Insets bottom="18" left="20" right="20" top="16" /></padding>
+            <Label styleClass="syl-panel-title" text="➕  Add Topic" />
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <TextField fx:id="topicNameField" onAction="#handleAddTopic" promptText="Enter topic name…" styleClass="syl-input" HBox.hgrow="ALWAYS" />
+                <Button fx:id="addTopicButton" onAction="#handleAddTopic" styleClass="syl-btn-primary" text="Add" />
+            </HBox>
+        </VBox>
+
+        <!-- Topics List Panel -->
+        <VBox spacing="12" styleClass="syl-panel" VBox.vgrow="ALWAYS">
+            <padding><Insets bottom="18" left="20" right="20" top="16" /></padding>
+            <Label styleClass="syl-panel-title" text="📋  Topics" />
+            <ListView fx:id="topicsListView" styleClass="syl-list" VBox.vgrow="ALWAYS" />
+        </VBox>
+
+        <!-- Action footer -->
+        <HBox alignment="CENTER_RIGHT" spacing="12">
+            <Pane HBox.hgrow="ALWAYS" />
+            <Button fx:id="clearAllButton" onAction="#handleClearAll" styleClass="syl-btn-outline" text="Reset Progress" />
+            <Button fx:id="deleteTopicButton" onAction="#handleDeleteTopic" styleClass="syl-btn-danger" text="🗑 Delete" />
+        </HBox>
+    </VBox>
+
+</VBox>
