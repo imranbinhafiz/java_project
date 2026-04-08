@@ -91,7 +91,7 @@ public class ChallengeSwapEvalController {
         }
 
         // Marks spinner: 0-10
-        marksSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 5, 1));
+        marksSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 10, 5, 1));
         marksSpinner.setEditable(true);
 
         client.setPushListener(this::handlePush);

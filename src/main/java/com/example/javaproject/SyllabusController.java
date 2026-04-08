@@ -145,7 +145,7 @@ public class SyllabusController {
         dialog.getDialogPane().getStyleClass().add("comment-dialog-pane");
 
         ButtonType saveBtn = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
-        ButtonType clearBtn = new ButtonType("Clear", ButtonBar.ButtonData.OTHER);
+        ButtonType clearBtn = new ButtonType("Clear", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(saveBtn, clearBtn, ButtonType.CANCEL);
 
         TextArea area = new TextArea(topic.getComment());

@@ -40,11 +40,11 @@
                     <HBox spacing="20">
                         <VBox spacing="8" HBox.hgrow="ALWAYS">
                             <Label text="Duration (minutes)" styleClass="exam-field-label"/>
-                            <Spinner fx:id="durationSpinner" styleClass="exam-spinner" maxWidth="Infinity"/>
+                            <TextField fx:id="durationField"  styleClass="exam-spinner" maxWidth="Infinity"/>
                         </VBox>
                         <VBox spacing="8" HBox.hgrow="ALWAYS">
                             <Label text="Total Marks" styleClass="exam-field-label"/>
-                            <Spinner fx:id="totalMarksSpinner" styleClass="exam-spinner" maxWidth="Infinity"/>
+                            <TextField fx:id="totalMarksField"  styleClass="exam-spinner" maxWidth="Infinity"/>
                         </VBox>
                         <VBox spacing="12" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
                             <CheckBox fx:id="negativeMarkingCheck" text="Negative Marking (-1)" styleClass="exam-check"/>

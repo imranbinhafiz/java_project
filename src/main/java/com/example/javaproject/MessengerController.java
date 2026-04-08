@@ -8,13 +8,21 @@ import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.Base64;
 
 public class MessengerController {
 
@@ -25,6 +33,7 @@ public class MessengerController {
     @FXML private ScrollPane messagesScroll;
     @FXML private TextField  messageInput;
     @FXML private Button     sendButton;
+    @FXML private Button     attachButton;
     @FXML private Label      chatHeaderName;
     @FXML private Label      chatHeaderStatus;
     @FXML private VBox       noSelectionPane;
@@ -39,6 +48,9 @@ public class MessengerController {
     @FXML private StackPane  headerAvatarPane;
     @FXML private HBox       typingBar;
     @FXML private Label      typingLabel;
+    @FXML private HBox       pendingAttachmentBar;
+    @FXML private Label      pendingAttachmentLabel;
+    @FXML private Button     clearAttachmentBtn;
 
     // ── State ─────────────────────────────────────────────────────────
     private MessengerClient client;
@@ -48,6 +60,7 @@ public class MessengerController {
     private boolean currentIsRoom;
     private String  currentRoomHost;
     private String  searchQuery = "";
+    private PendingAttachment pendingAttachment;
 
     // Caches
     private final Map<String, List<ChatMessage>> dmCache      = new LinkedHashMap<>();
@@ -62,14 +75,57 @@ public class MessengerController {
     private final Map<String, HBox> bubbleMap = new LinkedHashMap<>();
 
     private static final int MAX_MSG_LEN = 500;
-    private static final String[] EMOJI_LIST = {
-        "😊","😂","❤️","👍","🔥","😎","🎉","😢","🤔","👀",
-        "😅","🙏","💯","✅","🚀","😍","🤣","😭","😤","💪"
-    };
+
+    // ── File / Image sending constants ────────────────────────────────
+    /** Prefix that marks a message payload as a Base64-encoded image. */
+    private static final String IMAGE_PREFIX = "[IMG:]";
+    /** Prefix that marks a message payload as a Base64-encoded generic file. */
+    private static final String FILE_PREFIX  = "[FILE:]";
+    /** Prefix that marks a message payload as a staged attachment with optional text. */
+    private static final String ATTACHMENT_PREFIX = "[ATTACH:]";
+    /** Separator between the filename and the Base64 data within a file payload. */
+    private static final String META_SEP     = "[:META:]";
+    private static final String ATTACHMENT_IMAGE_KIND = "IMG";
+    private static final String ATTACHMENT_FILE_KIND  = "FILE";
+    /** Maximum file size allowed for sending (5 MB). */
+    private static final long   MAX_FILE_BYTES = 5L * 1024 * 1024;
+    /** Maximum image width/height displayed inline (px). */
+    private static final double MAX_IMAGE_DISPLAY_SIZE = 280.0;
+
+    private static final Set<String> IMAGE_EXTENSIONS = new HashSet<>(Arrays.asList(
+        "png", "jpg", "jpeg", "gif", "bmp", "webp"
+    ));
+
     private static final String[] AVATAR_COLORS = {
         "#6366f1","#8b5cf6","#ec4899","#f59e0b","#10b981",
         "#3b82f6","#ef4444","#14b8a6","#f97316","#a855f7"
     };
+
+    private static final class PendingAttachment {
+        private final String fileName;
+        private final String dataBase64;
+        private final boolean image;
+
+        private PendingAttachment(String fileName, String dataBase64, boolean image) {
+            this.fileName = fileName;
+            this.dataBase64 = dataBase64;
+            this.image = image;
+        }
+    }
+
+    private static final class ParsedAttachment {
+        private final String fileName;
+        private final String caption;
+        private final String dataBase64;
+        private final boolean image;
+
+        private ParsedAttachment(String fileName, String caption, String dataBase64, boolean image) {
+            this.fileName = fileName;
+            this.caption = caption;
+            this.dataBase64 = dataBase64;
+            this.image = image;
+        }
+    }
 
     // ── Init ──────────────────────────────────────────────────────────
     @FXML
@@ -220,14 +276,9 @@ public class MessengerController {
             appendBubble(msg);
             scrollToBottom();
         }
-        // Refresh user row to show last message preview
         rebuildUserList(new ArrayList<>(onlineMap.keySet()));
     }
 
-    /**
-     * FIX: History data for DMs — always show regardless of whether user
-     * was online when messages were sent.
-     */
     private void handleHistoryData(String payload) {
         List<ChatMessage> msgs = parseMsgArray(
             ExamJsonUtil.extractArray(payload, "messages"), ChatMessage.Type.DM);
@@ -338,8 +389,6 @@ public class MessengerController {
         roomMembers.put(roomId, ExamJsonUtil.parseStringArray(members));
         roomCache.computeIfAbsent(roomId, k -> new ArrayList<>());
         rebuildRoomList();
-
-        // Show notification banner
         Platform.runLater(() -> showInviteToast(roomName, host));
     }
 
@@ -351,7 +400,6 @@ public class MessengerController {
         roomMembers.put(roomId, ExamJsonUtil.parseStringArray(members));
         if (roomId.equals(currentTarget)) {
             currentRoomHost = host;
-            // Refresh header status
             chatHeaderStatus.setText("Group chat  ·  hosted by " + host);
         }
         updateMgmtBtn();
@@ -370,7 +418,7 @@ public class MessengerController {
 
     private void handleDeleteMsgResponse(String payload, boolean isGroup) {
         String from = ExamJsonUtil.parseString(payload, "from");
-        String time = ExamJsonUtil.parseString(payload, "time"); // full ISO timestamp
+        String time = ExamJsonUtil.parseString(payload, "time");
 
         if (isGroup) {
             String roomId = ExamJsonUtil.parseString(payload, "roomId");
@@ -400,12 +448,21 @@ public class MessengerController {
     @FXML
     private void handleSend() {
         if (client == null || !client.isConnected()) return;
-        String text = messageInput.getText().trim();
-        if (text.isBlank() || currentTarget == null) return;
-        messageInput.clear();
+        if (currentTarget == null) return;
+
+        String text = messageInput == null ? "" : messageInput.getText().trim();
+        PendingAttachment attachment = pendingAttachment;
+        if (text.isBlank() && attachment == null) return;
+
+        String payload = attachment == null ? text : buildAttachmentPayload(attachment, text);
+
+        if (messageInput != null) {
+            messageInput.clear();
+        }
         if (charCounter != null) charCounter.setText("");
-        if (currentIsRoom) client.sendRoomMessage(myUsername, currentTarget, text);
-        else               client.sendDM(myUsername, currentTarget, text);
+        if (currentIsRoom) client.sendRoomMessage(myUsername, currentTarget, payload);
+        else               client.sendDM(myUsername, currentTarget, payload);
+        clearPendingAttachment();
     }
 
     @FXML
@@ -419,53 +476,81 @@ public class MessengerController {
 
     @FXML
     private void handleSearch() {
-        searchQuery = searchField != null ? searchField.getText().trim().toLowerCase() : "";
-        rebuildUserList(new ArrayList<>(onlineMap.keySet()));
+        String rawQuery = searchField == null ? "" : searchField.getText();
+        searchQuery = rawQuery == null ? "" : rawQuery.trim().toLowerCase(Locale.ROOT);
+        rebuildUserList(getAllKnownUsers());
         rebuildRoomList();
     }
 
-    /**
-     * FIX: Emoji is inserted at the current cursor position, not appended.
-     */
     @FXML
-    private void handleEmojiPicker() {
-        if (messageInput == null) return;
-        ContextMenu emojiMenu = new ContextMenu();
-        final int caretAtOpen = messageInput.getCaretPosition();
-
-        GridPane grid = new GridPane();
-        grid.setHgap(4); grid.setVgap(4);
-        grid.setPadding(new Insets(8));
-        int col = 0, row = 0;
-        for (String emoji : EMOJI_LIST) {
-            Button btn = new Button(emoji);
-            String normalStyle = "-fx-font-size:18px;-fx-background-color:transparent;-fx-cursor:hand;-fx-padding:5;-fx-min-width:36px;-fx-min-height:36px;-fx-background-radius:8px;";
-            String hoverStyle  = "-fx-font-size:18px;-fx-background-color:rgba(99,102,241,0.15);-fx-cursor:hand;-fx-padding:5;-fx-min-width:36px;-fx-min-height:36px;-fx-background-radius:8px;";
-            btn.setStyle(normalStyle);
-            btn.setOnMouseEntered(e -> btn.setStyle(hoverStyle));
-            btn.setOnMouseExited(e -> btn.setStyle(normalStyle));
-            final String em = emoji;
-            btn.setOnAction(e -> {
-                messageInput.requestFocus();
-                messageInput.positionCaret(Math.min(caretAtOpen, messageInput.getLength()));
-                messageInput.replaceSelection(em);
-                emojiMenu.hide();
-            });
-            grid.add(btn, col, row);
-            col++;
-            if (col >= 5) { col = 0; row++; }
-        }
-
-        CustomMenuItem item = new CustomMenuItem(grid, false);
-        emojiMenu.getItems().add(item);
-        emojiMenu.setStyle("-fx-background-color:#111827;-fx-border-color:rgba(99,102,241,0.2);-fx-border-width:1;-fx-border-radius:12;-fx-background-radius:12;-fx-effect:dropshadow(gaussian,rgba(0,0,0,0.6),16,0,0,4);");
-        emojiMenu.show(messageInput, Side.TOP, 0, -8);
+    private void handleClearAttachment() {
+        clearPendingAttachment();
     }
 
+    // ── File / Image Attachment ───────────────────────────────────────
+
     /**
-     * FIX: Member management dialog — improved UI, real user validation,
-     * remove button works via proper client call, add member validates existence.
+     * Opens a FileChooser so the user can pick an image or any file to send.
+     * Images are detected by extension and sent with IMAGE_PREFIX so the
+     * receiver renders them inline.  All other files are sent with FILE_PREFIX
+     * together with their original filename so the receiver can offer a save.
+     *
+     * The binary content is Base64-encoded and packed into the normal text
+     * message field — no server-side changes are needed.
      */
+    @FXML
+    private void handleAttachFile() {
+        if (currentTarget == null) {
+            showToast("Select a conversation first.", false);
+            return;
+        }
+        if (client == null || !client.isConnected()) {
+            showToast("Not connected to server.", false);
+            return;
+        }
+
+        Stage owner = (attachButton != null && attachButton.getScene() != null)
+                ? (Stage) attachButton.getScene().getWindow()
+                : null;
+
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Select a file to send");
+        chooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp", "*.webp"),
+            new FileChooser.ExtensionFilter("All Files", "*.*")
+        );
+
+        File selected = chooser.showOpenDialog(owner);
+        if (selected == null) return; // user cancelled
+
+        // Size guard
+        if (selected.length() > MAX_FILE_BYTES) {
+            showToast("File too large (max 5 MB).", false);
+            return;
+        }
+
+        // Run encoding off the FX thread so UI stays responsive
+        new Thread(() -> {
+            try {
+                byte[] bytes = Files.readAllBytes(selected.toPath());
+                String b64   = Base64.getEncoder().encodeToString(bytes);
+                String ext   = getExtension(selected.getName()).toLowerCase(Locale.ROOT);
+                boolean isImage = IMAGE_EXTENSIONS.contains(ext);
+                PendingAttachment attachment = new PendingAttachment(selected.getName(), b64, isImage);
+
+                Platform.runLater(() -> {
+                    setPendingAttachment(attachment);
+                    if (messageInput != null) {
+                        messageInput.requestFocus();
+                    }
+                });
+
+            } catch (Exception ex) {
+                Platform.runLater(() -> showToast("Failed to attach file: " + ex.getMessage(), false));
+            }
+        }, "FileAttachmentLoader").start();
+    }
+
     @FXML
     private void handleMemberMgmt() {
         if (!currentIsRoom || currentTarget == null) return;
@@ -479,12 +564,10 @@ public class MessengerController {
         dlgStage.setTitle(roomName + "  —  Members");
         dlgStage.setResizable(false);
 
-        // Root
         VBox root = new VBox(0);
         root.setStyle("-fx-background-color:#0f1629;");
         root.setPrefWidth(400);
 
-        // Title bar
         HBox titleBar = new HBox(10);
         titleBar.setPadding(new Insets(16, 20, 14, 20));
         titleBar.setAlignment(Pos.CENTER_LEFT);
@@ -502,7 +585,6 @@ public class MessengerController {
         titleBar.getChildren().addAll(roomAv, titleBox);
         root.getChildren().add(titleBar);
 
-        // Members list
         VBox listBox = new VBox(6);
         listBox.setPadding(new Insets(14, 16, 8, 16));
         ScrollPane sp = new ScrollPane(listBox);
@@ -525,7 +607,6 @@ public class MessengerController {
         }
         root.getChildren().add(sp);
 
-        // Add member section (host only)
         if (isHost) {
             VBox addSection = new VBox(8);
             addSection.setPadding(new Insets(10, 16, 10, 16));
@@ -556,23 +637,10 @@ public class MessengerController {
                 if (m.equals(myUsername)) { showFieldError(addStatus, "That's you!"); return; }
                 List<String> current = roomMembers.getOrDefault(roomId, List.of());
                 if (current.contains(m)) { showFieldError(addStatus, m + " is already a member"); return; }
-                
-                // Validate user exists using the server's known users via a client push
-                List<String> allUsers = new ArrayList<>(onlineMap.keySet()); // simplistic check based on UI state
-                boolean probablyExists = false;
-                for (String u : allUsers) {
-                    if (u.equalsIgnoreCase(m)) { probablyExists = true; break; }
-                }
-                
-                // Let's assume the server will do definitive validation, but optimistically send it.
                 if (client != null) client.addMember(myUsername, roomId, m);
-                
-                // Show optimistic UI while waiting for server redraw
                 addField.clear();
                 showFieldError(addStatus, "Invite sent.");
-                addStatus.setStyle("-fx-font-size:11px;-fx-text-fill:#4ade80;"); // Success color
-                
-                // Revert color back on change
+                addStatus.setStyle("-fx-font-size:11px;-fx-text-fill:#4ade80;");
                 addField.textProperty().addListener((obs, old, nw) -> {
                     addStatus.setStyle("-fx-font-size:11px;-fx-text-fill:#f87171;");
                     addStatus.setVisible(false);
@@ -586,7 +654,6 @@ public class MessengerController {
             root.getChildren().add(addSection);
         }
 
-        // Bottom bar: leave button + close
         HBox bottomBar = new HBox(10);
         bottomBar.setPadding(new Insets(12, 16, 14, 16));
         bottomBar.setAlignment(Pos.CENTER_LEFT);
@@ -604,7 +671,6 @@ public class MessengerController {
         Pane spacer = new Pane(); HBox.setHgrow(spacer, Priority.ALWAYS);
 
         if (isHost) {
-            // Host gets a Delete Group button
             Button deleteRoomBtn = new Button("🗑  Delete Group");
             deleteRoomBtn.setStyle("-fx-font-size:12.5px;-fx-font-weight:600;-fx-text-fill:#f87171;-fx-background-color:rgba(239,68,68,0.15);-fx-background-radius:10px;-fx-padding:9 18 9 18;-fx-cursor:hand;-fx-border-color:rgba(239,68,68,0.4);-fx-border-width:1;-fx-border-radius:10px;");
             deleteRoomBtn.setOnAction(e -> {
@@ -619,7 +685,6 @@ public class MessengerController {
                     if (result == ButtonType.OK) {
                         dlgStage.close();
                         if (client != null) client.deleteRoom(myUsername, roomId);
-                        // Clean up locally right away
                         roomCache.remove(roomId);
                         roomNames.remove(roomId);
                         roomHosts.remove(roomId);
@@ -641,9 +706,6 @@ public class MessengerController {
         dlgStage.showAndWait();
     }
 
-    /**
-     * FIX: buildMemberRow wired to remove callback that actually works.
-     */
     private HBox buildMemberRow(String member, boolean isHost, String roomId,
                                  javafx.stage.Stage dlgStage, VBox listBox, List<String> memberList) {
         HBox row = new HBox(10);
@@ -654,7 +716,6 @@ public class MessengerController {
         StackPane avatar = buildAvatar(member, getAvatarColor(member));
         avatar.setMinSize(34, 34); avatar.setMaxSize(34, 34);
 
-        // Online dot
         StackPane avatarWrap = new StackPane(avatar);
         if (onlineMap.getOrDefault(member, false)) {
             Circle dot = new Circle(5);
@@ -684,26 +745,19 @@ public class MessengerController {
             row.getChildren().add(badge);
         }
 
-        // Remove button: only host can remove others (not themselves)
         if (isHost && !member.equals(myUsername)) {
             Button removeBtn = new Button("Remove");
             removeBtn.setStyle("-fx-font-size:11px;-fx-font-weight:600;-fx-text-fill:#fca5a5;-fx-background-color:rgba(239,68,68,0.1);-fx-background-radius:8px;-fx-border-color:rgba(239,68,68,0.25);-fx-border-width:1;-fx-border-radius:8px;-fx-padding:5 11 5 11;-fx-cursor:hand;");
             removeBtn.setOnMouseEntered(e -> removeBtn.setStyle("-fx-font-size:11px;-fx-font-weight:600;-fx-text-fill:#fecaca;-fx-background-color:rgba(239,68,68,0.22);-fx-background-radius:8px;-fx-border-color:rgba(239,68,68,0.4);-fx-border-width:1;-fx-border-radius:8px;-fx-padding:5 11 5 11;-fx-cursor:hand;"));
             removeBtn.setOnMouseExited(e -> removeBtn.setStyle("-fx-font-size:11px;-fx-font-weight:600;-fx-text-fill:#fca5a5;-fx-background-color:rgba(239,68,68,0.1);-fx-background-radius:8px;-fx-border-color:rgba(239,68,68,0.25);-fx-border-width:1;-fx-border-radius:8px;-fx-padding:5 11 5 11;-fx-cursor:hand;"));
             removeBtn.setOnAction(e -> {
-                if (client != null) {
-                    client.removeMember(myUsername, roomId, member);
-                }
-                // We will rely heavily on the server pushing a CHAT_ROOM_UPDATE event 
-                // which our handleRoomUpdate -> refreshActiveMemberDialog will pick up
-                // and cleanly redraw the dialog.
+                if (client != null) client.removeMember(myUsername, roomId, member);
                 removeBtn.setDisable(true);
                 removeBtn.setText("Removing...");
             });
             row.getChildren().add(removeBtn);
         }
 
-        // You badge
         if (member.equals(myUsername)) {
             Label youBadge = new Label("You");
             youBadge.setStyle("-fx-font-size:9px;-fx-font-weight:700;-fx-text-fill:#818cf8;-fx-background-color:rgba(99,102,241,0.1);-fx-border-color:rgba(99,102,241,0.2);-fx-border-width:1;-fx-border-radius:8px;-fx-background-radius:8px;-fx-padding:3 8 3 8;");
@@ -732,6 +786,7 @@ public class MessengerController {
 
     // ── Open Conversations ────────────────────────────────────────────
     private void openDM(String username) {
+        clearPendingAttachment();
         currentTarget   = username;
         currentIsRoom   = false;
         currentRoomHost = null;
@@ -747,8 +802,6 @@ public class MessengerController {
         showChat();
         updateMgmtBtn();
 
-        // FIX: Always request fresh history from server (covers case where
-        // messages were sent while B was offline)
         messagesContainer.getChildren().clear();
         bubbleMap.clear();
         List<ChatMessage> cached = dmCache.get(username);
@@ -764,6 +817,7 @@ public class MessengerController {
     }
 
     private void openRoom(String roomId, String roomName, String host) {
+        clearPendingAttachment();
         currentTarget   = roomId;
         currentIsRoom   = true;
         currentRoomHost = host;
@@ -871,7 +925,8 @@ public class MessengerController {
         if (msgs != null && !msgs.isEmpty()) {
             ChatMessage last = msgs.get(msgs.size() - 1);
             String senderLabel = last.getFrom().equals(myUsername) ? "You" : last.getFrom();
-            previewText = senderLabel + ": " + truncate(last.getText(), 32);
+            String txt = last.getText();
+            previewText = buildConversationPreview(senderLabel, txt, 32);
         }
         Label preview = new Label(previewText.isEmpty() ? (online ? "Online" : "Offline") : previewText);
         preview.getStyleClass().add(previewText.isEmpty() ? (online ? "conv-status-online" : "conv-status-offline") : "conv-preview");
@@ -895,9 +950,6 @@ public class MessengerController {
         return row;
     }
 
-    /**
-     * FIX: Group room card is now properly sized and shows member count + preview.
-     */
     private HBox buildRoomRow(String roomId, String roomName, String host) {
         HBox row = new HBox(12);
         row.setAlignment(Pos.CENTER_LEFT);
@@ -912,7 +964,6 @@ public class MessengerController {
         Label nameLbl = new Label(roomName);
         nameLbl.getStyleClass().add("conv-name");
 
-        // Show member count + last message preview
         int memberCount = roomMembers.getOrDefault(roomId, List.of()).size();
         List<ChatMessage> msgs = roomCache.get(roomId);
         String previewText = "";
@@ -926,7 +977,8 @@ public class MessengerController {
             } else {
                 senderLabel = last.getFrom();
             }
-            previewText = senderLabel + ": " + truncate(last.getText(), 26);
+            String txt = last.getText();
+            previewText = buildConversationPreview(senderLabel, txt, 26);
         }
         Label sub = new Label(previewText.isEmpty()
             ? (memberCount > 0 ? memberCount + " members  ·  " + host : "Host: " + host)
@@ -1018,11 +1070,9 @@ public class MessengerController {
         if (messagesContainer.getChildren().isEmpty()) {
             messagesContainer.getChildren().add(buildDateDivider(newDate));
         } else {
-            // Find the last actual message node (might be a divider or a bubble)
-            // It's safer to just check the cache for the previous message
             List<ChatMessage> cache = currentIsRoom ? roomCache.get(currentTarget) : dmCache.get(currentTarget);
             if (cache != null && cache.size() > 1) {
-                ChatMessage prev = cache.get(cache.size() - 2); // The one right before this new one
+                ChatMessage prev = cache.get(cache.size() - 2);
                 if (!prev.getFormattedDate().equals(newDate)) {
                     messagesContainer.getChildren().add(buildDateDivider(newDate));
                 }
@@ -1091,7 +1141,7 @@ public class MessengerController {
         return s == null ? "" : s;
     }
 
-    // Message delete UI: right-click or hover shows delete for own messages.
+    // ── Bubble builder ────────────────────────────────────────────────
     private HBox buildBubble(ChatMessage msg) {
         boolean isMine   = myUsername.equals(msg.getFrom());
         boolean isSystem = "system".equals(msg.getFrom());
@@ -1114,7 +1164,6 @@ public class MessengerController {
             StackPane av = buildAvatar(msg.getFrom(), getAvatarColor(msg.getFrom()));
             av.getStyleClass().clear();
             av.setMinSize(34, 34); av.setMaxSize(34, 34);
-            av.setStyle(av.getStyle()); // keep color
             row.getChildren().add(av);
         }
 
@@ -1128,68 +1177,227 @@ public class MessengerController {
             bubble.getChildren().add(sender);
         }
 
-        Label textLbl = new Label(msg.getText());
-        textLbl.getStyleClass().add("bubble-text");
-        textLbl.setWrapText(true);
-        textLbl.setMaxWidth(420);
+        String text = msg.getText();
+        ParsedAttachment parsedAttachment = parseAttachmentPayload(text);
+
+        // ── Image message ──────────────────────────────────────────
+        if (parsedAttachment != null) {
+            if (parsedAttachment.caption != null && !parsedAttachment.caption.isBlank()) {
+                Label textLbl = new Label(parsedAttachment.caption);
+                textLbl.getStyleClass().add("bubble-text");
+                textLbl.setWrapText(true);
+                textLbl.setMaxWidth(420);
+                bubble.getChildren().add(textLbl);
+            }
+            if (parsedAttachment.image) {
+                bubble.getChildren().add(buildImageNode(parsedAttachment.dataBase64, isMine));
+            } else {
+                bubble.getChildren().add(buildFileNode(parsedAttachment.fileName, parsedAttachment.dataBase64));
+            }
+        } else if (text != null && text.startsWith(IMAGE_PREFIX)) {
+            Node imageNode = buildImageNode(text.substring(IMAGE_PREFIX.length()), isMine);
+            bubble.getChildren().add(imageNode);
+
+        // ── File message ───────────────────────────────────────────
+        } else if (text != null && text.startsWith(FILE_PREFIX)) {
+            Node fileNode = buildFileNode(text, isMine);
+            bubble.getChildren().add(fileNode);
+
+        // ── Plain text message ─────────────────────────────────────
+        } else {
+            Label textLbl = new Label(text);
+            textLbl.getStyleClass().add("bubble-text");
+            textLbl.setWrapText(true);
+            textLbl.setMaxWidth(420);
+            bubble.getChildren().add(textLbl);
+        }
 
         Label timeLbl = new Label(msg.getFormattedTime());
         timeLbl.getStyleClass().add("bubble-time");
-
         HBox timeRow = new HBox();
         timeRow.setAlignment(isMine ? Pos.CENTER_RIGHT : Pos.CENTER_LEFT);
         timeRow.getChildren().add(timeLbl);
+        bubble.getChildren().add(timeRow);
 
-        bubble.getChildren().addAll(textLbl, timeRow);
+        // Delete button (own messages only)
+        Button delBtn = new Button("🗑");
+        delBtn.setStyle("-fx-font-size:13px;-fx-background-color:transparent;-fx-cursor:hand;-fx-padding:3 5 3 5;-fx-background-radius:6px;-fx-opacity:0;-fx-text-fill:#f87171;");
+        delBtn.setFocusTraversable(false);
+        final HBox fRow = row;
+        delBtn.setOnAction(e -> deleteMessage(fRow, msg));
+        delBtn.setOnMouseEntered(e -> delBtn.setStyle("-fx-font-size:13px;-fx-background-color:rgba(239,68,68,0.15);-fx-cursor:hand;-fx-padding:3 5 3 5;-fx-background-radius:6px;-fx-opacity:1;-fx-text-fill:#f87171;"));
+        delBtn.setOnMouseExited(e -> {
+            if (!fRow.isHover()) delBtn.setStyle("-fx-font-size:13px;-fx-background-color:transparent;-fx-cursor:hand;-fx-padding:3 5 3 5;-fx-background-radius:6px;-fx-opacity:0;-fx-text-fill:#f87171;");
+        });
 
-        // Delete button for own messages
         if (isMine) {
-            Button delBtn = new Button("🗑");
-            delBtn.setStyle("-fx-font-size:13px;-fx-background-color:transparent;-fx-cursor:hand;-fx-padding:3 5 3 5;-fx-background-radius:6px;-fx-opacity:0;-fx-text-fill:#f87171;");
-            delBtn.setFocusTraversable(false);
-            delBtn.setOnMouseEntered(e -> delBtn.setStyle("-fx-font-size:13px;-fx-background-color:rgba(239,68,68,0.15);-fx-cursor:hand;-fx-padding:3 5 3 5;-fx-background-radius:6px;-fx-opacity:1;-fx-text-fill:#f87171;"));
-            delBtn.setOnMouseExited(e -> {
-                if (!row.isHover()) delBtn.setStyle("-fx-font-size:13px;-fx-background-color:transparent;-fx-cursor:hand;-fx-padding:3 5 3 5;-fx-background-radius:6px;-fx-opacity:0;-fx-text-fill:#f87171;");
-            });
-            delBtn.setOnAction(e -> deleteMessage(row, msg));
-
-            HBox.setHgrow(bubble, Priority.SOMETIMES);
-            row.getChildren().addAll(bubble, delBtn);
-
-            // Show/hide delete button on row hover
+            row.getChildren().addAll(delBtn, bubble);
             row.setOnMouseEntered(e -> delBtn.setStyle("-fx-font-size:13px;-fx-background-color:transparent;-fx-cursor:hand;-fx-padding:3 5 3 5;-fx-background-radius:6px;-fx-opacity:1;-fx-text-fill:#f87171;"));
             row.setOnMouseExited(e -> delBtn.setStyle("-fx-font-size:13px;-fx-background-color:transparent;-fx-cursor:hand;-fx-padding:3 5 3 5;-fx-background-radius:6px;-fx-opacity:0;-fx-text-fill:#f87171;"));
         } else {
             row.getChildren().add(bubble);
         }
 
-        // For isMine, bubble is added before delBtn — reorder
-        if (isMine && row.getChildren().size() >= 2) {
-            // bubble should be second-to-last, delBtn last — but we added delBtn, then bubble?
-            // Actually: we add delBtn, then bubble for isMine — let's fix ordering
-            row.getChildren().clear();
-            Button existingDel = null;
-            // Re-add in correct order: del | bubble
-            existingDel = new Button("🗑");
-            final Button finalDel = existingDel;
-            existingDel.setStyle("-fx-font-size:13px;-fx-background-color:transparent;-fx-cursor:hand;-fx-padding:3 5 3 5;-fx-background-radius:6px;-fx-opacity:0;-fx-text-fill:#f87171;");
-            existingDel.setFocusTraversable(false);
-            existingDel.setOnMouseEntered(e -> finalDel.setStyle("-fx-font-size:13px;-fx-background-color:rgba(239,68,68,0.15);-fx-cursor:hand;-fx-padding:3 5 3 5;-fx-background-radius:6px;-fx-opacity:1;-fx-text-fill:#f87171;"));
-            existingDel.setOnMouseExited(e -> finalDel.setStyle("-fx-font-size:13px;-fx-background-color:transparent;-fx-cursor:hand;-fx-padding:3 5 3 5;-fx-background-radius:6px;-fx-opacity:0;-fx-text-fill:#f87171;"));
-            final HBox fRow = row;
-            existingDel.setOnAction(e -> deleteMessage(fRow, msg));
-
-            row.getChildren().addAll(existingDel, bubble);
-            row.setOnMouseEntered(e -> finalDel.setStyle("-fx-font-size:13px;-fx-background-color:transparent;-fx-cursor:hand;-fx-padding:3 5 3 5;-fx-background-radius:6px;-fx-opacity:1;-fx-text-fill:#f87171;"));
-            row.setOnMouseExited(e -> finalDel.setStyle("-fx-font-size:13px;-fx-background-color:transparent;-fx-cursor:hand;-fx-padding:3 5 3 5;-fx-background-radius:6px;-fx-opacity:0;-fx-text-fill:#f87171;"));
-        }
-
         return row;
     }
 
     /**
-     * Delete a message: removes from the server permanently, then from local cache + UI.
+     * Builds an inline image view node from a Base64-encoded image string.
+     * Clicking the image opens a full-size view in a dialog.
      */
+    private Node buildImageNode(String base64Data, boolean isMine) {
+        try {
+            byte[] imgBytes = Base64.getDecoder().decode(base64Data);
+            Image image = new Image(new ByteArrayInputStream(imgBytes));
+            ImageView iv = new ImageView(image);
+            iv.setPreserveRatio(true);
+            // Scale down to fit bubble width while keeping aspect ratio
+            double w = image.getWidth();
+            double h = image.getHeight();
+            if (w > MAX_IMAGE_DISPLAY_SIZE || h > MAX_IMAGE_DISPLAY_SIZE) {
+                if (w >= h) {
+                    iv.setFitWidth(MAX_IMAGE_DISPLAY_SIZE);
+                } else {
+                    iv.setFitHeight(MAX_IMAGE_DISPLAY_SIZE);
+                }
+            }
+            iv.getStyleClass().add("bubble-image");
+            iv.setStyle("-fx-background-radius:12px;-fx-cursor:hand;");
+
+            // Tooltip hint
+            Tooltip.install(iv, new Tooltip("Click to view full size"));
+
+            // Click → open full-size dialog
+            iv.setOnMouseClicked(e -> showImageDialog(imgBytes, image));
+
+            return iv;
+        } catch (Exception ex) {
+            // Fallback if decoding fails
+            Label err = new Label("⚠ Could not load image");
+            err.setStyle("-fx-text-fill:#f87171;-fx-font-size:12px;");
+            return err;
+        }
+    }
+
+    /**
+     * Opens a pop-up dialog showing the image at full (or window-capped) size.
+     */
+    private void showImageDialog(byte[] imgBytes, Image image) {
+        Stage dialog = new Stage();
+        dialog.setTitle("Image");
+        dialog.initOwner(messagesScroll.getScene().getWindow());
+        dialog.initModality(javafx.stage.Modality.NONE);
+
+        ImageView fullIv = new ImageView(image);
+        fullIv.setPreserveRatio(true);
+        double maxW = Math.min(image.getWidth(),  900);
+        double maxH = Math.min(image.getHeight(), 700);
+        fullIv.setFitWidth(maxW);
+        fullIv.setFitHeight(maxH);
+
+        // Save button
+        Button saveBtn = new Button("💾  Save Image");
+        saveBtn.setStyle("-fx-font-size:13px;-fx-font-weight:600;-fx-text-fill:white;-fx-background-color:#6366f1;-fx-background-radius:10px;-fx-padding:9 20 9 20;-fx-cursor:hand;");
+        saveBtn.setOnAction(e -> {
+            FileChooser fc = new FileChooser();
+            fc.setTitle("Save Image");
+            fc.setInitialFileName("image.png");
+            fc.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("PNG Image", "*.png"),
+                new FileChooser.ExtensionFilter("All Files", "*.*")
+            );
+            File dest = fc.showSaveDialog(dialog);
+            if (dest != null) {
+                try {
+                    Files.write(dest.toPath(), imgBytes);
+                    showToast("Image saved!", true);
+                } catch (Exception ex) {
+                    showToast("Failed to save: " + ex.getMessage(), false);
+                }
+            }
+        });
+
+        VBox root = new VBox(12, fullIv, saveBtn);
+        root.setAlignment(Pos.CENTER);
+        root.setPadding(new Insets(16));
+        root.setStyle("-fx-background-color:#0a0f1c;");
+
+        javafx.scene.Scene scene = new javafx.scene.Scene(root);
+        dialog.setScene(scene);
+        dialog.setResizable(true);
+        dialog.show();
+    }
+
+    /**
+     * Builds a file pill widget showing the file name and a download/save button.
+     * The payload format is:  [FILE:]<filename>[:META:]<base64>
+     */
+    private Node buildFileNode(String payload, boolean isMine) {
+        String inner   = payload.substring(FILE_PREFIX.length());
+        int    sep     = inner.indexOf(META_SEP);
+        String filename = sep >= 0 ? inner.substring(0, sep) : "file";
+        String b64Data  = sep >= 0 ? inner.substring(sep + META_SEP.length()) : "";
+        return buildFileNode(filename, b64Data);
+    }
+
+    private Node buildFileNode(String filename, String b64Data) {
+        VBox pill = new VBox(4);
+        pill.getStyleClass().add("bubble-file-pill");
+        pill.setMaxWidth(260);
+
+        HBox iconRow = new HBox(8);
+        iconRow.setAlignment(Pos.CENTER_LEFT);
+        Label icon = new Label(getFileIcon(filename));
+        icon.setStyle("-fx-font-size:22px;");
+        VBox nameBox = new VBox(2);
+        Label nameLbl = new Label(filename);
+        nameLbl.getStyleClass().add("bubble-file-name");
+        // Estimate size from base64 length
+        long approxBytes = (long)(b64Data.length() * 0.75);
+        Label sizeLbl = new Label(formatFileSize(approxBytes));
+        sizeLbl.getStyleClass().add("bubble-file-size");
+        nameBox.getChildren().addAll(nameLbl, sizeLbl);
+        iconRow.getChildren().addAll(icon, nameBox);
+        pill.getChildren().add(iconRow);
+
+        Button saveBtn = new Button("⬇  Save file");
+        saveBtn.setStyle("-fx-font-size:11.5px;-fx-font-weight:600;-fx-text-fill:#818cf8;-fx-background-color:rgba(99,102,241,0.1);-fx-background-radius:8px;-fx-padding:6 14 6 14;-fx-cursor:hand;-fx-border-color:rgba(99,102,241,0.25);-fx-border-width:1;-fx-border-radius:8px;");
+        saveBtn.setOnMouseEntered(ev -> saveBtn.setStyle("-fx-font-size:11.5px;-fx-font-weight:600;-fx-text-fill:#c7d2fe;-fx-background-color:rgba(99,102,241,0.2);-fx-background-radius:8px;-fx-padding:6 14 6 14;-fx-cursor:hand;-fx-border-color:rgba(99,102,241,0.4);-fx-border-width:1;-fx-border-radius:8px;"));
+        saveBtn.setOnMouseExited(ev -> saveBtn.setStyle("-fx-font-size:11.5px;-fx-font-weight:600;-fx-text-fill:#818cf8;-fx-background-color:rgba(99,102,241,0.1);-fx-background-radius:8px;-fx-padding:6 14 6 14;-fx-cursor:hand;-fx-border-color:rgba(99,102,241,0.25);-fx-border-width:1;-fx-border-radius:8px;"));
+
+        final String finalB64  = b64Data;
+        final String finalName = filename;
+        saveBtn.setOnAction(ev -> saveFileFromBase64(finalB64, finalName));
+        pill.getChildren().add(saveBtn);
+
+        return pill;
+    }
+
+    /**
+     * Decodes base64 data and saves it via a FileChooser dialog.
+     */
+    private void saveFileFromBase64(String b64Data, String suggestedName) {
+        if (b64Data == null || b64Data.isBlank()) {
+            showToast("No file data to save.", false);
+            return;
+        }
+        Stage owner = (Stage) messagesScroll.getScene().getWindow();
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Save File");
+        fc.setInitialFileName(suggestedName);
+        File dest = fc.showSaveDialog(owner);
+        if (dest == null) return;
+        new Thread(() -> {
+            try {
+                byte[] data = Base64.getDecoder().decode(b64Data);
+                Files.write(dest.toPath(), data);
+                Platform.runLater(() -> showToast("Saved: " + dest.getName(), true));
+            } catch (Exception ex) {
+                Platform.runLater(() -> showToast("Save failed: " + ex.getMessage(), false));
+            }
+        }, "FileSaver").start();
+    }
+
     private void deleteMessage(HBox row, ChatMessage msg) {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Delete Message");
@@ -1200,19 +1408,15 @@ public class MessengerController {
         confirm.getDialogPane().getStylesheets().add(getClass().getResource("css/messenger.css").toExternalForm());
         confirm.showAndWait().ifPresent(result -> {
             if (result == ButtonType.OK) {
-                // Remove from UI immediately
                 messagesContainer.getChildren().remove(row);
-                // Remove from local cache
                 if (currentIsRoom) {
                     List<ChatMessage> cache = roomCache.get(currentTarget);
                     if (cache != null) cache.removeIf(m -> m == msg);
-                    // Permanently delete on server (so it won't come back on reload)
                     if (client != null)
                         client.deleteGroupMessage(currentTarget, myUsername, msg.getFormattedTimeRaw());
                 } else {
                     List<ChatMessage> cache = dmCache.get(currentTarget);
                     if (cache != null) cache.removeIf(m -> m == msg);
-                    // Permanently delete on server (so it won't come back on reload)
                     if (client != null)
                         client.deleteDM(myUsername, currentTarget, msg.getFormattedTimeRaw());
                 }
@@ -1229,9 +1433,33 @@ public class MessengerController {
         return row;
     }
 
+    // ── Toast notification ────────────────────────────────────────────
+    /**
+     * Shows a small non-blocking toast label inside the chat area (or no-sel pane).
+     * @param success true = green success style, false = red error style
+     */
+    private void showToast(String message, boolean success) {
+        String color  = success ? "#4ade80" : "#f87171";
+        String bgColor = success ? "rgba(74,222,128,0.1)" : "rgba(248,113,113,0.1)";
+        String border  = success ? "rgba(74,222,128,0.3)" : "rgba(248,113,113,0.3)";
+        Label toast = new Label(message);
+        toast.setStyle("-fx-background-color:" + bgColor + ";-fx-text-fill:" + color
+                + ";-fx-font-size:12px;-fx-background-radius:12px;-fx-padding:9 18 9 18;"
+                + "-fx-border-color:" + border + ";-fx-border-width:1;-fx-border-radius:12px;");
+        toast.setWrapText(true);
+        toast.setMaxWidth(320);
+
+        VBox target = chatPane != null && chatPane.isVisible() ? chatPane : noSelectionPane;
+        if (target == null) return;
+        target.getChildren().add(toast);
+        new Thread(() -> {
+            try { Thread.sleep(3000); } catch (Exception ignored) {}
+            Platform.runLater(() -> target.getChildren().remove(toast));
+        }, "ToastRemover").start();
+    }
+
     // ── Invite toast ──────────────────────────────────────────────────
     private void showInviteToast(String roomName, String invitedBy) {
-        // Show small banner at top of no-selection pane or chat area
         if (noSelectionPane == null) return;
         Label toast = new Label("📨  You were added to \"" + roomName + "\" by " + invitedBy);
         toast.setStyle("-fx-background-color:rgba(99,102,241,0.15);-fx-text-fill:#c7d2fe;-fx-font-size:12px;-fx-background-radius:12px;-fx-padding:10 18 10 18;-fx-border-color:rgba(99,102,241,0.3);-fx-border-width:1;-fx-border-radius:12px;");
@@ -1257,6 +1485,7 @@ public class MessengerController {
         if (noSelectionPane != null) { noSelectionPane.setVisible(true);  noSelectionPane.setManaged(true); }
         if (chatPane        != null) { chatPane.setVisible(false); chatPane.setManaged(false); }
         currentTarget = null;
+        clearPendingAttachment();
     }
 
     private void scrollToBottom() {
@@ -1281,10 +1510,157 @@ public class MessengerController {
     private void updateSendBtnState() {
         if (sendButton == null || messageInput == null) return;
         boolean hasText = !messageInput.getText().trim().isEmpty();
-        sendButton.setDisable(!hasText);
+        sendButton.setDisable(currentTarget == null || (!hasText && pendingAttachment == null));
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────
+    // ── File helpers ──────────────────────────────────────────────────
+    private String getExtension(String filename) {
+        int dot = filename.lastIndexOf('.');
+        return (dot >= 0 && dot < filename.length() - 1) ? filename.substring(dot + 1) : "";
+    }
+
+    private String extractFileName(String payload) {
+        String inner = payload.substring(FILE_PREFIX.length());
+        int sep = inner.indexOf(META_SEP);
+        return sep >= 0 ? inner.substring(0, sep) : "file";
+    }
+
+    private void setPendingAttachment(PendingAttachment attachment) {
+        pendingAttachment = attachment;
+        refreshPendingAttachmentUi();
+        updateSendBtnState();
+    }
+
+    private void clearPendingAttachment() {
+        pendingAttachment = null;
+        refreshPendingAttachmentUi();
+        updateSendBtnState();
+    }
+
+    private void refreshPendingAttachmentUi() {
+        boolean hasAttachment = pendingAttachment != null;
+        if (pendingAttachmentBar != null) {
+            pendingAttachmentBar.setVisible(hasAttachment);
+            pendingAttachmentBar.setManaged(hasAttachment);
+        }
+        if (pendingAttachmentLabel != null) {
+            pendingAttachmentLabel.setText(hasAttachment
+                ? (pendingAttachment.image ? "Image attached: " : "File attached: ") + pendingAttachment.fileName
+                : "");
+        }
+        if (attachButton != null) {
+            if (hasAttachment) {
+                if (!attachButton.getStyleClass().contains("attach-btn-active")) {
+                    attachButton.getStyleClass().add("attach-btn-active");
+                }
+            } else {
+                attachButton.getStyleClass().remove("attach-btn-active");
+            }
+        }
+    }
+
+    private String buildAttachmentPayload(PendingAttachment attachment, String caption) {
+        String kind = attachment.image ? ATTACHMENT_IMAGE_KIND : ATTACHMENT_FILE_KIND;
+        return ATTACHMENT_PREFIX
+            + kind + META_SEP
+            + encodeAttachmentMeta(attachment.fileName)
+            + META_SEP
+            + encodeAttachmentMeta(caption == null ? "" : caption)
+            + META_SEP
+            + attachment.dataBase64;
+    }
+
+    private ParsedAttachment parseAttachmentPayload(String payload) {
+        if (payload == null || !payload.startsWith(ATTACHMENT_PREFIX)) return null;
+        List<String> parts = splitAttachmentParts(payload.substring(ATTACHMENT_PREFIX.length()), 4);
+        if (parts.size() != 4) return null;
+
+        boolean isImage;
+        if (ATTACHMENT_IMAGE_KIND.equals(parts.get(0))) {
+            isImage = true;
+        } else if (ATTACHMENT_FILE_KIND.equals(parts.get(0))) {
+            isImage = false;
+        } else {
+            return null;
+        }
+
+        try {
+            String fileName = decodeAttachmentMeta(parts.get(1));
+            String caption = decodeAttachmentMeta(parts.get(2));
+            return new ParsedAttachment(fileName, caption, parts.get(3), isImage);
+        } catch (IllegalArgumentException ex) {
+            return null;
+        }
+    }
+
+    private List<String> splitAttachmentParts(String value, int expectedParts) {
+        if (value == null) return List.of();
+        List<String> parts = new ArrayList<>(expectedParts);
+        int start = 0;
+        for (int i = 0; i < expectedParts - 1; i++) {
+            int idx = value.indexOf(META_SEP, start);
+            if (idx < 0) return List.of();
+            parts.add(value.substring(start, idx));
+            start = idx + META_SEP.length();
+        }
+        parts.add(value.substring(start));
+        return parts;
+    }
+
+    private String encodeAttachmentMeta(String value) {
+        return Base64.getEncoder().encodeToString(value.getBytes(StandardCharsets.UTF_8));
+    }
+
+    private String decodeAttachmentMeta(String encoded) {
+        return new String(Base64.getDecoder().decode(encoded), StandardCharsets.UTF_8);
+    }
+
+    private String buildConversationPreview(String senderLabel, String text, int maxLen) {
+        if (text == null) return "";
+
+        ParsedAttachment attachment = parseAttachmentPayload(text);
+        if (attachment != null) {
+            return senderLabel + ": " + truncate(buildAttachmentPreviewBody(attachment), maxLen);
+        }
+        if (text.startsWith(IMAGE_PREFIX)) {
+            return senderLabel + ": 🖼 Image";
+        }
+        if (text.startsWith(FILE_PREFIX)) {
+            return senderLabel + ": 📎 " + extractFileName(text);
+        }
+        return senderLabel + ": " + truncate(text, maxLen);
+    }
+
+    private String buildAttachmentPreviewBody(ParsedAttachment attachment) {
+        String lead = attachment.image ? "🖼 Image" : "📎 " + attachment.fileName;
+        if (attachment.caption == null || attachment.caption.isBlank()) {
+            return lead;
+        }
+        return lead + " · " + attachment.caption;
+    }
+
+    private String getFileIcon(String filename) {
+        String ext = getExtension(filename).toLowerCase();
+        return switch (ext) {
+            case "pdf"             -> "📄";
+            case "doc", "docx"     -> "📝";
+            case "xls", "xlsx"     -> "📊";
+            case "ppt", "pptx"     -> "📋";
+            case "zip", "rar", "7z"-> "🗜";
+            case "mp3", "wav", "ogg"-> "🎵";
+            case "mp4", "avi", "mov"-> "🎬";
+            case "txt"             -> "📃";
+            default                -> "📎";
+        };
+    }
+
+    private String formatFileSize(long bytes) {
+        if (bytes < 1024)       return bytes + " B";
+        if (bytes < 1024*1024)  return String.format("%.1f KB", bytes / 1024.0);
+        return String.format("%.1f MB", bytes / (1024.0 * 1024.0));
+    }
+
+    // ── General helpers ───────────────────────────────────────────────
     private String getAvatarColor(String name) {
         if (name == null || name.isEmpty()) return AVATAR_COLORS[0];
         return AVATAR_COLORS[Math.abs(name.hashCode()) % AVATAR_COLORS.length];
@@ -1295,14 +1671,8 @@ public class MessengerController {
         return s.length() > max ? s.substring(0, max) + "…" : s;
     }
 
-    /**
-     * Returns all known users (from the online map + any we know from history).
-     * Used to validate "add member" input.
-     */
     private List<String> getAllKnownUsers() {
         Set<String> all = new LinkedHashSet<>(onlineMap.keySet());
-        all.add(myUsername);
-        // Also include anyone we've DMed with
         all.addAll(dmCache.keySet());
         return new ArrayList<>(all);
     }
@@ -1331,7 +1701,7 @@ public class MessengerController {
             String toVal  = type == ChatMessage.Type.GROUP ? roomId : to;
             LocalDateTime ts;
             try { ts = LocalDateTime.parse(time); } catch (Exception e) { ts = LocalDateTime.now(); }
-            
+
             ChatMessage msg = new ChatMessage(from, toVal, text, type, ts, read);
             list.add(msg);
         }

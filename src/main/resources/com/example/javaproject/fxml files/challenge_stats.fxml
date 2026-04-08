@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import org.kordamp.ikonli.javafx.*?>
 
-<BorderPane style="-fx-background-color: transparent;"
-            stylesheets="@../css/dashboard.css,@../css/challenge.css"
-            xmlns="http://javafx.com/javafx/17.0.12"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.javaproject.ChallengeStatsController">
+<BorderPane style="-fx-background-color: transparent;" stylesheets="@../css/dashboard.css,@../css/challenge.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.ChallengeStatsController">
 
     <top>
-        <HBox styleClass="ch-topbar" alignment="CENTER_LEFT" spacing="14">
-            <padding><Insets top="12" right="24" bottom="12" left="24"/></padding>
-            <Button text="◀  Back" styleClass="ch-btn-secondary" onAction="#handleBack"/>
-            <Label text="My Stats" styleClass="ch-title"/>
+        <HBox alignment="CENTER_LEFT" spacing="14" styleClass="ch-topbar">
+            <padding><Insets bottom="12" left="24" right="24" top="12" /></padding>
+            <Button onAction="#handleBack" styleClass="ch-btn-secondary" text="◀  Back" />
+            <Label styleClass="ch-title" text="My Stats" />
         </HBox>
     </top>
 
@@ -25,58 +22,62 @@
 
                 <!-- Stat Cards Row -->
                 <HBox spacing="14">
-                    <VBox styleClass="ch-stat-card" alignment="CENTER" spacing="8" HBox.hgrow="ALWAYS">
-                        <Label fx:id="winsLabel" text="0" styleClass="ch-stat-val ch-stat-wins"/>
-                        <Label text="SWAP WINS" styleClass="ch-stat-lbl"/>
+                    <VBox alignment="CENTER" spacing="8" styleClass="ch-stat-card" HBox.hgrow="ALWAYS">
+                        <Label fx:id="winsLabel" text="0" textFill="#faf8f8">
+                     <styleClass>
+                        <String fx:value="ch-stat-val" />
+                        <String fx:value="ch-stat-wins" />
+                     </styleClass></Label>
+                        <Label styleClass="ch-stat-lbl" text="SWAP WINS" />
                     </VBox>
-                    <VBox styleClass="ch-stat-card" alignment="CENTER" spacing="8" HBox.hgrow="ALWAYS">
-                        <Label fx:id="lossesLabel" text="0" styleClass="ch-stat-val ch-stat-losses"/>
-                        <Label text="LOSSES" styleClass="ch-stat-lbl"/>
+                    <VBox alignment="CENTER" spacing="8" styleClass="ch-stat-card" HBox.hgrow="ALWAYS">
+                        <Label fx:id="lossesLabel" text="0" textFill="#faf8f8">
+                     <styleClass>
+                        <String fx:value="ch-stat-val" />
+                        <String fx:value="ch-stat-losses" />
+                     </styleClass></Label>
+                        <Label styleClass="ch-stat-lbl" text="LOSSES" />
                     </VBox>
-                    <VBox styleClass="ch-stat-card" alignment="CENTER" spacing="8" HBox.hgrow="ALWAYS">
-                        <Label fx:id="scoreLabel" text="0" styleClass="ch-stat-val"/>
-                        <Label text="BEST SPEED SCORE" styleClass="ch-stat-lbl"/>
+                    <VBox alignment="CENTER" spacing="8" styleClass="ch-stat-card" HBox.hgrow="ALWAYS">
+                        <Label fx:id="scoreLabel" styleClass="ch-stat-val" text="0" />
+                        <Label styleClass="ch-stat-lbl" text="BEST SPEED SCORE" />
                     </VBox>
-                    <VBox styleClass="ch-stat-card" alignment="CENTER" spacing="8" HBox.hgrow="ALWAYS">
-                        <Label fx:id="totalLabel" text="0"
-                               style="-fx-font-size:32px; -fx-font-weight:bold; -fx-text-fill:#94a3b8;"/>
-                        <Label text="TOTAL GAMES" styleClass="ch-stat-lbl"/>
+                    <VBox alignment="CENTER" spacing="8" styleClass="ch-stat-card" HBox.hgrow="ALWAYS">
+                        <Label fx:id="totalLabel" style="-fx-font-size:32px; -fx-font-weight:bold; -fx-text-fill:#94a3b8;" text="0" />
+                        <Label styleClass="ch-stat-lbl" text="TOTAL GAMES" />
                     </VBox>
                 </HBox>
 
                 <!-- Performance Overview -->
-                <VBox styleClass="ch-panel" spacing="14" style="-fx-padding: 18 20 18 20;">
-                    <Label text="Swap Duel Performance" styleClass="ch-panel-title"/>
-                    <Pane styleClass="ch-divider"/>
+                <VBox spacing="14" style="-fx-padding: 18 20 18 20;" styleClass="ch-panel">
+                    <Label styleClass="ch-panel-title" text="Swap Duel Performance" />
+                    <Pane styleClass="ch-divider" />
                     <HBox alignment="CENTER_LEFT" spacing="24">
                         <VBox spacing="4" HBox.hgrow="ALWAYS">
-                            <Label text="WIN RATE" styleClass="ch-sec-lbl"/>
-                            <Label fx:id="winRateLabel" text="— %"
-                                   style="-fx-font-size:26px; -fx-font-weight:bold; -fx-text-fill:#818cf8;"/>
+                            <Label styleClass="ch-sec-lbl" text="WIN RATE" />
+                            <Label fx:id="winRateLabel" style="-fx-font-size:26px; -fx-font-weight:bold; -fx-text-fill:#818cf8;" text="— %" />
                         </VBox>
                         <VBox spacing="4" HBox.hgrow="ALWAYS">
-                            <Label text="WINS vs LOSSES" styleClass="ch-sec-lbl"/>
-                            <HBox spacing="8" alignment="CENTER_LEFT">
-                                <Label fx:id="winsSmallLabel" text="0 W"
-                                       style="-fx-font-size:15px; -fx-font-weight:bold; -fx-text-fill:#86efac;"/>
-                                <Label text="/" styleClass="ch-meta-lbl"/>
-                                <Label fx:id="lossesSmallLabel" text="0 L"
-                                       style="-fx-font-size:15px; -fx-font-weight:bold; -fx-text-fill:#fca5a5;"/>
+                            <Label styleClass="ch-sec-lbl" text="WINS vs LOSSES" />
+                            <HBox alignment="CENTER_LEFT" spacing="8">
+                                <Label fx:id="winsSmallLabel" style="-fx-font-size:15px; -fx-font-weight:bold; -fx-text-fill:#86efac;" text="0 W" />
+                                <Label styleClass="ch-meta-lbl" text="/" />
+                                <Label fx:id="lossesSmallLabel" style="-fx-font-size:15px; -fx-font-weight:bold; -fx-text-fill:#fca5a5;" text="0 L" />
                             </HBox>
                         </VBox>
                     </HBox>
                 </VBox>
 
                 <!-- Challenge History -->
-                <VBox styleClass="ch-panel" spacing="12" style="-fx-padding: 18 20 18 20;">
+                <VBox spacing="12" style="-fx-padding: 18 20 18 20;" styleClass="ch-panel">
                     <HBox alignment="CENTER_LEFT" spacing="10">
-                        <FontIcon iconLiteral="fas-history" iconSize="14" iconColor="#818cf8"/>
-                        <Label text="Challenge History" styleClass="ch-panel-title"/>
+                        <FontIcon iconColor="#818cf8" iconLiteral="fas-history" iconSize="14" />
+                        <Label styleClass="ch-panel-title" text="Challenge History" />
                     </HBox>
-                    <Pane styleClass="ch-divider"/>
-                    <ScrollPane styleClass="ch-scroll" fitToWidth="true" maxHeight="300">
+                    <Pane styleClass="ch-divider" />
+                    <ScrollPane fitToWidth="true" maxHeight="300" styleClass="ch-scroll">
                         <VBox fx:id="historyBox" spacing="8">
-                            <padding><Insets top="2" right="4" bottom="4" left="4"/></padding>
+                            <padding><Insets bottom="4" left="4" right="4" top="2" /></padding>
                         </VBox>
                     </ScrollPane>
                 </VBox>
