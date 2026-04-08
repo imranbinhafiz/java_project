@@ -357,7 +357,86 @@
     -fx-border-radius: 20px;
 }
 
+/* ─── IMAGE / FILE BUBBLE ─────────────────────────────────────── */
+/* Wrapper inside a bubble for an inline image preview */
+.bubble-image {
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 6, 0, 0, 2);
+}
+
+/* Non-image file attachment pill inside a bubble */
+.bubble-file-pill {
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(99,102,241,0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 10px;
+    -fx-padding: 8 14 8 14;
+    -fx-cursor: hand;
+}
+.bubble-mine .bubble-file-pill {
+    -fx-background-color: rgba(255,255,255,0.12);
+    -fx-border-color: rgba(255,255,255,0.25);
+}
+.bubble-file-pill:hover {
+    -fx-background-color: rgba(99,102,241,0.2);
+    -fx-border-color: rgba(99,102,241,0.55);
+}
+
+.bubble-file-name {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #c7d2fe;
+    -fx-wrap-text: true;
+    -fx-max-width: 220px;
+}
+.bubble-mine .bubble-file-name { -fx-text-fill: #eef2ff; }
+
+.bubble-file-size {
+    -fx-font-size: 10.5px;
+    -fx-text-fill: rgba(148,163,184,0.7);
+}
+.bubble-mine .bubble-file-size { -fx-text-fill: rgba(199,210,254,0.7); }
+
 /* ─── INPUT BAR ───────────────────────────────────────────────── */
+.pending-attachment-bar {
+    -fx-background-color: #0a0f1c;
+    -fx-border-color: rgba(99,102,241,0.08);
+    -fx-border-width: 1 0 0 0;
+    -fx-padding: 10 14 2 14;
+}
+
+.pending-attachment-label {
+    -fx-font-size: 11.5px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #c7d2fe;
+    -fx-background-color: rgba(99,102,241,0.1);
+    -fx-background-radius: 999px;
+    -fx-border-color: rgba(99,102,241,0.2);
+    -fx-border-width: 1;
+    -fx-border-radius: 999px;
+    -fx-padding: 6 12 6 12;
+}
+
+.pending-attachment-clear {
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #94a3b8;
+    -fx-background-color: transparent;
+    -fx-background-radius: 50%;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+    -fx-min-width: 28px; -fx-min-height: 28px;
+    -fx-max-width: 28px; -fx-max-height: 28px;
+    -fx-padding: 0;
+}
+.pending-attachment-clear:hover {
+    -fx-background-color: rgba(239,68,68,0.12);
+    -fx-text-fill: #f87171;
+}
+
 .input-bar {
     -fx-background-color: #0a0f1c;
     -fx-border-color: rgba(99,102,241,0.1);
@@ -384,7 +463,8 @@
 }
 .msg-input:hover { -fx-border-color: rgba(99,102,241,0.3); }
 
-.emoji-btn {
+/* ─── ATTACH BUTTON (replaces old emoji button) ───────────────── */
+.attach-btn {
     -fx-font-size: 17px;
     -fx-background-color: transparent;
     -fx-cursor: hand;
@@ -394,9 +474,19 @@
     -fx-min-width: 36px; -fx-min-height: 36px;
     -fx-max-width: 36px; -fx-max-height: 36px;
 }
-.emoji-btn:hover {
-    -fx-background-color: rgba(99,102,241,0.1);
+.attach-btn:hover {
+    -fx-background-color: rgba(99,102,241,0.12);
     -fx-text-fill: #818cf8;
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.25), 8, 0, 0, 0);
+}
+.attach-btn-active {
+    -fx-background-color: rgba(99,102,241,0.16);
+    -fx-text-fill: #a5b4fc;
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.3), 8, 0, 0, 0);
+}
+.attach-btn:pressed {
+    -fx-scale-x: 0.90; -fx-scale-y: 0.90;
+    -fx-background-color: rgba(99,102,241,0.2);
 }
 
 .msg-send-btn {

@@ -36,8 +36,8 @@ public class PublishExamController {
     // ── FXML – Exam Form ──────────────────────────────────────────────
     @FXML private TextField         examTitleField;
     @FXML private TextArea          examDescField;
-    @FXML private Spinner<Integer>  durationSpinner;
-    @FXML private Spinner<Integer>  totalMarksSpinner;
+    @FXML private TextField          durationField;
+    @FXML private TextField          totalMarksField;
     @FXML private CheckBox          negativeMarkingCheck;
     @FXML private CheckBox          shuffleOptionsCheck;
     @FXML private RadioButton       realTimeRadio;
@@ -65,9 +65,7 @@ public class PublishExamController {
 
     @FXML
     public void initialize() {
-        // Spinners
-        durationSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 300, 60));
-        totalMarksSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 100));
+        // Default values for time spinners
         startHourSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 9));
         startMinSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
         endHourSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 10));
@@ -177,6 +175,23 @@ public class PublishExamController {
             AnimationUtil.pulse(examTitleField, 1.04);
             return false;
         }
+        
+        // Validate duration
+        int duration = parseIntField(durationField, 60, 1, 300, "Duration");
+        if (duration < 0) {
+            setStatus("❌ Invalid duration. Please enter a number between 1 and 300.", true);
+            AnimationUtil.pulse(durationField, 1.04);
+            return false;
+        }
+        
+        // Validate total marks
+        int totalMarks = parseIntField(totalMarksField, 100, 1, 1000, "Total Marks");
+        if (totalMarks < 0) {
+            setStatus("❌ Invalid total marks. Please enter a number between 1 and 1000.", true);
+            AnimationUtil.pulse(totalMarksField, 1.04);
+            return false;
+        }
+        
         if (questionRows.isEmpty()) {
             setStatus("❌ Add at least one question.", true);
             return false;
@@ -202,8 +217,8 @@ public class PublishExamController {
         Exam exam = new Exam();
         exam.setTitle(examTitleField.getText().trim());
         exam.setDescription(examDescField.getText().trim());
-        exam.setDurationMinutes(durationSpinner.getValue());
-        exam.setTotalMarks(totalMarksSpinner.getValue());
+        exam.setDurationMinutes(parseIntField(durationField, 60, 1, 300, "Duration"));
+        exam.setTotalMarks(parseIntField(totalMarksField, 100, 1, 1000, "Total Marks"));
         exam.setNegativeMarking(negativeMarkingCheck.isSelected());
         exam.setShuffleOptions(shuffleOptionsCheck.isSelected());
         exam.setPublisherUsername(username);
@@ -233,6 +248,29 @@ public class PublishExamController {
         statusLabel.setStyle(isError
                 ? "-fx-text-fill: #fca5a5;"
                 : "-fx-text-fill: #86efac;");
+    }
+
+    /**
+     * Parses an integer from a TextField with validation and default value.
+     * @param field The TextField to parse
+     * @param defaultValue The default value if parsing fails or field is empty
+     * @param min Minimum allowed value (inclusive)
+     * @param max Maximum allowed value (inclusive)
+     * @param fieldName Name for error messages (unused, kept for consistency)
+     * @return The parsed value clamped to [min, max], or -1 if invalid input
+     */
+    private int parseIntField(TextField field, int defaultValue, int min, int max, String fieldName) {
+        String text = field.getText().trim();
+        if (text.isEmpty()) {
+            return defaultValue;
+        }
+        try {
+            int value = Integer.parseInt(text);
+            // Clamp to valid range
+            return Math.max(min, Math.min(max, value));
+        } catch (NumberFormatException e) {
+            return -1; // Invalid input indicator
+        }
     }
 
     // ──────────────────────────────────────────────────────────────────
