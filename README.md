@@ -1,6 +1,6 @@
 <div align="center">
 
-<h1>🎓 Smart Exam System</h1>
+<h1>🎓 EduPortal</h1>
 
 <p><em>A full-featured, LAN-based academic desktop application built entirely in Java 21 + JavaFX</em></p>
 
