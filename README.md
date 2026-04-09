@@ -1,6 +1,6 @@
 <div align="center">
 
-<h1>🎓 EduPortal</h1>
+<h1>🎓 Smart Exam System</h1>
 
 <p><em>A full-featured, LAN-based academic desktop application built entirely in Java 21 + JavaFX</em></p>
 
@@ -186,11 +186,11 @@ An intelligent, conversational AI tutor is built right into the app — powered 
 
 ## ⚙️ Installation
 
-1. Download the **`1-2 project.zip`** file from the [Releases](#) section
-2. Extract the archive to your desired directory
+1. Download the **`1-2 project.zip`** file 
+2. Extract it
 3. Run **`java_project.exe`** to launch the application
 
-> Make sure **Java 21** and **JavaFX 21** are installed and correctly configured on your machine before running.
+
 
 ---
 
@@ -217,8 +217,4 @@ Clients:                 Enter the host machine's local IP address on the login 
 
 ---
 
-<div align="center">
 
-Made with ❤️ using Java 21 + JavaFX
-
-</div>
